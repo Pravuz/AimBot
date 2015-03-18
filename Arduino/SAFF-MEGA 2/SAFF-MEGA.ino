@@ -128,32 +128,47 @@ void Mode_Auto_RC()
 		int diff = millis() - lastPassTime;
 		if (diff > pixyDelayTime)
 		{
-			uint16_t x = getWord();
-			uint16_t y = getWord();
-
-
-
-			if (x != 0 || y != 0)
-			{
-				// Send to Brugi if any movement
-				Serial1.print("X");
-				Serial1.print(x);
-				Serial1.print(",");
-				Serial1.print("Y");
-				Serial1.print(y);
-				Serial1.print(",");
-			}
 			lastPassTime = millis();
 
-			while (Serial1.available() < 1)
+
+			int x = 0;
+			int y = 0;
+			if (Serial3.available >= BUF_SIZE) // If pixy has no object then do nothing
 			{
-				// Wait for Brugi feedback
-			}
-			takePicture(); // Arrived at destination, take picture
-			while (Serial1.available() > 0)
-			{
-				// Expecting one char, read buffer to end regardless
-				Serial1.read();
+				while (Serial3.available() > 0)
+				{
+					if (Serial3.read == ID_SYNC) // Loop untill sync'd
+					{
+						if (Serial3.read == ID_VECTOR) // Certain it's sync'd
+						{
+							x = Serial3.read();
+							y = Serial3.read();
+						}
+					}
+				}
+
+				if (x != 0 || y != 0)
+				{
+					// Send to Brugi if any movement
+					Serial1.print("X");
+					Serial1.print(x);
+					Serial1.print(",");
+					Serial1.print("Y");
+					Serial1.print(y);
+					Serial1.print(",");
+
+
+					while (Serial2.available() < 1)
+					{
+						// Wait for Brugi feedback
+					}
+					takePicture(); // Arrived at destination, take picture
+					while (Serial2.available() > 0)
+					{
+						// Expecting one char, read buffer to end regardless
+						Serial2.read();
+					}
+				}
 			}
 		}
 		// Check if RC is still connected
