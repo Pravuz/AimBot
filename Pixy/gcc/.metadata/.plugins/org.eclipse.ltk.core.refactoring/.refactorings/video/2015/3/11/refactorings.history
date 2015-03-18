@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;video/inc/greyCom&apos; to &apos;greyCom.h&apos;" description="Rename resource &apos;greyCom&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="inc/greyCom" name="greyCom.h" stamp="1425895839681" updateReferences="true"/>
+</session>

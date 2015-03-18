@@ -1,0 +1,4 @@
+#Tue Mar 03 15:19:58 CET 2015
+__DEFAULT__=false
+org.eclipse.help.ui.localSearch.master=true
+expression=Monitor Memory
