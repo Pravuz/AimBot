@@ -1,6 +1,23 @@
 // Declarations and info
-
 //#define DEBUG_MODE_ON
+#define ID_SYNC         0xa5
+#define ID_PARAM	0x2d
+#define ID_STARTSTOP    0x3c
+#define ID_VECTOR	0x4b
+#define BUF_SIZE	6
+
+/*******************************************************
+* BUFFER TABLE
+* n =	VECTOR			PARAM				CMD
+* -----------------------------------------------------
+* 0 = 	ID_SYNC			ID_SYNC				ID_SYNC
+* 1 = 	ID_VECTOR		ID_PARAM	 		ID_STARTSTOP
+* 2 = 	MSB(X)			PARAM(DeltaP)		0
+* 3 = 	LSB(X)			PARAM(MSB(nOfP))	0
+* 4 = 	MSB(Y)			PARAM(LSB(nOfP))	0
+* 5 = 	LSB(Y)			0					0
+* *****************************************************/
+
 
 #define BAUD_RATE 115200
 
@@ -29,8 +46,7 @@ int BrugiPwrPIN = 12;
 int VideoTrxPwrPIN = 13;
 int PixyPwrPIN = 14;
 
-// SPI to Pixy (on the ICSP header at the Arduino board)
-#include <SPI.h>
+// Pixy (on the ICSP header at the Arduino board)
 int pixyDelayTime = 500;
 int manualDelayTime = 10;
 int lastPictureTime = 0;
@@ -77,32 +93,9 @@ void setup()
 	// Setup serial
 	setup_Serial();
 
-#ifdef DEBUG_MODE_ON
-	pinMode(8, OUTPUT);
-	pinMode(9, OUTPUT);
-	pinMode(10, OUTPUT);
-	pinMode(11, OUTPUT);
-	pinMode(12, OUTPUT);
-
-	// test leds
-	digitalWrite(8, HIGH);
-	digitalWrite(9, HIGH);
-	digitalWrite(10, HIGH);
-	digitalWrite(11, HIGH);
-	digitalWrite(12, HIGH);
-	delay(3000);
-	digitalWrite(8, LOW);
-	digitalWrite(9, LOW);
-	digitalWrite(10, LOW);
-	digitalWrite(11, LOW);
-	digitalWrite(12, LOW);
-#endif
-
 	// Start mode selector interrupt
 	attachInterrupt(chan3, calculatePWMch3, CHANGE);
 
-	// init Pixy
-	//initSPI();
 }
 
 void loop()
@@ -130,21 +123,16 @@ void Mode_Auto_RC()
 
 	while (onAuto && onRC)
 	{
-#ifdef DEBUG_MODE_ON
-		digitalWrite(8, HIGH);
-		digitalWrite(9, LOW);
-		digitalWrite(10, LOW);
-		digitalWrite(11, LOW);
-		
-#endif
 
-#if 0		
 		//Get vector from pixy, pass it to Brugi
 		int diff = millis() - lastPassTime;
 		if (diff > pixyDelayTime)
 		{
 			uint16_t x = getWord();
 			uint16_t y = getWord();
+
+
+
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
@@ -168,7 +156,6 @@ void Mode_Auto_RC()
 				Serial1.read();
 			}
 		}
-#endif
 		// Check if RC is still connected
 		delay(1);
 		rcTimeout++;
@@ -176,11 +163,8 @@ void Mode_Auto_RC()
 		{
 			onRC = false;
 		}
-		
-
 		// Power check
 		checkButtonAndVoltage();
-
 	}
 }
 
@@ -198,47 +182,55 @@ void Mode_Auto_NC()
 	Serial.println("Mode_Auto_NC");
 
 	while (onAuto && !onRC) // 
-	{
-#ifdef DEBUG_MODE_ON
-		digitalWrite(8, LOW);
-		digitalWrite(9, HIGH);
-		digitalWrite(10, LOW);
-		digitalWrite(11, LOW);
-		
-#endif
-
-#if 0		
+	{		
 		//Get vector from pixy, pass it to Brugi
 		int diff = millis() - lastPassTime;
 		if (diff > pixyDelayTime)
 		{
-			uint16_t x = getWord();
-			uint16_t y = getWord();
-			if (x != 0 || y != 0)
-			{
-				// Send to Brugi if any movement
-				Serial1.print("X");
-				Serial1.print(x);
-				Serial1.print(",");
-				Serial1.print("Y");
-				Serial1.print(y);
-				Serial1.print(",");
-			}
 			lastPassTime = millis();
 
-			while (Serial1.available() < 1)
+
+			int x = 0;
+			int y = 0;
+			if (Serial3.available >= BUF_SIZE) // If pixy has no object then do nothing
 			{
-				// Wait for Brugi feedback
-			}
-			takePicture(); // Arrived at destination, take picture
-			while (Serial1.available() > 0)
-			{
-				// Expecting one char, read buffer to end regardless
-				Serial1.read();
+				while (Serial3.available() > 0)
+				{
+					if (Serial3.read == ID_SYNC) // Loop untill sync'd
+					{
+						if (Serial3.read == ID_VECTOR) // Certain it's sync'd
+						{
+							x = Serial3.read();
+							y = Serial3.read();
+						}
+					}
+				}
+
+				if (x != 0 || y != 0)
+				{
+					// Send to Brugi if any movement
+					Serial1.print("X");
+					Serial1.print(x);
+					Serial1.print(",");
+					Serial1.print("Y");
+					Serial1.print(y);
+					Serial1.print(",");
+
+
+					while (Serial2.available() < 1)
+					{
+						// Wait for Brugi feedback
+					}
+					takePicture(); // Arrived at destination, take picture
+					while (Serial2.available() > 0)
+					{
+						// Expecting one char, read buffer to end regardless
+						Serial2.read();
+					}
+				}
 			}
 		}
 
-#endif
 		// Power check
 		checkButtonAndVoltage();
 	}
@@ -257,16 +249,7 @@ void Mode_Manual_RC()
 
 	Serial.println("Mode_Manual_RC");
 	while (!onAuto && onRC)
-	{
-#ifdef DEBUG_MODE_ON
-		digitalWrite(8, LOW);
-		digitalWrite(9, LOW);
-		digitalWrite(10, HIGH);
-		digitalWrite(11, LOW);
-		
-#endif
-
-#if 0		
+	{	
 		int diff = millis() - lastPassTime;
 		if (diff > manualDelayTime)
 		{
@@ -285,7 +268,6 @@ void Mode_Manual_RC()
 			lastPassTime = millis();
 		}
 
-#endif
 
 		// Check if RC is still connected
 		delay(1);
@@ -295,10 +277,8 @@ void Mode_Manual_RC()
 			onRC = false;
 		}
 
-
 		// Power check
 		checkButtonAndVoltage();
-
 	}
 
 }
@@ -308,18 +288,6 @@ void Mode_Manual_NC()
 	Serial.println("Mode_Manual_NC");
 	while (!onAuto && !onRC)
 	{
-#ifdef DEBUG_MODE_ON
-		digitalWrite(8, LOW);
-		digitalWrite(9, LOW);
-		digitalWrite(10, LOW);
-		digitalWrite(11, HIGH);
-		delay(500);
-		digitalWrite(8, HIGH);
-		digitalWrite(9, HIGH);
-		digitalWrite(10, HIGH);
-		digitalWrite(11, HIGH);
-		
-#endif
 		// All power off
 		digitalWrite(PixyPwrPIN, LOW);
 		digitalWrite(BrugiPwrPIN, LOW);
@@ -331,11 +299,6 @@ void Mode_Manual_NC()
 
 		delay(500);
 		sleepNow();
-
-
-		// Power check  (needs to wake with interrupt to work)
-		//checkButtonAndVoltage();
-
 	}
 }
 
@@ -361,8 +324,9 @@ void takePicture()
 
 void setup_Serial()
 {
-	Serial.begin(BAUD_RATE);		// Usb
-	// Serial1.begin(BAUD_RATE);	// Brugi (can't use serial1 with current interrupt pins setup)
+	Serial.begin(BAUD_RATE);	// Usb debug
+	Serial2.begin(BAUD_RATE);	// Brugi
+	Serial3.begin(BAUD_RATE);	// Pixy
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup
@@ -442,21 +406,6 @@ void calculatePWMch3() // Mode selector
 	}
 }
 
-uint16_t getWord()
-{
-	// Request register on position 0
-	// do it twice and reorder the bits to get a 16bit int
-	uint16_t w;
-	uint8_t c;
-
-	w = SPI.transfer(0);
-	w <<= 8;
-	c = SPI.transfer(0);
-	w |= c;
-
-	return w;
-}
-
 void initButtonAndVoltage()
 {
 	pinMode(7, OUTPUT);
@@ -471,8 +420,6 @@ void checkButtonAndVoltage()
 	int diff = millis() - lastPowerCheck;
 	if (diff > powerCheckTime) // check every 100ms or so
 	{
-
-
 	
 #if 1
 		//testing
@@ -493,9 +440,6 @@ void checkButtonAndVoltage()
 			{
 				// power button pressed, power off
 				delay(3000);
-#ifdef DEBUG_MODE_ON
-				Serial.println("button off");
-#endif
 				digitalWrite(7, LOW);
 				delay(1000);
 			}
@@ -505,9 +449,6 @@ void checkButtonAndVoltage()
 		{
 			// bat low, power off
 			delay(1000);
-#ifdef DEBUG_MODE_ON
-			Serial.println("low voltage off");
-#endif
 			digitalWrite(7, LOW);
 			delay(1000);
 		}
