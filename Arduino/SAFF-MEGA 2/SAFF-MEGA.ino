@@ -304,7 +304,7 @@ void setup_Serial()
 void wakeUpNow()        // here the interrupt is handled after wakeup
 {
 	// execute code here after wake-up before returning to the loop() function
-	Serial.begin(BAUD_RATE);
+	setup_Serial();
 }
 
 void sleepNow()         // here we put the arduino to sleep
