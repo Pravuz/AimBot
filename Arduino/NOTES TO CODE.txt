@@ -1,0 +1,19 @@
+
+--------timepassed and oldtime --------------------------------
+// max value for 16bit int = 32767
+// 32 767us = 0,032767s og 1/0,032767s=30,51850947599719hz
+// max value for 16bit uint = 65535
+// could change timepassed to a 16bit uint
+// oldtime however gets huge, needs long
+
+
+--------interrupts  --------------------------------
+// Interrupt pins on mega:
+// int.0 = 2, int.1 = 3, int.2 = 21, int.3 = 20, int.4 = 19, int.5 = 18
+
+
+
+
+
+
+
