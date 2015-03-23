@@ -80,6 +80,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <AimBot.ino>
+#include <Aimbot_Serial.h>
 #include <BLcontroller.h>
 #include <Interupts_.h>
 #include <config_oppsett.h>

@@ -73,6 +73,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aimbot_Serial.h" />
     <ClInclude Include="BLcontroller.h" />
     <ClInclude Include="config_oppsett.h" />
     <ClInclude Include="definitions.h" />

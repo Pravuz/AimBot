@@ -36,5 +36,8 @@
     <ClInclude Include="Visual Micro\.Brugi.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Aimbot_Serial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #include "BLcontroller.h"
 #include "Interupts_.h"
 #include <Wire\Wire.h>
+#define __ARDUINO
+#include "Aimbot_Serial.h"
 
 uint8_t z_axe = 0, y_axe = 0;
 int16_t z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
@@ -11,17 +13,14 @@ boolean crib = false;
 boolean box = false;
 
 
-
+AimBot_Serial *megaSerial;
 
 void setup()
 {
-	Serial.begin(115200);
-	delay(5000);
-	
-	Serial.println("Init BLcontroller");
+
+	*megaSerial = AimBot_Serial(&Serial);
 	initBlController();
 	
-	Serial.println("Init Motorstuff");
 	initMotorStuff();
 
 	motorPowerOff();
@@ -30,21 +29,34 @@ void setup()
 }
 
 
-
+#define bldc1 360/12/256
+#define bldc2 360/24/256
 void loop()
 {
+
+	megaSerial->serialUpdate();
+	int x = megaSerial->getX();
+	int y = megaSerial->getY();
+
+	x = x / bldc2;
+	y = y / bldc1;
+
+	//gjør utregninger og flytter motorene
+
+	megaSerial->sendPosReached();
+
 	if (Serial.available() > 0 && (z_Pos == 0 || y_Pos == 0))
 	{
 		if (z_Pos == 0) 
 		{ 
 			z_Pos = 0; 
-			z_Pos_Steps = map(z_Pos, -37.5, 37.5, -320, 320);
-			crib = true;
+			z_Pos_Steps = map(z_Pos, -38, 38, -640, 640);
+			box = true;
 		} //Hent Veriene fra serielbufferen.
 		if (y_Pos == 0) 
 		{ 
 			y_Pos = 0; 
-			y_Pos_Steps = map(z_Pos, -37.5, 37.5, -320, 320);
+			y_Pos_Steps = map(z_Pos, -38, 38, -320, 320);
 			box = true;
 		}
 	}
@@ -84,7 +96,7 @@ void loop()
 			}
 			else
 			{
-				crib = false;
+				box = false;
 			}
 		}
 
