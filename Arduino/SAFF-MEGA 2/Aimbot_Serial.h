@@ -75,6 +75,15 @@ struct AimBot_Serial
 		else return 0;
 	}
 
+	bool isRCmode(){	// check if last recieved coords are RC or pixy-vector
+		if (debug){
+			Serial.print("Mode RC? : ");
+			Serial.println((char)m_buf[1]);
+		}
+		if (m_buf[1] == VECTOR)	return false;
+		else return true;
+	}
+
 	void sendVect(char x, char y){
 		m_rxbuf[0] = AIM_SYNC;
 		m_rxbuf[1] = VECTOR;

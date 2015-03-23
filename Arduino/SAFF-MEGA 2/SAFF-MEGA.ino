@@ -266,10 +266,12 @@ int yVECT_OUTmin = -38;
 int yVECT_OUTmax = 38;
 char getVECTx(char x)
 {
+	// Map pixy pixel-vector to degrees, X
 	return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
 }
 char getVECTy(char y)
 {
+	// Map pixy pixel-vector to degrees, Y
 	return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
 }
 
