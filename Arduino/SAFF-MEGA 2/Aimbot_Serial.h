@@ -1,7 +1,7 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
-#define BUF_SIZE 6
+#define BUF_SIZE 6 //todo: remove this stupid shit
 #define BAUDRATE 115200
 
 enum CMD_ID {
@@ -46,16 +46,30 @@ struct AimBot_Serial
 		else return 0;
 	}
 
-	void sendVect(byte x, int y){
-		
+	void sendVect(byte x, byte y){
+		m_rxbuf[0] = AIM_SYNC;
+		m_rxbuf[1] = VECTOR;
+		m_rxbuf[2] = x;
+		m_rxbuf[3] = y;
+		for (int i = 4; i < 6; i++){
+			m_rxbuf[i] = 0;
+		}
 	}
 
 	void stopPixy(){
-		
+		m_rxbuf[0] = AIM_SYNC;
+		m_rxbuf[1] = PIXY_STOP;
+		for (int i = 2; i < 6; i++){
+			m_rxbuf[i] = 0;
+		}
 	}
 
 	void startPixy(){
-	
+		m_rxbuf[0] = AIM_SYNC;
+		m_rxbuf[1] = PIXY_START;
+		for (int i = 2; i < 6; i++){
+			m_rxbuf[i] = 0;
+		}
 	}
 	void posReached(){
 		m_rxbuf[0] = AIM_SYNC;
