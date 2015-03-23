@@ -12,7 +12,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
 #define _VMDEBUG 1
-#define ARDUINO 160
+#define ARDUINO 158
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__

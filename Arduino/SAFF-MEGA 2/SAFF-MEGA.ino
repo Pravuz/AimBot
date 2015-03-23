@@ -126,12 +126,10 @@ void Mode_Auto_RC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print("X");
+				Serial1.print(ID_SYNC);
+				Serial1.print(ID_VECTOR);
 				Serial1.print(x);
-				Serial1.print(",");
-				Serial1.print("Y");
 				Serial1.print(y);
-				Serial1.print(",");
 
 
 				while (Serial2.available() < 1)
@@ -185,12 +183,10 @@ void Mode_Auto_NC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print("X");
+				Serial1.print(ID_SYNC);
+				Serial1.print(ID_VECTOR);
 				Serial1.print(x);
-				Serial1.print(",");
-				Serial1.print("Y");
 				Serial1.print(y);
-				Serial1.print(",");
 
 				while (Serial2.available() < 1)
 				{
@@ -225,12 +221,10 @@ void Mode_Manual_RC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print("X");
+				Serial1.print(ID_SYNC);
+				Serial1.print(ID_VECTOR);
 				Serial1.print(x);
-				Serial1.print(",");
-				Serial1.print("Y");
 				Serial1.print(y);
-				Serial1.print(",");
 			}
 			lastPassTime = millis();
 		}
