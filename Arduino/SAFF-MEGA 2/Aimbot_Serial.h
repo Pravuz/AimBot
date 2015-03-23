@@ -4,7 +4,7 @@
 #define BUF_SIZE 6 //todo: remove this stupid shit
 #define BAUDRATE 115200
 
-enum CMD_ID {
+enum CMD_ID{
 	AIM_SYNC = 0xa5,
 	VECTOR,
 	PIXY_PARAM_NOFP,
@@ -54,25 +54,25 @@ struct AimBot_Serial
 #endif
 	}
 
-	int getX(){
+	char getX(){
 		if (debug){
 			Serial.print("Recieved X-Vector: ");
-			Serial.println(m_buf[2]);
+			Serial.println((char)m_buf[2]);
 		}
-		if (m_buf[1] == VECTOR)	return m_buf[2];
+		if (m_buf[1] == VECTOR)	return (char)m_buf[2];
 		else return 0;
 	}
 
-	int getY(){
+	char getY(){
 		if (debug){
 			Serial.print("Recieved Y-Vector: ");
-			Serial.println(m_buf[3]);
+			Serial.println((char)m_buf[3]);
 		}
-		if (m_buf[1] == VECTOR)	return m_buf[3];
+		if (m_buf[1] == VECTOR)	return (char)m_buf[3];
 		else return 0;
 	}
 
-	void sendVect(byte x, byte y){
+	void sendVect(char x, char y){
 		m_rxbuf[0] = AIM_SYNC;
 		m_rxbuf[1] = VECTOR;
 		m_rxbuf[2] = x;
@@ -125,11 +125,16 @@ struct AimBot_Serial
 		}
 		m_serial->write(m_rxbuf, BUF_SIZE);
 	}
+	
+	void flushBuf(){
+		delete[] m_rxbuf, m_buf;
+		m_serial->flush();
+	}
 
 private:
 
 	void sync(){
-		if (m_buf[0] != AIM_SYNC){
+		if (m_serial->peek() != AIM_SYNC){
 			while (1)
 			{
 				if (m_serial->peek() != AIM_SYNC)
