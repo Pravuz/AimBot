@@ -42,7 +42,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/crp.c">
+					<resource project-relative-path="src/system_LPC43xx.c">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -61,7 +61,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/system_LPC43xx.c">
+					<resource project-relative-path="src/crp.c">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -108,6 +108,7 @@
 						<entry kind="includePath" name="/pixy_m4/inc">
 							<flag value="VALUE_WORKSPACE_PATH|RESOLVED"/>
 						</entry>
+						<entry kind="includePath" name="C:/Users/ouroborus/Documents/BACHELOR/AimBot/Common"/>
 						<entry kind="macro" name="CORE_M4" value=""/>
 						<entry kind="macro" name="CPP_USE_HEAP" value=""/>
 						<entry kind="macro" name="IPC_MASTER" value=""/>
@@ -146,6 +147,7 @@
 						<entry kind="includePath" name="/pixy_m4/inc">
 							<flag value="VALUE_WORKSPACE_PATH|RESOLVED"/>
 						</entry>
+						<entry kind="includePath" name="C:/Users/ouroborus/Documents/BACHELOR/AimBot/Common"/>
 						<entry kind="macro" name="CORE_M4" value=""/>
 						<entry kind="macro" name="CPP_USE_HEAP" value=""/>
 						<entry kind="macro" name="IPC_MASTER" value=""/>
@@ -234,7 +236,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/qqueue.cpp">
+					<resource project-relative-path="src/spi.cpp">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -253,7 +255,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/spi.cpp">
+					<resource project-relative-path="src/qqueue.cpp">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>

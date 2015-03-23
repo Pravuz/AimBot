@@ -6,7 +6,7 @@
 #include <avr/sleep.h>
 
 // Serial structs
-AimBot_Serial escSerial, pixySerial;
+AimBot_Serial *escSerial, *pixySerial;
 
 // PWM-in related vars
 bool onRC = false;
@@ -104,15 +104,15 @@ void Mode_Auto_RC()
 	{
 		lastPassTime = millis();
 
-		pixySerial.serialUpdate();
+		pixySerial->serialUpdate();
 
-		char x = pixySerial.getX();
-		char y = pixySerial.getY();
+		char x = pixySerial->getX();
+		char y = pixySerial->getY();
 
 		if (x != 0 || y != 0)
 		{
 			// Send to Brugi if any movement
-			escSerial.sendVect(x, y);
+			escSerial->sendVect(x, y);
 
 			while (Serial2.available() < 1)
 			{
@@ -272,10 +272,10 @@ int getRCy()
 
 void setup_Serial()
 {
-	Serial.begin(BAUD_RATE);	// Usb debug
+	Serial.begin(BAUDRATE);	// Usb debug
 
-	escSerial(&Serial2);
-	pixySerial(&Serial3);
+	*escSerial =AimBot_Serial(&Serial2);
+	*pixySerial = AimBot_Serial(&Serial3);
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup
