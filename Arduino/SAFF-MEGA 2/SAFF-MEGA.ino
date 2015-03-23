@@ -1,15 +1,12 @@
 //#define DEBUG_MODE_ON
-
-// Serial related consts
-#define ID_SYNC 0xa5
-#define ID_PARAM 0x2d
-#define ID_STARTSTOP 0x3c
-#define ID_VECTOR 0x4b
-#define BUF_SIZE 6
-#define BAUD_RATE 115200
+#define __ARDUINO
+#include "Aimbot_Serial.h"
 
 // Sleep related
 #include <avr/sleep.h>
+
+// Serial structs
+AimBot_Serial escSerial, pixySerial;
 
 // PWM-in related vars
 bool onRC = false;
@@ -107,21 +104,10 @@ void Mode_Auto_RC()
 	{
 		lastPassTime = millis();
 
-		int x = 0;
-		int y = 0;
-		if (Serial3.available() >= BUF_SIZE) // If pixy has no object then do nothing
-		{
-			while (Serial3.available() > 0)
-			{
-				if (Serial3.read() == ID_SYNC) // Loop untill sync'd
-				{
-					if (Serial3.read() == ID_VECTOR) // Certain it's sync'd
-					{
-						x = Serial3.read();
-						y = Serial3.read();
-					}
-				}
-			}
+		pixySerial.serialUpdate();
+
+		int x = pixySerial.getX();
+		int y = pixySerial.getY();
 
 			if (x != 0 || y != 0)
 			{
@@ -145,7 +131,7 @@ void Mode_Auto_RC()
 					Serial2.read();
 				}
 			}
-		}
+		
 	}
 }
 
@@ -297,8 +283,9 @@ int getRCy()
 void setup_Serial()
 {
 	Serial.begin(BAUD_RATE);	// Usb debug
-	Serial2.begin(BAUD_RATE);	// Brugi
-	Serial3.begin(BAUD_RATE);	// Pixy
+
+	escSerial(&Serial2);
+	pixySerial(&Serial3);
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup

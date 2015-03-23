@@ -22,9 +22,9 @@ enum CMD_ID {
 struct AimBot_Serial
 {
 
-	AimBot_Serial(HardwareSerial *serial, unsigned long baudrate){
+	AimBot_Serial(HardwareSerial *serial){
 		m_serial = serial;
-		m_serial->begin(baudrate);
+		m_serial->begin(BAUDRATE);
 	}
 
 	void serialUpdate(){
@@ -48,6 +48,14 @@ struct AimBot_Serial
 
 	void sendVect(byte x, int y){
 		
+	}
+
+	void stopPixy(){
+		
+	}
+
+	void startPixy(){
+	
 	}
 	void posReached(){
 		m_rxbuf[0] = AIM_SYNC;
