@@ -12,7 +12,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega328p__
 #define __AVR_ATmega328P__
-#define ARDUINO 158
+#define ARDUINO 160
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__
@@ -80,6 +80,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <AimBot.ino>
+#include <Aimbot_Serial.h>
 #include <BLcontroller.h>
 #include <Interupts_.h>
 #include <config_oppsett.h>
