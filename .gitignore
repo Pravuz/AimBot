@@ -181,3 +181,13 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+*.xml
+Arduino/SAFF-MEGA 2/Visual Micro/Compile.vmps.xml
+*.xml
+Arduino/SAFF-MEGA 2/Visual Micro/Configuration.Debug.vmps.xml
+*.xml
+Pixy/gcc/.metadata/.plugins/org.eclipse.cdt.core/video.1425372042218.pdom
+*.index
+Pixy/gcc/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.cdt.managedbuilder.core.prefs
+Pixy/gcc/.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
+Pixy/gcc/.metadata/.plugins/org.eclipse.cdt.core/video.1425372042218.pdom

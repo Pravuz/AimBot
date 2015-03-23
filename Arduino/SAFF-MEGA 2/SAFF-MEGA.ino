@@ -106,29 +106,25 @@ void Mode_Auto_RC()
 
 		pixySerial.serialUpdate();
 
-		int x = pixySerial.getX();
-		int y = pixySerial.getY();
+		char x = pixySerial.getX();
+		char y = pixySerial.getY();
 
-			if (x != 0 || y != 0)
+		if (x != 0 || y != 0)
+		{
+			// Send to Brugi if any movement
+			escSerial.sendVect(x, y);
+
+			while (Serial2.available() < 1)
 			{
-				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
-				Serial1.print(x);
-				Serial1.print(y);
-
-
-				while (Serial2.available() < 1)
-				{
-					// Wait for Brugi feedback (brugi in position)
-				}
-				takePicture(); // Arrived at destination, take picture
-				while (Serial2.available() > 0)
-				{
-					// Expecting one char, read buffer to end regardless
-					Serial2.read();
-				}
+				// Wait for Brugi feedback (brugi in position)
 			}
+			takePicture(); // Arrived at destination, take picture
+			while (Serial2.available() > 0)
+			{
+				// Expecting one char, read buffer to end regardless
+				Serial2.read();
+			}
+		}
 		
 	}
 }
@@ -156,9 +152,9 @@ void Mode_Auto_NC()
 		{
 			while (Serial3.available() > 0)
 			{
-				if (Serial3.read() == ID_SYNC) // Loop untill sync'd
+				if (Serial3.read() == AIM_SYNC) // Loop untill sync'd
 				{
-					if (Serial3.read() == ID_VECTOR) // Certain it's sync'd
+					if (Serial3.read() == VECTOR) // Certain it's sync'd
 					{
 						x = Serial3.read();
 						y = Serial3.read();
@@ -169,8 +165,8 @@ void Mode_Auto_NC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
+				Serial1.print(AIM_SYNC);
+				Serial1.print(VECTOR);
 				Serial1.print(x);
 				Serial1.print(y);
 
@@ -207,8 +203,8 @@ void Mode_Manual_RC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
+				Serial1.print(AIM_SYNC);
+				Serial1.print(VECTOR);
 				Serial1.print(x);
 				Serial1.print(y);
 			}
