@@ -24,7 +24,6 @@ enum CMD_ID{
 #define DEBUG 0
 #endif
 #include <Arduino.h>
-#include <HardwareSerial.h>
 
 bool debug = DEBUG;
 struct AimBot_Serial
