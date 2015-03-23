@@ -154,5 +154,19 @@ private:
 //todo: move code from greyshades to here
 #endif
 #ifdef __DESKTOP
+public ref struct AimBot_Serial
+{
+
+	AimBot_Serial(System::IO::Ports::SerialPort^ serial, unsigned long baudrate){
+		m_serial = serial;
+		m_serial->BaudRate = baudrate;
+	}
+
+	
+
+	System::IO::Ports::SerialPort^ m_serial;
+
+};
+
 #endif
 #endif // SERIAL_H
