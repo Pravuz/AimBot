@@ -118,17 +118,23 @@ void Mode_Auto_RC()
 				Serial1.print(y);
 
 
-				while (Serial2.available() < 1)
-				{
-					// Wait for Brugi feedback (brugi in position)
-				}
-				takePicture(); // Arrived at destination, take picture
-				while (Serial2.available() > 0)
-				{
-					// Expecting one char, read buffer to end regardless
-					Serial2.read();
-				}
-			}
+		if (x != 0 || y != 0)
+		{
+			// Send to Brugi if any movement
+			escSerial.sendVect(x, y);
+
+
+			//while (Serial2.available() < 1)
+			//{
+				// Wait for Brugi feedback (brugi in position)
+			//}
+			//takePicture(); // Arrived at destination, take picture
+			//while (Serial2.available() > 0)
+			//{
+				// Expecting one char, read buffer to end regardless
+			//	Serial2.read();
+			//}
+		}
 		
 	}
 }
