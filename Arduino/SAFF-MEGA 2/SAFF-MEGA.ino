@@ -15,23 +15,24 @@ bool onAuto = true;
 int lastRCvalCH1 = 0;
 int lastRCvalCH2 = 0;
 int lastRCvalCH3 = 0;
+int lastRCvalCH4 = 0;
 int chan1 = 5;  // Interrupt numbers for each PWM chanel
 int chan2 = 4;
 int chan3 = 3;
+int chan4 = 2;  // pin 21
 volatile unsigned long oldtime1 = 0;
 volatile unsigned long timepassed1;
 volatile unsigned long oldtime2 = 0;
 volatile unsigned long timepassed2;
 volatile unsigned long oldtime3 = 0;
 volatile unsigned long timepassed3;
+volatile unsigned long oldtime4 = 0;
+volatile unsigned long timepassed4;
 
 // Power switching
 int BrugiPwrPIN = 12;
 int VideoTrxPwrPIN = 13;
 int PixyPwrPIN = 14;
-
-// Pixy 
-int pixyDelayTime = 500;
 
 // Take picture routine
 # define CAMERA_BTN_DELAY 100
@@ -40,9 +41,9 @@ int lastPictureTime = 0;
 int CameraShtrPIN = 10;
 int CameraFokuPIN = 11;
 
-// Mode related
+// Mode/loop related
 volatile unsigned long lastPassTime = 0;
-int manualDelayTime = 10;
+int loopTime = 10;
 
 // Power check
 volatile unsigned long lastPowerCheck = 0;
@@ -73,17 +74,23 @@ void setup()
 
 void loop()
 {
-	// Run update for the current mode
-	if (onAuto && onRC) Mode_Auto_RC();
-	if (onAuto && !onRC) Mode_Auto_NC();
-	if (!onAuto && onRC) Mode_Manual_RC();
-	if (!onAuto && !onRC) Mode_Manual_NC();
+	int diff = millis() - lastPassTime;
+	if (diff > loopTime)
+	{
+		// Run update for the current mode
+		if (onAuto && onRC) Mode_Auto_RC();
+		if (onAuto && !onRC) Mode_Auto_NC();
+		if (!onAuto && onRC) Mode_Manual_RC();
+		if (!onAuto && !onRC) Mode_Manual_NC();
 
-	// Power check
-	checkButtonAndVoltage();
+		// Power check
+		checkButtonAndVoltage();
 
-	// RC check
-	if (onRC) checkIfRCstillConnected();
+		// RC check
+		if (onRC) checkIfRCstillConnected();
+
+		lastPassTime = millis();
+	}
 }
 
 // Mode selection routines--------------------------------------------------------------------------
@@ -99,9 +106,7 @@ void Mode_Auto_RC()
 	detachInterrupt(chan2);
 
 	//Get vector from pixy, pass it to Brugi
-	int diff = millis() - lastPassTime;
-	if (diff > pixyDelayTime)
-	{
+
 		lastPassTime = millis();
 
 		pixySerial->serialUpdate();
@@ -111,21 +116,21 @@ void Mode_Auto_RC()
 
 		if (x != 0 || y != 0)
 		{
-			// Send to Brugi if any movement
-			escSerial->sendVect(x, y);
+			pixySerial->stopPixy(); // Stop pixy while moving
+			escSerial->sendVect(x, y); // Send to Brugi if any movement
 
 			while (Serial2.available() < 1)
 			{
 				// Wait for Brugi feedback (brugi in position)
 			}
 			takePicture(); // Arrived at destination, take picture
+			pixySerial->startPixy(); // Start pixy again
 			while (Serial2.available() > 0)
 			{
 				// Expecting one char, read buffer to end regardless
 				Serial2.read();
 			}
 		}
-	}
 }
 
 void Mode_Auto_NC()
@@ -139,32 +144,28 @@ void Mode_Auto_NC()
 	detachInterrupt(chan1);
 	detachInterrupt(chan2);
 	
-	//Get vector from pixy, pass it to Brugi
-	int diff = millis() - lastPassTime;
-	if (diff > pixyDelayTime)
+	lastPassTime = millis();
+
+	pixySerial->serialUpdate();
+
+	char x = getVECTx(pixySerial->getX());
+	char y = getVECTy(pixySerial->getY());
+
+	if (x != 0 || y != 0)
 	{
-		lastPassTime = millis();
+		pixySerial->stopPixy(); // Stop pixy while moving
+		escSerial->sendVect(x, y); // Send to Brugi if any movement
 
-		pixySerial->serialUpdate();
-
-		char x = getVECTx(pixySerial->getX());
-		char y = getVECTy(pixySerial->getY());
-
-		if (x != 0 || y != 0)
+		while (Serial2.available() < 1)
 		{
-			// Send to Brugi if any movement
-			escSerial->sendVect(x, y);
-
-			while (Serial2.available() < 1)
-			{
-				// Wait for Brugi feedback (brugi in position)
-			}
-			takePicture(); // Arrived at destination, take picture
-			while (Serial2.available() > 0)
-			{
-				// Expecting one char, read buffer to end regardless
-				Serial2.read();
-			}
+			// Wait for Brugi feedback (brugi in position)
+		}
+		takePicture(); // Arrived at destination, take picture
+		pixySerial->startPixy(); // Start pixy again
+		while (Serial2.available() > 0) //flush brugi serial
+		{
+			// Expecting one char, read buffer to end regardless
+			Serial2.read();
 		}
 	}
 }
@@ -179,21 +180,13 @@ void Mode_Manual_RC()
 	attachInterrupt(chan2, calculatePWMch2, CHANGE);
 	attachInterrupt(chan1, calculatePWMch1, CHANGE);
 
-		int diff = millis() - lastPassTime;
-		if (diff > manualDelayTime)
-		{
-			char x = getRCx();
-			char y = getRCy();
-			if (x != 0 || y != 0)
-			{
-				// Send to Brugi if any movement
-				Serial1.print(AIM_SYNC);
-				Serial1.print(VECTOR);
-				Serial1.print(x);
-				Serial1.print(y);
-			}
-			lastPassTime = millis();
-		}
+	char x = getRCx();
+	char y = getRCy();
+	if (x != 0 || y != 0)
+	{
+		// Send to Brugi if any movement
+		escSerial->sendRCxy(x, y);
+	}
 }
 
 void Mode_Manual_NC()
@@ -204,7 +197,7 @@ void Mode_Manual_NC()
 		// All power off
 		digitalWrite(PixyPwrPIN, LOW);
 		digitalWrite(BrugiPwrPIN, LOW);
-		digitalWrite(VideoTrxPwrPIN, LOW);
+		digitalWrite(VideoTrxPwrPIN, LOW); 
 
 		// Stop listening to RC-PWM 
 		detachInterrupt(chan1);
@@ -235,7 +228,6 @@ void takePicture()
 void checkIfRCstillConnected()
 {
 	// Check if RC is still connected
-	delay(1);
 	rcTimeout++;
 	if (rcTimeout > 1000)
 	{
@@ -363,6 +355,16 @@ void calculatePWMch3() // Mode selector
 		}
 		rcTimeout = 0;
 		onRC = true;
+	}
+}
+void calculatePWMch4() // Camera trigger
+{
+	timepassed4 = micros() - oldtime4;
+	oldtime4 = micros();
+
+	if (timepassed4 > 900 && timepassed4 < 2100)
+	{
+		lastRCvalCH4 = timepassed4;
 	}
 }
 
