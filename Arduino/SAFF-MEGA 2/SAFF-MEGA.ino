@@ -106,8 +106,8 @@ void Mode_Auto_RC()
 
 		pixySerial->serialUpdate();
 
-		char x = pixySerial->getX();
-		char y = pixySerial->getY();
+		char x = getVECTx(pixySerial->getX());
+		char y = getVECTy(pixySerial->getY());
 
 		if (x != 0 || y != 0)
 		{
@@ -125,7 +125,6 @@ void Mode_Auto_RC()
 				Serial2.read();
 			}
 		}
-		
 	}
 }
 
@@ -146,40 +145,25 @@ void Mode_Auto_NC()
 	{
 		lastPassTime = millis();
 
-		int x = 0;
-		int y = 0;
-		if (Serial3.available() >= BUF_SIZE) // If pixy has no object then do nothing
+		pixySerial->serialUpdate();
+
+		char x = getVECTx(pixySerial->getX());
+		char y = getVECTy(pixySerial->getY());
+
+		if (x != 0 || y != 0)
 		{
-			while (Serial3.available() > 0)
+			// Send to Brugi if any movement
+			escSerial->sendVect(x, y);
+
+			while (Serial2.available() < 1)
 			{
-				if (Serial3.read() == AIM_SYNC) // Loop untill sync'd
-				{
-					if (Serial3.read() == VECTOR) // Certain it's sync'd
-					{
-						x = Serial3.read();
-						y = Serial3.read();
-					}
-				}
+				// Wait for Brugi feedback (brugi in position)
 			}
-
-			if (x != 0 || y != 0)
+			takePicture(); // Arrived at destination, take picture
+			while (Serial2.available() > 0)
 			{
-				// Send to Brugi if any movement
-				Serial1.print(AIM_SYNC);
-				Serial1.print(VECTOR);
-				Serial1.print(x);
-				Serial1.print(y);
-
-				while (Serial2.available() < 1)
-				{
-					// Wait for Brugi feedback
-				}
-				takePicture(); // Arrived at destination, take picture
-				while (Serial2.available() > 0)
-				{
-					// Expecting one char, read buffer to end regardless
-					Serial2.read();
-				}
+				// Expecting one char, read buffer to end regardless
+				Serial2.read();
 			}
 		}
 	}
@@ -198,8 +182,8 @@ void Mode_Manual_RC()
 		int diff = millis() - lastPassTime;
 		if (diff > manualDelayTime)
 		{
-			uint16_t x = getRCx();
-			uint16_t y = getRCy();
+			char x = getRCx();
+			char y = getRCy();
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
@@ -259,22 +243,49 @@ void checkIfRCstillConnected()
 	}
 }
 
-int getRCx() 
+int xRCmin = 1000;
+int xRCmax = 2000;
+int xRCMAPmin = -38;
+int xRCMAPmax = 38;
+int yRCmin = 1000;
+int yRCmax = 2000;
+int yRCMAPmin = -38;
+int yRCMAPmax = 38;
+char getRCx() 
 {
 	// Map RC vals to degrees, X
-	return map(lastRCvalCH1, 1000, 2000, 0, 100);
+	//return (char)map(lastRCvalCH1, 1000, 2000, 0, 100);
+	return (char)map(lastRCvalCH1, xRCmin, xRCmax, xRCMAPmin, xRCMAPmax);
 }
-int getRCy()
+char getRCy()
 {
 	// Map RC vals to degrees, Y
-	return map(lastRCvalCH2, 1000, 2000, 0, 100);
+	//return (char)map(lastRCvalCH2, 1000, 2000, 0, 100);
+	return (char)map(lastRCvalCH2, yRCmin, yRCmax, yRCMAPmin, yRCMAPmax);
+}
+
+int xVECT_INmin = -127;
+int xVECT_INmax = 127;
+int xVECT_OUTmin = -38;
+int xVECT_OUTmax = 38;
+int yVECT_INmin = -100;
+int yVECT_INmax = 100;
+int yVECT_OUTmin = -38;
+int yVECT_OUTmax = 38;
+char getVECTx(char x)
+{
+	return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
+}
+char getVECTy(char y)
+{
+	return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
 }
 
 void setup_Serial()
 {
 	Serial.begin(BAUDRATE);	// Usb debug
 
-	*escSerial =AimBot_Serial(&Serial2);
+	*escSerial = AimBot_Serial(&Serial2);
 	*pixySerial = AimBot_Serial(&Serial3);
 }
 
