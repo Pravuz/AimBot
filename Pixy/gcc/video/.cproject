@@ -42,6 +42,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.2019360818" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pixy_m4/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}\..\..\Common&quot;"/>
 								</option>
 								<option id="com.crt.advproject.cpp.fpu.2017478922" name="Floating point" superClass="com.crt.advproject.cpp.fpu" value="com.crt.advproject.cpp.fpu.fpv4" valueType="enumerated"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.optimization.level.2025756128" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.optimize" valueType="enumerated"/>
@@ -180,6 +181,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.2084681091" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pixy_m4/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc}\..\Common&quot;"/>
 								</option>
 								<option id="com.crt.advproject.cpp.fpu.1958626479" name="Floating point" superClass="com.crt.advproject.cpp.fpu" value="com.crt.advproject.cpp.fpu.fpv4" valueType="enumerated"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.optimization.level.27866910" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.optimize" valueType="enumerated"/>
@@ -367,8 +369,17 @@
 		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974;com.crt.advproject.config.exe.release.1185040974.;com.crt.advproject.gcc.exe.release.1306225994;com.crt.advproject.compiler.input.1188769616">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974.50096265;com.crt.advproject.config.exe.release.1185040974.50096265.;com.crt.advproject.cpp.exe.release.1193436180;com.crt.advproject.compiler.cpp.input.493959877">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974;com.crt.advproject.config.exe.release.1185040974.;com.crt.advproject.cpp.exe.release.1684236021;com.crt.advproject.compiler.cpp.input.873729882">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974.50096265;com.crt.advproject.config.exe.release.1185040974.50096265.;com.crt.advproject.gcc.exe.release.1118893685;com.crt.advproject.compiler.input.88786496">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974.50096265;com.crt.advproject.config.exe.release.1185040974.50096265.;com.crt.advproject.gas.exe.release.25355452;com.crt.advproject.assembler.input.1188902633">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1185040974;com.crt.advproject.config.exe.release.1185040974.;com.crt.advproject.gas.exe.release.2058821617;com.crt.advproject.assembler.input.912057015">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
