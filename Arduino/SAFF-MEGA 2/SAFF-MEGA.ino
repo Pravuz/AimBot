@@ -6,7 +6,7 @@
 #include <avr/sleep.h>
 
 // Serial structs
-AimBot_Serial escSerial, pixySerial;
+AimBot_Serial *escSerial, *pixySerial;
 
 // PWM-in related vars
 bool onRC = false;
@@ -104,16 +104,16 @@ void Mode_Auto_RC()
 	{
 		lastPassTime = millis();
 
-		pixySerial.serialUpdate();
+		pixySerial->serialUpdate();
 
-		int x = pixySerial.getX();
-		int y = pixySerial.getY();
+		int x = pixySerial->getX();
+		int y = pixySerial->getY();
 
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
+				Serial1.print(AIM_SYNC);
+				Serial1.print(VECTOR);
 				Serial1.print(x);
 				Serial1.print(y);
 
@@ -156,9 +156,9 @@ void Mode_Auto_NC()
 		{
 			while (Serial3.available() > 0)
 			{
-				if (Serial3.read() == ID_SYNC) // Loop untill sync'd
+				if (Serial3.read() == AIM_SYNC) // Loop untill sync'd
 				{
-					if (Serial3.read() == ID_VECTOR) // Certain it's sync'd
+					if (Serial3.read() == VECTOR) // Certain it's sync'd
 					{
 						x = Serial3.read();
 						y = Serial3.read();
@@ -169,8 +169,8 @@ void Mode_Auto_NC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
+				Serial1.print(AIM_SYNC);
+				Serial1.print(VECTOR);
 				Serial1.print(x);
 				Serial1.print(y);
 
@@ -207,8 +207,8 @@ void Mode_Manual_RC()
 			if (x != 0 || y != 0)
 			{
 				// Send to Brugi if any movement
-				Serial1.print(ID_SYNC);
-				Serial1.print(ID_VECTOR);
+				Serial1.print(AIM_SYNC);
+				Serial1.print(VECTOR);
 				Serial1.print(x);
 				Serial1.print(y);
 			}
@@ -276,10 +276,10 @@ int getRCy()
 
 void setup_Serial()
 {
-	Serial.begin(BAUD_RATE);	// Usb debug
+	Serial.begin(BAUDRATE);	// Usb debug
 
-	escSerial(&Serial2);
-	pixySerial(&Serial3);
+	*escSerial = AimBot_Serial(&Serial2);
+	*pixySerial = AimBot_Serial(&Serial3);
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup

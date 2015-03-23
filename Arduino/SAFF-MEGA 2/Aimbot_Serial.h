@@ -23,9 +23,14 @@ enum CMD_ID{
 #else
 #define DEBUG 0
 #endif
+#include "Arduino.h"
+#include "HardwareSerial.h"
 bool debug = DEBUG;
 struct AimBot_Serial
 {
+	HardwareSerial *m_serial;
+	byte m_buf[BUF_SIZE];
+	byte m_rxbuf[BUF_SIZE];
 
 	AimBot_Serial(HardwareSerial *serial){
 		m_serial = serial;
@@ -143,10 +148,6 @@ private:
 			}
 		}
 	}
-
-	HardwareSerial *m_serial;
-	byte m_buf[BUF_SIZE];
-	byte m_rxbuf[BUF_SIZE];
 };
 
 #endif

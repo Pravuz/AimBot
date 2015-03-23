@@ -27,7 +27,7 @@ GreyRegion currentRegion;
 sPoint16 m_medianVector; //vector can have a negative direction, so using a signed version of the point struct.
 
 int count;
-bool running, rxsync;
+bool running;
 uint8_t *m_txbuf, *m_rxbuf;
 
 GreyShades::GreyShades(uint8_t *lastRegionMem) {
@@ -308,7 +308,7 @@ void GreyShades::objCalcs() {
 		m_vectorsToCenter.pop_front(); // will likely only happend once pr objCalcs
 }
 
-void GreyShades::reset(){
+void GreyShades::reset() {
 	currentRegion = REG_A1;
 	m_vectorsToCenter.clear();
 	m_DetectedObjects.clear();
@@ -332,7 +332,7 @@ void initUart() {
 	UART_TxCmd(LPC_USART0, ENABLE);
 }
 
-void serialSync(){
+void serialSync() {
 	//will this work?
 	UART_TxCmd(LPC_USART0, DISABLE);
 	UART_TxCmd(LPC_USART0, ENABLE);
@@ -346,14 +346,17 @@ uint32_t serialPrintVector(sPoint16 &p) {
 #if 0
 	m_txbuf[2] = p.m_x >> 8; //MSbyte
 	m_txbuf[3] = (uint8_t) p.m_x & 0xFF;
-	m_txbuf[4] = p.m_y >> 8; //MSbyte
+	m_txbuf[4] = p.m_y >> 8;//MSbyte
 	m_txbuf[5] = (uint8_t) p.m_y & 0xFF;
 #endif
 #if 1
-	if(p.mx > 127) m_txbuf[2] = 127;
-	else if (p.mx < -127) m_txbuf[2] = -127;
-	else m_txbuf[2] = (int8_t)p.m_x;
-	m_txbuf[3] = (int8_t)p.m_y;
+	if (p.m_x > 127)
+		m_txbuf[2] = 127;
+	else if (p.m_x < -127)
+		m_txbuf[2] = -127;
+	else
+		m_txbuf[2] = (int8_t) p.m_x;
+	m_txbuf[3] = (int8_t) p.m_y;
 
 #endif
 	uint8_t timeout = 250;
@@ -374,33 +377,40 @@ uint32_t serialRecieve() {
 	}
 	if (UART_Receive(LPC_USART0, m_rxbuf, 6 * sizeof(uint8_t), NONE_BLOCKING)
 			> 0) {
-		if (m_rxbuf[0] == ID_SYNC) {
+		if (m_rxbuf[0] == AIM_SYNC) {
 			switch (m_rxbuf[1]) {
-			case ID_PARAM:
-				uint8_t m_deltaP;
-				m_deltaP = m_rxbuf[2];
+			case PIXY_PARAM_NOFP:
 				uint16_t m_nOfP;
-				m_nOfP = m_rxbuf[3] << 8 | m_rxbuf[4];
-				g_greyShades.setParams(m_deltaP, m_nOfP);
+				m_nOfP = m_rxbuf[2] << 8 | m_rxbuf[3];
+				g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
 				g_greyShades.reset();
 				break;
-			case ID_STARTSTOP:
-				if (running){
+			case PIXY_PARAM_DELTAP:
+				uint8_t m_deltaP;
+				m_deltaP = m_rxbuf[2];
+				g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
+				g_greyShades.reset();
+				break;
+			case PIXY_START:
+				if (!running) {
+					running = true;
+					g_greyShades.reset();
+				}
+				break;
+			case PIXY_STOP:
+				if (running) {
 					running = false;
 					g_greyShades.reset();
 				}
-				else
-					running = true;
 				break;
 			}
 			return 1;
 		} else {
-			rxsync = false;
+			serialSync();
 		}
 	}
 	return 0;
 }
-
 #if 0
 int Uart::open()
 {
@@ -433,7 +443,6 @@ int greySetup() {
 	greyLoadParams();
 
 	count = 0;
-	rxsync = true;
 	running = true;
 
 	// Init UART

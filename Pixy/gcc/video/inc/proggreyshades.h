@@ -111,6 +111,8 @@ uint32_t serialRecieve();
 
 class GreyShades {
 public:
+	uint16_t nOfP;
+	uint8_t deltaP;
 	GreyShades(uint8_t *lastRegionMem);
 	~GreyShades();
 	void setParams(const uint8_t deltaP, const uint16_t nOfP);
@@ -118,9 +120,7 @@ public:
 	void reset();
 
 private:
-	uint16_t nOfP;
 	uint8_t *m_lastRegion;
-	uint8_t deltaP;
 	std::list<DetectedObject> m_DetectedObjects;
 	std::list<sPoint16> m_vectorsToCenter;
 
