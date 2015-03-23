@@ -6,7 +6,7 @@
 #include <avr/sleep.h>
 
 // Serial structs
-AimBot_Serial *escSerial, *pixySerial;
+AimBot_Serial escSerial, pixySerial;
 
 // PWM-in related vars
 bool onRC = false;
@@ -104,36 +104,26 @@ void Mode_Auto_RC()
 	{
 		lastPassTime = millis();
 
-		pixySerial->serialUpdate();
+		pixySerial.serialUpdate();
 
-		int x = pixySerial->getX();
-		int y = pixySerial->getY();
-
-			if (x != 0 || y != 0)
-			{
-				// Send to Brugi if any movement
-				Serial1.print(AIM_SYNC);
-				Serial1.print(VECTOR);
-				Serial1.print(x);
-				Serial1.print(y);
-
+		char x = pixySerial.getX();
+		char y = pixySerial.getY();
 
 		if (x != 0 || y != 0)
 		{
 			// Send to Brugi if any movement
 			escSerial.sendVect(x, y);
 
-
-			//while (Serial2.available() < 1)
-			//{
+			while (Serial2.available() < 1)
+			{
 				// Wait for Brugi feedback (brugi in position)
-			//}
-			//takePicture(); // Arrived at destination, take picture
-			//while (Serial2.available() > 0)
-			//{
+			}
+			takePicture(); // Arrived at destination, take picture
+			while (Serial2.available() > 0)
+			{
 				// Expecting one char, read buffer to end regardless
-			//	Serial2.read();
-			//}
+				Serial2.read();
+			}
 		}
 		
 	}
@@ -282,10 +272,10 @@ int getRCy()
 
 void setup_Serial()
 {
-	Serial.begin(BAUDRATE);	// Usb debug
+	Serial.begin(BAUD_RATE);	// Usb debug
 
-	*escSerial = AimBot_Serial(&Serial2);
-	*pixySerial = AimBot_Serial(&Serial3);
+	escSerial(&Serial2);
+	pixySerial(&Serial3);
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup
