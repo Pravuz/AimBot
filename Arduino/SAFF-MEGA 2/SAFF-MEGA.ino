@@ -1,4 +1,4 @@
-//#define DEBUG_MODE_ON
+#define __DEBUG
 #define __ARDUINO
 #include "Aimbot_Serial.h"
 
