@@ -5,7 +5,7 @@
 #define BAUDRATE 115200
 
 enum CMD_ID {
-	SYNC = 0xa5,
+	AIM_SYNC = 0xa5,
 	VECTOR,
 	PIXY_PARAM_NOFP,
 	PIXY_PARAM_DELTAP,
@@ -17,7 +17,7 @@ enum CMD_ID {
 };
 
 
-#ifndef __ARDUINO
+#ifdef __ARDUINO
 
 
 struct AimBot_Serial
@@ -47,7 +47,7 @@ struct AimBot_Serial
 		else return 0;
 	}
 	void posReached(){
-		m_rxbuf[0] = SYNC;
+		m_rxbuf[0] = AIM_SYNC;
 		m_rxbuf[1] = POS_REACHED;
 		for (int i = 2; i < 6; i++){
 			m_rxbuf[i] = 0;
@@ -57,10 +57,10 @@ struct AimBot_Serial
 private:
 
 	void sync(){
-		if (m_buf[0] != SYNC){
+		if (m_buf[0] != AIM_SYNC){
 			while (1)
 			{
-				if (m_serial->peek() != SYNC)
+				if (m_serial->peek() != AIM_SYNC)
 					m_serial->read();
 				else break;
 			}
@@ -75,7 +75,7 @@ private:
 
 #endif
 #ifdef __PIXY
-
+//todo: move code from greyshades to here
 #endif
 #ifdef __DESKTOP
 #endif

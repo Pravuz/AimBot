@@ -17,6 +17,7 @@
 #include "camera.h"
 #include "pixyvals.h"
 #include "lpc43xx_scu.h"
+#include "Aimbot_Serial.h"
 
 Program g_progGreyshades = { "grey", "perform shades of grey analysis",
 		greySetup, greyLoop };
@@ -339,8 +340,8 @@ void serialSync(){
 
 uint32_t serialPrintVector(sPoint16 &p) {
 	//startbyte
-	m_txbuf[0] = ID_SYNC;
-	m_txbuf[1] = ID_VECTOR;
+	m_txbuf[0] = AIM_SYNC;
+	m_txbuf[1] = VECTOR;
 	//data
 #if 0
 	m_txbuf[2] = p.m_x >> 8; //MSbyte

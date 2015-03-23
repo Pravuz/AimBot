@@ -15,12 +15,11 @@
 
 #ifndef _PROGGREYSHADES_H
 #define _PROGGREYSHADES_H
-#define __ISPIXY
+#define __PIXY
 
 #include <list>
 #include "lpc43xx_uart.h"
 #include "exec.h"
-#include "greyCom.h"
 
 extern Program g_progGreyshades;
 
