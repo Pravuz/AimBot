@@ -1,4 +1,5 @@
 #pragma once
+#define __DESKTOP
 #include "Aimbot_Serial.h"
 namespace AimbotC {
 
@@ -15,11 +16,14 @@ namespace AimbotC {
 	public ref class Main : public System::Windows::Forms::Form
 	{
 	public:
+
+		AimBot_Serial^ m_serial;
+
 		Main(void)
 		{
 			InitializeComponent();
-			findPorts();
-			AimBot_Serial desktop_Serial(serialPort, 115200);
+			m_serial = gcnew AimBot_Serial(serialPort);
+			
 			//
 			//TODO: Add the constructor code here
 			//
@@ -125,6 +129,7 @@ namespace AimbotC {
 			this->txtRecived->Multiline = true;
 			this->txtRecived->Name = L"txtRecived";
 			this->txtRecived->ReadOnly = true;
+			this->txtRecived->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->txtRecived->Size = System::Drawing::Size(100, 300);
 			this->txtRecived->TabIndex = 3;
 			// 
@@ -177,6 +182,7 @@ namespace AimbotC {
 			this->Controls->Add(this->cboPorts);
 			this->Name = L"Main";
 			this->Text = L"Main";
+			this->Load += gcnew System::EventHandler(this, &Main::Main_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -184,15 +190,14 @@ namespace AimbotC {
 #pragma endregion
 
 		// find availeble ports
+	
 	delegate void SetTextBoxDtype(System::String ^);
-		
-	private: void findPorts(){
-				 array<Object^>^ objectArray = serialPort->GetPortNames();
 
-				 this->cboPorts->Items->AddRange(objectArray);
-				 
-	}
+private: System::Void Main_Load(System::Object^  sender, System::EventArgs^  e) {
 
+			 this->cboPorts->Items->AddRange(m_serial->findPorts());
+}
+	
 	private: System::Void btnOpen_Click(System::Object^  sender, System::EventArgs^  e) {
 
 				 this->txtRecived->Clear();
@@ -220,9 +225,12 @@ namespace AimbotC {
 			}
 		 private: System::Void serialPort_DataRecived(System::Object^ sender, System::IO::Ports::SerialDataReceivedEventArgs^ e)
 			 {
-				 String^ indata = this->serialPort->ReadLine();
+				
+				
+				
+				 String^ indata = m_serial->hello();
 				 SetTextBoxDtype ^pfnDelegate = gcnew SetTextBoxDtype(this, &Main::setText);
-				 this->txtRecived->Invoke(pfnDelegate, indata);
+				 txtRecived->BeginInvoke(gcnew SetTextBoxDtype(this, &Main::setText), indata);
 			 }
 				  void setText(String ^indata){
 
@@ -246,11 +254,14 @@ namespace AimbotC {
 				  }
 			 
 		private: System::Void btnClose_Click(System::Object^  sender, System::EventArgs^  e) {
-
+					 MessageBox::Show("CHECK");
 					 this->serialPort->Close();
-
-					 this->progressBar1->Value = 0;
+					 
+					 for (int i = 100; i > -1; i--){
+						 progressBar1->Value = i;
+					 }
 
 		}
+
 };
 }

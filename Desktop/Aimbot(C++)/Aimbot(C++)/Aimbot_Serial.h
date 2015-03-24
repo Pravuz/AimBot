@@ -159,11 +159,20 @@ private:
 public ref struct AimBot_Serial
 {
 
-	AimBot_Serial(System::IO::Ports::SerialPort^ serial, unsigned long baudrate){
+	AimBot_Serial(System::IO::Ports::SerialPort^ serial){
 		m_serial = serial;
-		m_serial->BaudRate = baudrate;
+		m_serial->BaudRate = BAUDRATE;
 	}
 
+	array<Object^>^ findPorts(){
+		return m_serial->GetPortNames();
+	}
+	
+	String^ hello(){
+		String^ tmp;
+		m_serial->ReadTo(tmp);
+		return tmp;
+	}
 	
 
 	System::IO::Ports::SerialPort^ m_serial;

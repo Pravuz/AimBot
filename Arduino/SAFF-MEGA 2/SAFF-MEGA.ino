@@ -5,7 +5,7 @@
 // Sleep related
 #include <avr/sleep.h>
 
-// Serial structs
+// Serial header related
 AimBot_Serial *escSerial, *pixySerial;
 
 // PWM-in related vars
@@ -57,7 +57,6 @@ void setup()
 {
 	// Setup serial
 	setup_Serial();
-
 
 	// Relay setup
 	initButtonAndVoltage();
@@ -201,8 +200,7 @@ void Mode_Manual_RC()
 	if (x != 0 || y != 0)
 	{
 		// Send to Brugi if any movement
-		//escSerial->sendRCxy(x, y);
-		Serial.println("good");
+		escSerial->sendRCxy(x, y);
 	}
 }
 
@@ -311,7 +309,7 @@ void setup_Serial()
 void wakeUpNow()        // here the interrupt is handled after wakeup
 {
 	// execute code here after wake-up before returning to the loop() function
-	setup_Serial();
+	//setup_Serial();
 }
 
 void sleepNow()         // here we put the arduino to sleep

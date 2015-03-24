@@ -15,7 +15,6 @@ enum CMD_ID {
 	POS_REACHED,
 	MOV_XY
 };
-
 #ifdef __MEGA
 #ifdef __DEBUG
 #define DEBUG 1
