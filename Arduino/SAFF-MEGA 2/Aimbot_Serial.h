@@ -108,9 +108,9 @@ struct AimBot_Serial
 		m_tx[2] = x;
 		m_tx[3] = y;
 		if (debug){
-			Serial.println("Sending RC xy");  // For debug
+			//Serial.println("Sending RC xy");  // For debug
 			m_serial->write(m_tx, sizeof(uint8_t)* 4);
-			Serial.println();
+			//Serial.println();
 		}
 		m_serial->write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
 	}

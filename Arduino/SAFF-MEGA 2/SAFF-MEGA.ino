@@ -43,7 +43,7 @@ int CameraFokuPIN = 11;
 
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
-int loopTime = 10;
+int loopTime = 1000;
 
 // debug console
 volatile unsigned long lastDebug = 0;
@@ -191,6 +191,8 @@ void Mode_Manual_RC()
 	digitalWrite(VideoTrxPwrPIN, HIGH);
 
 	// Start lytting på PWM-RC
+	detachInterrupt(chan1);
+	detachInterrupt(chan2);
 	attachInterrupt(chan2, calculatePWMch2, CHANGE);
 	attachInterrupt(chan1, calculatePWMch1, CHANGE);
 
@@ -200,6 +202,7 @@ void Mode_Manual_RC()
 	{
 		// Send to Brugi if any movement
 		//escSerial->sendRCxy(x, y);
+		Serial.println("good");
 	}
 }
 
@@ -250,12 +253,12 @@ void checkIfRCstillConnected()
 
 int xRCmin = 1000;
 int xRCmax = 2000;
-int xRCMAPmin = -38;
-int xRCMAPmax = 38;
+int xRCMAPmin = -10;
+int xRCMAPmax = 10;
 int yRCmin = 1000;
 int yRCmax = 2000;
-int yRCMAPmin = -38;
-int yRCMAPmax = 38;
+int yRCMAPmin = -10;
+int yRCMAPmax = 10;
 char getRCx()
 {
 	// Map RC vals to degrees, X
@@ -279,13 +282,21 @@ int yVECT_OUTmin = -38;
 int yVECT_OUTmax = 38;
 char getVECTx(char x)
 {
-	// Map pixy pixel-vector to degrees, X
-	return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
+	if (x == 0)return 0;
+	else
+	{
+		// Map pixy pixel-vector to degrees, X
+		return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
+	}
 }
 char getVECTy(char y)
 {
-	// Map pixy pixel-vector to degrees, Y
-	return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
+	if (y == 0)return 0;
+	else
+	{
+		// Map pixy pixel-vector to degrees, Y
+		return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
+	}
 }
 
 void setup_Serial()
