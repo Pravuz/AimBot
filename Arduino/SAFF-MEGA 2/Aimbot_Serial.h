@@ -121,7 +121,12 @@ struct AimBot_Serial
 		m_tx[3] = y;
 		if (debug) {
 			Serial.println("Sending RC xy");  // For debug
-			Serial.write(m_tx, sizeof(uint8_t)* 4);
+			//Serial.write(m_tx, sizeof(uint8_t)* 4);
+			for (int i = 0; i < 4; i++)
+			{
+				Serial.print(m_tx[i]);
+				Serial.print(" ");
+			}
 			Serial.println();
 		}
 		Serial2.write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
