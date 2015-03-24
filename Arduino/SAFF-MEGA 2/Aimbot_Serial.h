@@ -32,8 +32,8 @@ struct AimBot_Serial
 	AimBot_Serial(HardwareSerial *serial){
 		m_serial = serial;
 		m_serial->begin(BAUDRATE);
-		m_rx = new uint8_t[];
-		m_tx = new uint8_t[];
+		m_rx = new uint8_t[8];
+		m_tx = new uint8_t[8];
 	}
 
 	void serialUpdate(){
@@ -135,8 +135,8 @@ struct AimBot_Serial
 	void flushBuf(){
 		delete[] m_tx, m_rx;
 		m_serial->flush();
-		m_rx = new uint8_t[];
-		m_tx = new uint8_t[];
+		m_rx = new uint8_t[8];
+		m_tx = new uint8_t[8];
 	}
 
 private:
