@@ -1,5 +1,5 @@
 #define __DEBUG
-#define __ARDUINO
+#define __MEGA
 #include "Aimbot_Serial.h"
 
 // Sleep related
@@ -304,8 +304,8 @@ void setup_Serial()
 	Serial.begin(BAUDRATE);	// Usb debug
 	Serial.println("started");
 
-	*escSerial = AimBot_Serial(&Serial2);
-	*pixySerial = AimBot_Serial(&Serial3);
+	*escSerial = AimBot_Serial();
+	*pixySerial = AimBot_Serial();
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup
