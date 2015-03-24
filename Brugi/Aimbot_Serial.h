@@ -38,29 +38,31 @@ struct AimBot_Serial
 
 	void serialUpdate(){
 		if (m_serial->available()){
+			int len = 0;
 			sync();
 			while (true){
 				m_rx[len] = m_serial->read();
+				len++;
 				if (m_serial->peek() == AIM_SYNC) break;
 			}
 		}
 		if (debug){
 			Serial.println("Serial update complete");
-		}
-		if (debug){}
-		switch (m_rx[1])
-		{
-		case PIXY_PARAM_DELTAP:
-			Serial.print("Pixy is now using deltaP setting = ");
-			int temp = (char)(m_rx[2] << 8) | (byte)m_rx[3];
-			Serial.println(temp);
-			break;
-		case PIXY_PARAM_NOFP:
-			Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
-			Serial.println(m_rx[2]);
-			break;
-		default:
-			break;
+			int temp = 0;
+			switch (m_rx[1])
+			{
+			case PIXY_PARAM_DELTAP:
+				Serial.print("Pixy is now using deltaP setting = ");
+				temp = (int)((char)(m_rx[2] << 8) | (byte)m_rx[3]);
+				Serial.println(temp);
+				break;
+			case PIXY_PARAM_NOFP:
+				Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
+				Serial.println(m_rx[2]);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
