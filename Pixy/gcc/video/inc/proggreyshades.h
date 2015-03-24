@@ -18,7 +18,6 @@
 #define __PIXY
 
 #include <list>
-#include "lpc43xx_uart.h"
 #include "exec.h"
 
 extern Program g_progGreyshades;

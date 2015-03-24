@@ -3,7 +3,7 @@
 
 #define BAUDRATE 115200
 
-enum CMD_ID{
+enum CMD_ID {
 	AIM_SYNC = 0xa5,
 	VECTOR,
 	PIXY_PARAM_NOFP,
@@ -15,7 +15,6 @@ enum CMD_ID{
 	POS_REACHED,
 	MOV_XY
 };
-
 
 #ifdef __ARDUINO
 #ifdef __DEBUG
@@ -29,85 +28,91 @@ bool debug = DEBUG;
 
 struct AimBot_Serial
 {
-	AimBot_Serial(HardwareSerial *serial){
+	AimBot_Serial(HardwareSerial *serial) {
 		m_serial = serial;
 		m_serial->begin(BAUDRATE);
 		m_rx = new uint8_t[8];
 		m_tx = new uint8_t[8];
 	}
 
-	void serialUpdate(){
-		if (m_serial->available()){
+	~AimBot_Serial() {
+		delete[] m_rx, m_tx;
+	}
+
+	void serialUpdate() {
+		if (m_serial->available()) {
+			int len = 0;
 			sync();
-			while (true){
+			while (true) {
 				m_rx[len] = m_serial->read();
+				len++;
 				if (m_serial->peek() == AIM_SYNC) break;
 			}
 		}
-		if (debug){
+		if (debug) {
 			Serial.println("Serial update complete");
-		}
-		if (debug){}
-		switch (m_rx[1])
-		{
-		case PIXY_PARAM_DELTAP:
-			Serial.print("Pixy is now using deltaP setting = ");
-			int temp = (char)(m_rx[2] << 8) | (byte)m_rx[3];
-			Serial.println(temp);
-			break;
-		case PIXY_PARAM_NOFP:
-			Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
-			Serial.println(m_rx[2]);
-			break;
-		default:
-			break;
+			int temp = 0;
+			switch (m_rx[1])
+			{
+				case PIXY_PARAM_DELTAP:
+				Serial.print("Pixy is now using deltaP setting = ");
+				temp = (int)((char)(m_rx[2] << 8) | (byte)m_rx[3]);
+				Serial.println(temp);
+				break;
+				case PIXY_PARAM_NOFP:
+				Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
+				Serial.println(m_rx[2]);
+				break;
+				default:
+				break;
+			}
 		}
 	}
 
-	char getX(){
-		if (debug){
+	char getX() {
+		if (debug) {
 			Serial.print("Recieved X-Vector: ");
 			Serial.println((char)m_rx[2]);
 		}
-		if (m_rx[1] == VECTOR)	return (char)m_rx[2];
+		if (m_rx[1] == VECTOR) return (char)m_rx[2];
 		else return 0;
 	}
 
-	char getY(){
-		if (debug){
+	char getY() {
+		if (debug) {
 			Serial.print("Recieved Y-Vector: ");
 			Serial.println((char)m_rx[3]);
 		}
-		if (m_rx[1] == VECTOR)	return (char)m_rx[3];
+		if (m_rx[1] == VECTOR) return (char)m_rx[3];
 		else return 0;
 	}
 
-	bool isRCmode(){	// check if last recieved coords are RC or pixy-vector
-		if (debug){
+	bool isRCmode() {	// check if last recieved coords are RC or pixy-vector
+		if (debug) {
 			Serial.print("Mode RC? : ");
 			Serial.println((char)m_rx[1]);
 		}
-		if (m_rx[1] == VECTOR)	return false;
+		if (m_rx[1] == VECTOR) return false;
 		else return true;
 	}
 
-	void sendVect(char x, char y){
+	void sendVect(char x, char y) {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = VECTOR;
 		m_tx[2] = x;
 		m_tx[3] = y;
-		if (debug){
+		if (debug) {
 			Serial.println("Sending Vector");
 			m_serial->write(m_tx, sizeof(uint8_t)* 4);
 		}
 		m_serial->write(m_tx, sizeof(uint8_t)* 4);
 	}
-	void sendRCxy(char x, char y){
+	void sendRCxy(char x, char y) {
 		m_tx[0] = AIM_SYNC;  // Sync
-		m_tx[1] = MOV_XY;  // Signal the brugi it's in RC mode 
+		m_tx[1] = MOV_XY;// Signal the brugi it's in RC mode
 		m_tx[2] = x;
 		m_tx[3] = y;
-		if (debug){
+		if (debug) {
 			Serial.println("Sending RC xy");  // For debug
 			m_serial->write(m_tx, sizeof(uint8_t)* 4);
 			Serial.println();
@@ -115,44 +120,44 @@ struct AimBot_Serial
 		m_serial->write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
 	}
 
-	void startPixy(){
+	void startPixy() {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = PIXY_START;
-		if (debug){
+		if (debug) {
 			Serial.print("Pixy command START: ");
 			Serial.println(m_tx[1]);
 		}
 		m_serial->write(m_rx, sizeof(uint8_t)* 2);
 	}
 
-	void stopPixy(){
+	void stopPixy() {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = PIXY_STOP;
-		if (debug){
+		if (debug) {
 			Serial.print("Pixy command STOP: ");
 			Serial.println(m_tx[1]);
 		}
 		m_serial->write(m_tx, sizeof(uint8_t)* 2);
 	}
 
-	void sendPosReached(){
+	void sendPosReached() {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = POS_REACHED;
-		if (debug){
+		if (debug) {
 			Serial.print("ESC Reached position ");
 			Serial.println(m_tx[1]);
 		}
 		m_serial->write(m_tx, sizeof(uint8_t)* 2);
 	}
 
-	void flushBuf(){
+	void flushBuf() {
 		delete[] m_tx, m_rx;
 		m_serial->flush();
 		m_rx = new uint8_t[8];
 		m_tx = new uint8_t[8];
 	}
 
-	void pixyNOfP(int nofp){
+	void pixyNOfP(int nofp) {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = PIXY_PARAM_NOFP;
 		m_tx[2] = (byte)nofp;
@@ -160,7 +165,7 @@ struct AimBot_Serial
 		m_serial->write(m_tx, sizeof(uint8_t)* 4);
 	}
 
-	void pixyDeltaP(char deltaP){
+	void pixyDeltaP(char deltaP) {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = PIXY_PARAM_DELTAP;
 		m_tx[2] = deltaP;
@@ -169,12 +174,12 @@ struct AimBot_Serial
 
 private:
 
-	void sync(){
-		if (m_serial->peek() != AIM_SYNC){
+	void sync() {
+		if (m_serial->peek() != AIM_SYNC) {
 			while (1)
 			{
 				if (m_serial->peek() != AIM_SYNC)
-					m_serial->read();
+				m_serial->read();
 				else break;
 			}
 		}
@@ -187,6 +192,118 @@ private:
 #endif
 #ifdef __PIXY
 //todo: move code from greyshades to here
+
+#include "lpc43xx_uart.h"
+
+struct AimBot_Serial {
+
+	AimBot_Serial() {
+		scu_pinmux(0x2, 0, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1); // U0_TXD
+		scu_pinmux(0x2, 1, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1);// U0_RXD
+		scu_pinmux(0x1, 3, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0);// turn SSP1_MISO into GPIO0[10]
+		scu_pinmux(0x1, 4, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0);// turn SSP1_MOSI into GPIO0[11]
+
+		UART_CFG_Type ucfg;
+		// regular config
+		ucfg.Baud_rate = 115200;
+		ucfg.Databits = UART_DATABIT_8;
+		ucfg.Parity = UART_PARITY_NONE;
+		ucfg.Stopbits = UART_STOPBIT_1;
+		ucfg.Clock_Speed = CLKFREQ;
+		UART_Init(LPC_USART0, &ucfg);
+		UART_TxCmd(LPC_USART0, ENABLE);
+
+		m_rx = new uint8_t[8];
+		m_tx = new uint8_t[8];
+	}
+
+	~AimBot_Serial() {
+		//reset pinmux
+		scu_pinmux(0x2, 0, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC4); 	   // U0_TXD
+		scu_pinmux(0x2, 1, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC4);// U0_RXD
+
+		NVIC_DisableIRQ(USART0_IRQn);
+
+		//delete buffer reservation
+		delete[] m_rx, m_tx;
+	}
+
+	uint32_t updateSerial() {
+		uint8_t timeout = 250;
+		while (UART_CheckBusy(LPC_USART0) == SET) {
+			timeout--;
+			if (timeout = 0)
+				return 0;
+		}
+		if (UART_Receive(LPC_USART0, m_rx, 6 * sizeof(uint8_t), NONE_BLOCKING)
+				> 0) {
+			if (m_rx[0] == AIM_SYNC) {
+				switch (m_rx[1]) {
+				case PIXY_PARAM_NOFP:
+					uint16_t m_nOfP;
+					m_nOfP = m_rx[2] << 8 | m_rx[3];
+					g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
+					g_greyShades.reset();
+					break;
+				case PIXY_PARAM_DELTAP:
+					uint8_t m_deltaP;
+					m_deltaP = m_rx[2];
+					g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
+					g_greyShades.reset();
+					break;
+				case PIXY_START:
+					if (!running) {
+						running = true;
+						g_greyShades.reset();
+					}
+					break;
+				case PIXY_STOP:
+					if (running) {
+						running = false;
+						g_greyShades.reset();
+					}
+					break;
+				}
+				return 1;
+			} else {
+				sync();
+			}
+		}
+		return 0;
+	}
+
+	uint32_t sendVector(sPoint16 &p) {
+		//startbyte
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = VECTOR;
+		//data
+	#if 1
+		if (p.m_x > 127)
+			m_tx[2] = 127;
+		else if (p.m_x < -127)
+			m_tx[2] = -127;
+		else
+			m_tx[2] = (int8_t) p.m_x;
+		m_tx[3] = (int8_t) p.m_y;
+
+	#endif
+		uint8_t timeout = 250;
+		while (UART_CheckBusy(LPC_USART0) == SET) {
+			timeout--;
+			if (timeout = 0)
+				return 0;
+		}
+		return UART_Send(LPC_USART0, m_tx, 4 * sizeof(uint8_t), NONE_BLOCKING);
+	}
+
+private:
+
+	void sync() {
+		//how to sync??
+	}
+
+	uint8_t *m_tx, *m_rx;
+};
 #endif
 #ifdef __DESKTOP
 #endif

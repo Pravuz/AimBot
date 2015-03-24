@@ -36,6 +36,10 @@ struct AimBot_Serial
 		m_tx = new uint8_t[8];
 	}
 
+	~AimBot_Serial(){
+		delete[] m_rx, m_tx;
+	}
+
 	void serialUpdate(){
 		if (m_serial->available()){
 			int len = 0;

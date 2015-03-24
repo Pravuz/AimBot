@@ -26,18 +26,14 @@ static GreyShades g_greyShades((uint8_t *) LAST_REGION_MEMORY);
 GreyRegion currentRegion;
 sPoint16 m_medianVector; //vector can have a negative direction, so using a signed version of the point struct.
 
-int count;
 bool running;
-uint8_t *m_txbuf, *m_rxbuf;
+AimBot_Serial m_serial;
 
 GreyShades::GreyShades(uint8_t *lastRegionMem) {
 	m_lastRegion = lastRegionMem;
-	m_txbuf = new uint8_t[6]; //buffer for serial output of vectors.
-	m_rxbuf = new uint8_t[6]; //buffer for serial input of param/cmd.
 }
 
 GreyShades::~GreyShades() {
-	delete[] m_txbuf, m_rxbuf;
 }
 
 void GreyShades::setParams(const uint8_t deltaP, const uint16_t nOfP) {
@@ -301,7 +297,7 @@ void GreyShades::objCalcs() {
 		m_medianVector.m_y = medianOfVTC_y.front();
 
 		// We now have a vector ready for arduino
-		serialPrintVector(m_medianVector);
+		m_serial.sendVector(m_medianVector);
 	}
 
 	while (m_vectorsToCenter.size() > 5)
@@ -314,125 +310,6 @@ void GreyShades::reset() {
 	m_DetectedObjects.clear();
 }
 
-void initUart() {
-
-	scu_pinmux(0x2, 0, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1); 	   // U0_TXD
-	scu_pinmux(0x2, 1, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1); 	   // U0_RXD
-	scu_pinmux(0x1, 3, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0); // turn SSP1_MISO into GPIO0[10]
-	scu_pinmux(0x1, 4, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0); // turn SSP1_MOSI into GPIO0[11]
-
-	UART_CFG_Type ucfg;
-	// regular config
-	ucfg.Baud_rate = 115200;
-	ucfg.Databits = UART_DATABIT_8;
-	ucfg.Parity = UART_PARITY_NONE;
-	ucfg.Stopbits = UART_STOPBIT_1;
-	ucfg.Clock_Speed = CLKFREQ;
-	UART_Init(LPC_USART0, &ucfg);
-	UART_TxCmd(LPC_USART0, ENABLE);
-}
-
-void serialSync() {
-	//will this work?
-	UART_TxCmd(LPC_USART0, DISABLE);
-	UART_TxCmd(LPC_USART0, ENABLE);
-}
-
-uint32_t serialPrintVector(sPoint16 &p) {
-	//startbyte
-	m_txbuf[0] = AIM_SYNC;
-	m_txbuf[1] = VECTOR;
-	//data
-#if 0
-	m_txbuf[2] = p.m_x >> 8; //MSbyte
-	m_txbuf[3] = (uint8_t) p.m_x & 0xFF;
-	m_txbuf[4] = p.m_y >> 8;//MSbyte
-	m_txbuf[5] = (uint8_t) p.m_y & 0xFF;
-#endif
-#if 1
-	if (p.m_x > 127)
-		m_txbuf[2] = 127;
-	else if (p.m_x < -127)
-		m_txbuf[2] = -127;
-	else
-		m_txbuf[2] = (int8_t) p.m_x;
-	m_txbuf[3] = (int8_t) p.m_y;
-
-#endif
-	uint8_t timeout = 250;
-	while (UART_CheckBusy(LPC_USART0) == SET) {
-		timeout--;
-		if (timeout = 0)
-			return 0;
-	}
-	return UART_Send(LPC_USART0, m_txbuf, 6 * sizeof(uint8_t), NONE_BLOCKING);
-}
-
-uint32_t serialRecieve() {
-	uint8_t timeout = 250;
-	while (UART_CheckBusy(LPC_USART0) == SET) {
-		timeout--;
-		if (timeout = 0)
-			return 0;
-	}
-	if (UART_Receive(LPC_USART0, m_rxbuf, 6 * sizeof(uint8_t), NONE_BLOCKING)
-			> 0) {
-		if (m_rxbuf[0] == AIM_SYNC) {
-			switch (m_rxbuf[1]) {
-			case PIXY_PARAM_NOFP:
-				uint16_t m_nOfP;
-				m_nOfP = m_rxbuf[2] << 8 | m_rxbuf[3];
-				g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
-				g_greyShades.reset();
-				break;
-			case PIXY_PARAM_DELTAP:
-				uint8_t m_deltaP;
-				m_deltaP = m_rxbuf[2];
-				g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
-				g_greyShades.reset();
-				break;
-			case PIXY_START:
-				if (!running) {
-					running = true;
-					g_greyShades.reset();
-				}
-				break;
-			case PIXY_STOP:
-				if (running) {
-					running = false;
-					g_greyShades.reset();
-				}
-				break;
-			}
-			return 1;
-		} else {
-			serialSync();
-		}
-	}
-	return 0;
-}
-#if 0
-int Uart::open()
-{
-	scu_pinmux(0x2, 0, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1); 	   // U0_TXD
-	scu_pinmux(0x2, 1, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC1);// U0_RXD
-	scu_pinmux(0x1, 3, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0);// turn SSP1_MISO into GPIO0[10]
-	scu_pinmux(0x1, 4, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0);// turn SSP1_MOSI into GPIO0[11]
-
-	NVIC_EnableIRQ(USART0_IRQn);
-	return 0;
-}
-
-int Uart::close()
-{
-	scu_pinmux(0x2, 0, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC4); 	   // U0_TXD
-	scu_pinmux(0x2, 1, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC4);// U0_RXD
-
-	NVIC_DisableIRQ(USART0_IRQn);
-	return 0;
-}
-#endif
-
 int greySetup() {
 //initial currentRegion
 	currentRegion = REG_A1;
@@ -442,50 +319,27 @@ int greySetup() {
 // load parameters
 	greyLoadParams();
 
-	count = 0;
-	running = true;
-
-	// Init UART
-	initUart();
-
 //init vector
 	m_medianVector.m_x = 0;
 	m_medianVector.m_y = 0;
+
+	running = true;
 
 	return 0;
 }
 
 int greyLoop() {
 	//check for new instructions
-	serialRecieve();
+	m_serial.updateSerial();
 
 //handle images in parts.
 	if (running)
 		g_greyShades.handleImage();
 
-#if 0 //debug breakpoint loc
-	count++;
-	if (count == 350)
-	count = 0;
-#endif
 	return 0;
 }
 
 void greyLoadParams() {
-#if 0 //fuck off params
-	prm_add("Pixel-change treshold", 0,
-			"@c 4-20 recommended. Depends on weather, lighting etc. (default 15)",
-			UINT8(15), END);
-	prm_add("Pixel-change cutoff", 0,
-			"@c 1-32000, keep as low as possible, higher => moar cpu demanding. Use depending on distance to object. (default 3000)",
-			UINT16(3000), END);
-
-	uint8_t g_deltaP;
-	uint32_t g_nOfP;
-	prm_get("Pixel-change treshold", &g_deltaP, END);
-	prm_get("Pixel-change cutoff", &g_nOfP, END);
-	g_greyShades.setParams(g_deltaP, g_nOfP);
-#endif
-//default params.
+	//default params.
 	g_greyShades.setParams(15, 10500);
 }

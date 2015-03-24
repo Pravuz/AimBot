@@ -31,7 +31,6 @@ src/main_m4.o src/main_m4.d: ../src/main_m4.cpp \
  C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/chirpusb.h \
  C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/usblink.h \
  C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\inc/proggreyshades.h \
- C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/lpc43xx_uart.h \
  C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\inc/exec.h \
  C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\inc/cr_start_m0.h
 
@@ -98,8 +97,6 @@ C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/chirpusb.h:
 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/usblink.h:
 
 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\inc/proggreyshades.h:
-
-C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\inc/lpc43xx_uart.h:
 
 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\inc/exec.h:
 
