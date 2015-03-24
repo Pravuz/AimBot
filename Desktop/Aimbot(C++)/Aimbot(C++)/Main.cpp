@@ -12,7 +12,6 @@ void Main(array<String^>^ args){
 
 	AimbotC::Main form;
 	Application::Run(%form); 4
-
-		;
+	;
 }
 
