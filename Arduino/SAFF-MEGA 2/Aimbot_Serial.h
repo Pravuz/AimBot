@@ -17,7 +17,7 @@ enum CMD_ID{
 };
 
 
-#ifdef __ARDUINO
+#ifdef __MEGA
 #ifdef __DEBUG
 #define DEBUG 1
 #else
@@ -118,7 +118,7 @@ struct AimBot_Serial
 			m_serial->write(m_tx, sizeof(uint8_t)* 4);
 			//Serial.println();
 		}
-		m_serial->write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
+		//m_serial->write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
 	}
 
 	void startPixy(){
