@@ -13,8 +13,8 @@ enum CMD_ID{
 	PIXY_START,
 	MOV_X,
 	MOV_Y,
-	MOV_XY,
-	POS_REACHED
+	POS_REACHED,
+	MOV_XY
 };
 
 

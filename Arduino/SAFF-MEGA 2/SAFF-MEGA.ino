@@ -16,10 +16,10 @@ int lastRCvalCH1 = 0;
 int lastRCvalCH2 = 0;
 int lastRCvalCH3 = 0;
 int lastRCvalCH4 = 0;
-int chan1 = 5;  // Interrupt numbers for each PWM chanel
-int chan2 = 4;
-int chan3 = 3;
-int chan4 = 2;  // pin 21
+int chan1 = 5;  // Interrupt numbers for each PWM chanel //SONDRE ENDRET
+int chan2 = 4; //SONDRE ENDRET
+int chan3 = 3; //SONDRE ENDRET
+int chan4 = 2; //SONDRE pin 21 ADDED
 volatile unsigned long oldtime1 = 0;
 volatile unsigned long timepassed1;
 volatile unsigned long oldtime2 = 0;
@@ -38,7 +38,7 @@ int PixyPwrPIN = 14;
 # define CAMERA_BTN_DELAY 100
 # define CAMERA_PICT_DELAY 500
 int lastPictureTime = 0;
-int CameraShtrPIN = 10;
+int CameraShtrPIN = 6;
 int CameraFokuPIN = 11;
 
 // Mode/loop related
@@ -55,9 +55,10 @@ void setup()
 	initButtonAndVoltage();
 
 	// interrupt pins int.4-2
-	pinMode(18, INPUT); // int.5 -- throttle  (chan1)
-	pinMode(19, INPUT); // aile 4  chan2
-	pinMode(20, INPUT); // elev 3   chan3
+	pinMode(chan1, INPUT); // int.5 -- throttle  (chan1)
+	pinMode(chan2, INPUT); // aile 4  chan2
+	pinMode(chan3, INPUT); // rudo 3   chan3
+	pinMode(chan4, INPUT); // Gear //SONDRE added
 
 	// power pins
 	pinMode(CameraShtrPIN, OUTPUT);
@@ -70,6 +71,7 @@ void setup()
 
 	// Start mode selector interrupt
 	attachInterrupt(chan3, calculatePWMch3, CHANGE);
+	attachInterrupt(chan4, calculatePWMch4, CHANGE);
 }
 
 void loop()
@@ -107,30 +109,30 @@ void Mode_Auto_RC()
 
 	//Get vector from pixy, pass it to Brugi
 
-		lastPassTime = millis();
+	lastPassTime = millis();
 
-		pixySerial->serialUpdate();
+	pixySerial->serialUpdate();
 
-		char x = getVECTx(pixySerial->getX());
-		char y = getVECTy(pixySerial->getY());
+	char x = getVECTx(pixySerial->getX());
+	char y = getVECTy(pixySerial->getY());
 
-		if (x != 0 || y != 0)
+	if (x != 0 || y != 0)
+	{
+		pixySerial->stopPixy(); // Stop pixy while moving
+		escSerial->sendVect(x, y); // Send to Brugi if any movement
+
+		while (Serial2.available() < 1)
 		{
-			pixySerial->stopPixy(); // Stop pixy while moving
-			escSerial->sendVect(x, y); // Send to Brugi if any movement
-
-			while (Serial2.available() < 1)
-			{
-				// Wait for Brugi feedback (brugi in position)
-			}
-			takePicture(); // Arrived at destination, take picture
-			pixySerial->startPixy(); // Start pixy again
-			while (Serial2.available() > 0)
-			{
-				// Expecting one char, read buffer to end regardless
-				Serial2.read();
-			}
+			// Wait for Brugi feedback (brugi in position)
 		}
+		takePicture(); // Arrived at destination, take picture
+		pixySerial->startPixy(); // Start pixy again
+		while (Serial2.available() > 0)
+		{
+			// Expecting one char, read buffer to end regardless
+			Serial2.read();
+		}
+	}
 }
 
 void Mode_Auto_NC()
@@ -143,7 +145,7 @@ void Mode_Auto_NC()
 	// Stop listening to RC-PWM 
 	detachInterrupt(chan1);
 	detachInterrupt(chan2);
-	
+
 	lastPassTime = millis();
 
 	pixySerial->serialUpdate();
@@ -197,7 +199,7 @@ void Mode_Manual_NC()
 		// All power off
 		digitalWrite(PixyPwrPIN, LOW);
 		digitalWrite(BrugiPwrPIN, LOW);
-		digitalWrite(VideoTrxPwrPIN, LOW); 
+		digitalWrite(VideoTrxPwrPIN, LOW);
 
 		// Stop listening to RC-PWM 
 		detachInterrupt(chan1);
@@ -243,7 +245,7 @@ int yRCmin = 1000;
 int yRCmax = 2000;
 int yRCMAPmin = -38;
 int yRCMAPmax = 38;
-char getRCx() 
+char getRCx()
 {
 	// Map RC vals to degrees, X
 	//return (char)map(lastRCvalCH1, 1000, 2000, 0, 100);
@@ -305,18 +307,19 @@ void sleepNow()         // here we put the arduino to sleep
 	sleep_enable();          // enables the sleep bit in the mcucr register
 
 	// Detach other interrupts on int.4 and attach wakeUpNow
-	detachInterrupt(chan3);  // int.4 = pin 19
-	attachInterrupt(chan3, wakeUpNow, HIGH);
+	detachInterrupt(chan3);  // int.4 = pin 19 //SONDRE Endret fra 3 til 20
+	attachInterrupt(chan3, wakeUpNow, HIGH); //SONDRE Endret fra 3 til 20
 
-	sleep_mode();            // here the device is actually put to sleep
+	sleep_cpu(); ////SONDRE sleep_mode() gjør sleep_enable, sleep_cpu, sleep_disable, så siden enable og disable blir gjort over og under, trengs bare cpu her?
+	//sleep_mode();            // here the device is actually put to sleep
 	// THE PROGRAM CONTINUES FROM HERE AFTER WAKING UP
 
 	sleep_disable();         // first thing after waking from sleep
 
-	detachInterrupt(chan3);      // disables interrupt 4 on pin 19 so wakeUpNow is only run once
+	detachInterrupt(chan3);      // disables interrupt 4 on pin 19 so wakeUpNow is only run once //SONDRE Endret fra 3 til 20
 
 	// Start mode selector interrupt gets attached again
-	attachInterrupt(chan3, calculatePWMch3, CHANGE);
+	attachInterrupt(chan3, calculatePWMch3, CHANGE); //SONDRE Endret fra 3 til 20
 }
 
 void calculatePWMch1() // Throttle 1
@@ -334,7 +337,7 @@ void calculatePWMch2() // Throttle 2
 	timepassed2 = micros() - oldtime2;
 	oldtime2 = micros();
 
-	if (timepassed2 > 900 && timepassed2 < 2100) 
+	if (timepassed2 > 900 && timepassed2 < 2100)
 	{
 		lastRCvalCH2 = timepassed2;
 	}
@@ -372,10 +375,10 @@ void calculatePWMch4() // Camera trigger
 
 void initButtonAndVoltage()
 {
-	pinMode(7, OUTPUT);
-	digitalWrite(7, HIGH);
+	pinMode(5, OUTPUT); //SONDRE endret fra 7 til 5
+	digitalWrite(5, HIGH); //SONDRE endret fra 7 til 5
 	pinMode(A0, INPUT);
-	pinMode(A5, INPUT);
+	pinMode(A1, INPUT); //SONDRE endret fra 5 til 1
 
 }
 
@@ -384,7 +387,7 @@ void checkButtonAndVoltage()
 	int diff = millis() - lastPowerCheck;
 	if (diff > powerCheckTime) // check every 100ms or so
 	{
-	
+
 #if 0
 		//testing
 		String s = "ch1: ";
@@ -403,16 +406,16 @@ void checkButtonAndVoltage()
 			{
 				// power button pressed, power off
 				delay(3000);
-				digitalWrite(7, LOW);
+				digitalWrite(5, LOW); //SONDRE endret fra 7 til 5
 				delay(1000);
 			}
 		}
 
-		if (analogRead(5) < 900)
+		if (analogRead(1) < 900) //SONDRE endret fra 5 til 1
 		{
 			// bat low, power off
 			delay(1000);
-			digitalWrite(7, LOW);
+			digitalWrite(5, LOW); //SONDRE endret fra 7 til 5
 			delay(1000);
 		}
 	}

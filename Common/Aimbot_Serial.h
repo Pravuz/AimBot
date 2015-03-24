@@ -13,7 +13,8 @@ enum CMD_ID{
 	PIXY_START,
 	MOV_X,
 	MOV_Y,
-	POS_REACHED
+	POS_REACHED,
+	MOV_XY
 };
 
 
@@ -74,6 +75,15 @@ struct AimBot_Serial
 		else return 0;
 	}
 
+	bool isRCmode(){	// check if last recieved coords are RC or pixy-vector
+		if (debug){
+			Serial.print("Mode RC? : ");
+			Serial.println((char)m_buf[1]);
+		}
+		if (m_buf[1] == VECTOR)	return false;
+		else return true;
+	}
+
 	void sendVect(char x, char y){
 		m_rxbuf[0] = AIM_SYNC;
 		m_rxbuf[1] = VECTOR;
@@ -88,6 +98,21 @@ struct AimBot_Serial
 			Serial.println();
 		}
 		m_serial->write(m_rxbuf, BUF_SIZE);
+	}
+	void sendRCxy(char x, char y){
+		m_rxbuf[0] = AIM_SYNC;  // Sync
+		m_rxbuf[1] = MOV_XY;  // Signal the brugi it's in RC mode 
+		m_rxbuf[2] = x;
+		m_rxbuf[3] = y;
+		for (int i = 4; i < BUF_SIZE; i++){  // Fill the rest of the buffer with 0
+			m_rxbuf[i] = 0;	
+		}
+		if (debug){
+			Serial.println("Sending RC xy");  // For debug
+			for (int i = 0; i < BUF_SIZE; i++) Serial.print(i);
+			Serial.println();
+		}
+		m_serial->write(m_rxbuf, BUF_SIZE);  // Write to brugi
 	}
 
 	void startPixy(){
