@@ -167,14 +167,40 @@ public ref struct AimBot_Serial
 	array<Object^>^ findPorts(){
 		return m_serial->GetPortNames();
 	}
-	
-	String^ hello(){
-		String^ tmp;
-		m_serial->ReadTo(tmp);
-		return tmp;
+
+	void setName(System::String^ portName){
+		m_serial->PortName = portName;
+	}
+
+	System::String^ readS(){
+		return m_serial->ReadLine();
+	}
+
+	void openPort(){
+		m_serial->Open();
+	}
+
+	void closePort(){
+		m_serial->Close();
+	}
+
+	int status(){
+		int test = 1;
+		if (m_serial->IsOpen == true)
+		{
+			test = 0;
+		}
+		else
+		{
+			test = 1;
+		}
+		return test;
+	}
+
+	void request(){
+		m_serial->Write("0xff2222");
 	}
 	
-
 	System::IO::Ports::SerialPort^ m_serial;
 
 };
