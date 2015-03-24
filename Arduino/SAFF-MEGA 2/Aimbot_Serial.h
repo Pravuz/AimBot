@@ -94,7 +94,7 @@ struct AimBot_Serial
 		}
 		if (debug){
 			Serial.println("Sending Vector");
-			for (int i = 0; i < BUF_SIZE; i++) Serial.print(i);
+			for (int i = 0; i < BUF_SIZE; i++) Serial.print(m_rxbuf[i]);
 			Serial.println();
 		}
 		m_serial->write(m_rxbuf, BUF_SIZE);
@@ -109,7 +109,7 @@ struct AimBot_Serial
 		}
 		if (debug){
 			Serial.println("Sending RC xy");  // For debug
-			for (int i = 0; i < BUF_SIZE; i++) Serial.print(i);
+			for (int i = 0; i < BUF_SIZE; i++) Serial.print(m_rxbuf[i]);
 			Serial.println();
 		}
 		m_serial->write(m_rxbuf, BUF_SIZE);  // Write to brugi
@@ -172,8 +172,8 @@ private:
 	}
 
 	HardwareSerial *m_serial;
-	byte m_buf[BUF_SIZE];
-	byte m_rxbuf[BUF_SIZE];
+	uint8_t *m_buf;
+	uint8_t *m_rxbuf;
 };
 
 #endif

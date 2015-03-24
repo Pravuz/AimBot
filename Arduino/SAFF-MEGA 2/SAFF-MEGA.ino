@@ -45,12 +45,20 @@ int CameraFokuPIN = 11;
 volatile unsigned long lastPassTime = 0;
 int loopTime = 10;
 
+// debug console
+volatile unsigned long lastDebug = 0;
+int debugTime = 1000;
+
 // Power check
 volatile unsigned long lastPowerCheck = 0;
 int powerCheckTime = 100;
 
 void setup()
 {
+	// Setup serial
+	setup_Serial();
+
+
 	// Relay setup
 	initButtonAndVoltage();
 
@@ -66,12 +74,10 @@ void setup()
 	pinMode(BrugiPwrPIN, OUTPUT);
 	pinMode(VideoTrxPwrPIN, OUTPUT);
 
-	// Setup serial
-	setup_Serial();
-
 	// Start mode selector interrupt
 	attachInterrupt(chan3, calculatePWMch3, CHANGE);
 	attachInterrupt(chan4, calculatePWMch4, CHANGE);
+	Serial.println("started");
 }
 
 void loop()
@@ -93,6 +99,17 @@ void loop()
 
 		lastPassTime = millis();
 	}
+
+	int diffy = millis() - lastDebug;
+	if (diffy > debugTime)
+	{
+		if (onAuto && onRC) Serial.println("Mode_Auto_RC");
+		if (onAuto && !onRC) Serial.println("Mode_Auto_NC");
+		if (!onAuto && onRC) Serial.println("Mode_Manual_RC");
+		if (!onAuto && !onRC) Serial.println("Mode_Manual_NC");
+
+		lastDebug = millis();
+	}
 }
 
 // Mode selection routines--------------------------------------------------------------------------
@@ -108,9 +125,6 @@ void Mode_Auto_RC()
 	detachInterrupt(chan2);
 
 	//Get vector from pixy, pass it to Brugi
-
-	lastPassTime = millis();
-
 	pixySerial->serialUpdate();
 
 	char x = getVECTx(pixySerial->getX());
@@ -145,8 +159,6 @@ void Mode_Auto_NC()
 	// Stop listening to RC-PWM 
 	detachInterrupt(chan1);
 	detachInterrupt(chan2);
-
-	lastPassTime = millis();
 
 	pixySerial->serialUpdate();
 
@@ -187,13 +199,12 @@ void Mode_Manual_RC()
 	if (x != 0 || y != 0)
 	{
 		// Send to Brugi if any movement
-		escSerial->sendRCxy(x, y);
+		//escSerial->sendRCxy(x, y);
 	}
 }
 
 void Mode_Manual_NC()
 {
-	Serial.println("Mode_Manual_NC");
 	while (!onAuto && !onRC)
 	{
 		// All power off
@@ -206,7 +217,7 @@ void Mode_Manual_NC()
 		detachInterrupt(chan2);
 
 		delay(500);
-		sleepNow();
+		//sleepNow();
 	}
 }
 
@@ -280,6 +291,7 @@ char getVECTy(char y)
 void setup_Serial()
 {
 	Serial.begin(BAUDRATE);	// Usb debug
+	Serial.println("started");
 
 	*escSerial = AimBot_Serial(&Serial2);
 	*pixySerial = AimBot_Serial(&Serial3);
