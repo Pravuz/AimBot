@@ -15,7 +15,6 @@ enum CMD_ID {
 	POS_REACHED,
 	MOV_XY
 };
-
 #ifdef __MEGA
 #ifdef __DEBUG
 #define DEBUG 1
@@ -31,13 +30,15 @@ struct AimBot_Serial
 	AimBot_Serial() {
 		Serial2.begin(BAUDRATE);
 		Serial3.begin(BAUDRATE);
-		m_rx1 = new uint8_t[8];
-		m_rx2 = new uint8_t[8];
-		m_tx = new uint8_t[8];
+		m_rx1 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_rx2 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 	}
 
 	~AimBot_Serial() {
-		delete[] m_rx1, m_rx2, m_tx;
+		free(m_rx1);
+		free(m_rx2);
+		free(m_tx);
 	}
 
 	void serialUpdate() {
