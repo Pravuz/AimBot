@@ -37,17 +37,30 @@ struct AimBot_Serial
 	}
 
 	void serialUpdate(){
-		len = 0;
 		if (m_serial->available()){
 			sync();
 			while (true){
 				m_rx[len] = m_serial->read();
-				if (m_serial->peek() != AIM_SYNC) len++;
-				else break;
+				if (m_serial->peek() == AIM_SYNC) break;
 			}
 		}
 		if (debug){
 			Serial.println("Serial update complete");
+		}
+		if (debug){}
+		switch (m_rx[1])
+		{
+		case PIXY_PARAM_DELTAP:
+			Serial.print("Pixy is now using deltaP setting = ");
+			int temp = (char)(m_rx[2] << 8) | (byte)m_rx[3];
+			Serial.println(temp);
+			break;
+		case PIXY_PARAM_NOFP:
+			Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
+			Serial.println(m_rx[2]);
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -85,9 +98,9 @@ struct AimBot_Serial
 		m_tx[3] = y;
 		if (debug){
 			Serial.println("Sending Vector");
-			m_serial->write(m_tx, sizeof(uint8_t) * 4);
+			m_serial->write(m_tx, sizeof(uint8_t)* 4);
 		}
-		m_serial->write(m_tx, sizeof(uint8_t) * 4);
+		m_serial->write(m_tx, sizeof(uint8_t)* 4);
 	}
 	void sendRCxy(char x, char y){
 		m_tx[0] = AIM_SYNC;  // Sync
@@ -137,6 +150,21 @@ struct AimBot_Serial
 		m_serial->flush();
 		m_rx = new uint8_t[8];
 		m_tx = new uint8_t[8];
+	}
+
+	void pixyNOfP(int nofp){
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = PIXY_PARAM_NOFP;
+		m_tx[2] = (byte)nofp;
+		m_tx[3] = (char)(nofp >> 8);
+		m_serial->write(m_tx, sizeof(uint8_t)* 4);
+	}
+
+	void pixyDeltaP(char deltaP){
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = PIXY_PARAM_DELTAP;
+		m_tx[2] = deltaP;
+		m_serial->write(m_tx, sizeof(uint8_t)* 3);
 	}
 
 private:
