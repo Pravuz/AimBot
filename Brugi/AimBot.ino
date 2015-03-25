@@ -1,7 +1,7 @@
 #include "BLcontroller.h"
 #include "Interupts_.h"
 #include <Wire\Wire.h>
-#define __ARDUINO
+#define __ESC
 #include "Aimbot_Serial.h"
 
 #define bldc1 360/12/256
@@ -23,7 +23,7 @@ AimBot_Serial *megaSerial;
 void setup()
 {
 
-	*megaSerial = AimBot_Serial(&Serial);
+	*megaSerial = AimBot_Serial();
 
 	initBlController();
 	

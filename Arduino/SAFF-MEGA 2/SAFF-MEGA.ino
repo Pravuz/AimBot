@@ -300,11 +300,10 @@ char getVECTy(char y)
 void setup_Serial()
 {
 	Serial.begin(BAUDRATE);	// Usb debug
-	//Serial.println("started");
-	//Serial2.begin(BAUDRATE);
-	//Serial3.begin(BAUDRATE);
-	*escSerial = AimBot_Serial(&Serial2);
-	*pixySerial = AimBot_Serial(&Serial3);
+	Serial.println("started");
+
+	*escSerial = AimBot_Serial();
+	*pixySerial = AimBot_Serial();
 }
 
 void wakeUpNow()        // here the interrupt is handled after wakeup
