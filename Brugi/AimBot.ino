@@ -7,6 +7,7 @@
 #define bldc1 360/12/256
 #define bldc2 360/24/256
 
+float z_Float = 0, y_Float = 0;
 
 uint8_t z_axe = 0, y_axe = 0;
 int16_t z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
@@ -38,10 +39,26 @@ void loop()
 {
 
 	megaSerial->serialUpdate();
-	
+
+	RCin = megaSerial->isRCmode();
 
 	z_Pos = megaSerial->getX();
 	y_Pos = megaSerial->getY();
+
+	if (RCin)
+	{
+		z_Float += z_Pos*0.1;
+		y_Float += y_Pos*0.1;
+
+		z_Pos = z_Float;
+		y_Pos = y_Float;
+	}
+	else if (!RCin)
+	{
+		z_Float = 0;
+		y_Float = 0;
+	}
+	
 
 	z_Pos_Steps = z_Pos / bldc2;
 	y_Pos_Steps = y_Pos / bldc1;
@@ -81,8 +98,10 @@ void loop()
 		MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 180);
 		MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 180);
 	}
-	
-	megaSerial->sendPosReached();
+	if (z_Pos == 0 & y_Pos == 0)
+	{
+		megaSerial->sendPosReached();
+	}
 	
 
 	//if (motorUpdate)
