@@ -10,8 +10,6 @@ enum CMD_ID {
 	PIXY_PARAM_DELTAP,
 	PIXY_STOP,
 	PIXY_START,
-	MOV_X,
-	MOV_Y,
 	POS_REACHED,
 	MOV_XY
 };
@@ -154,15 +152,6 @@ struct AimBot_Serial
 		Serial3.write(m_tx, sizeof(uint8_t)* 2);
 	}
 
-	void flushBuf() {
-		delete[] m_tx, m_rx1, m_rx2;
-		Serial2.flush();
-		Serial3.flush();
-		m_rx1 = new uint8_t[8];
-		m_rx2 = new uint8_t[8];
-		m_tx = new uint8_t[8];
-	}
-
 	void pixyNOfP(int nofp) {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = PIXY_PARAM_NOFP;
@@ -176,6 +165,17 @@ struct AimBot_Serial
 		m_tx[1] = PIXY_PARAM_DELTAP;
 		m_tx[2] = deltaP;
 		Serial3.write(m_tx, sizeof(uint8_t)* 3);
+	}
+
+	void flushBuf() {
+		Serial2.flush();
+		Serial3.flush();
+		m_rx1 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_rx2 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		free(m_rx1);
+		free(m_rx2);
+		free(m_tx);
 	}
 
 private:
@@ -203,7 +203,6 @@ private:
 	}
 
 	uint8_t *m_tx, *m_rx1, *m_rx2;
-	unsigned int len;
 };
 #endif
 #ifdef __ESC
@@ -212,12 +211,13 @@ struct AimBot_Serial
 {
 	AimBot_Serial() {
 		Serial.begin(BAUDRATE);
-		m_rx = new uint8_t[8];
-		m_tx = new uint8_t[8];
+		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 	}
 
 	~AimBot_Serial() {
-		delete[] m_rx, m_tx;
+		free(m_rx);
+		free(m_tx);
 	}
 
 	void serialUpdate() {
@@ -255,10 +255,16 @@ struct AimBot_Serial
 
 private:
 	void sync(){
-
+		if (Serial.peek() != AIM_SYNC) {
+			while (1)
+			{
+				if (Serial.peek() != AIM_SYNC)
+					Serial.read();
+				else break;
+			}
+		}
 	}
 	uint8_t *m_tx, *m_rx;
-	unsigned int len;
 };
 #endif
 #ifdef __PIXY
