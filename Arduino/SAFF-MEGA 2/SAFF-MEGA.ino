@@ -9,17 +9,16 @@
 AimBot_Serial *escSerial, *pixySerial;
 
 // PWM-in related vars
-bool onRC = false;
-int rcTimeout = 0;
-bool onAuto = true;
-int lastRCvalCH1 = 0;
-int lastRCvalCH2 = 0;
-int lastRCvalCH3 = 0;
-int lastRCvalCH4 = 0;
-int chan1 = 5;  // Interrupt numbers for each PWM chanel //SONDRE ENDRET
-int chan2 = 4; //SONDRE ENDRET
-int chan3 = 3; //SONDRE ENDRET
-int chan4 = 2; //SONDRE pin 21 ADDED
+int mode = 3;
+
+int lastRCvalCH1 = 0;  // Thro (min = 1052, max = 1912), TH_HOLD = 952
+int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
+int lastRCvalCH3 = 0;  // GEAR (1052 = 0, 1912 = 1, ) needs ACRO-MODE
+int lastRCvalCH4 = 0;  // ELEV (UP = 1916, DOWN = 1052)
+#define chan1 5  // Interrupt numbers for each PWM chanel
+#define chan2 4
+#define chan3 3
+#define chan4 2  // pin 21
 volatile unsigned long oldtime1 = 0;
 volatile unsigned long timepassed1;
 volatile unsigned long oldtime2 = 0;
@@ -30,28 +29,29 @@ volatile unsigned long oldtime4 = 0;
 volatile unsigned long timepassed4;
 
 // Power switching
-int BrugiPwrPIN = 12;
-int VideoTrxPwrPIN = 13;
-int PixyPwrPIN = 14;
+int BrugiPwrPIN = 2;
+int VideoTrxPwrPIN = 4;
+int PixyPwrPIN = 3;
+
+#define onOffPower 5
+#define batVolt A1
+#define powerButton A0
 
 // Take picture routine
 # define CAMERA_BTN_DELAY 100
 # define CAMERA_PICT_DELAY 500
 int lastPictureTime = 0;
-int CameraShtrPIN = 6;
+int CameraShtrPIN = 10;
 int CameraFokuPIN = 11;
 
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
-int loopTime = 1000;
-
-// debug console
-volatile unsigned long lastDebug = 0;
-int debugTime = 1000;
+#define loopTime 100
+int count = 0;
 
 // Power check
 volatile unsigned long lastPowerCheck = 0;
-int powerCheckTime = 100;
+#define powerCheckTime 1000
 
 void setup()
 {
@@ -62,10 +62,10 @@ void setup()
 	initButtonAndVoltage();
 
 	// interrupt pins int.4-2
-	pinMode(chan1, INPUT); // int.5 -- throttle  (chan1)
-	pinMode(chan2, INPUT); // aile 4  chan2
-	pinMode(chan3, INPUT); // rudo 3   chan3
-	pinMode(chan4, INPUT); // Gear //SONDRE added
+	pinMode(18, INPUT); // int.5 -- throttle  (chan1)
+	pinMode(19, INPUT); // aile 4  chan2
+	pinMode(20, INPUT); // elev 3   chan3
+	pinMode(21, INPUT);
 
 	// power pins
 	pinMode(CameraShtrPIN, OUTPUT);
@@ -73,41 +73,38 @@ void setup()
 	pinMode(BrugiPwrPIN, OUTPUT);
 	pinMode(VideoTrxPwrPIN, OUTPUT);
 
-	// Start mode selector interrupt
-	attachInterrupt(chan3, calculatePWMch3, CHANGE);
+	//Start mode selector interrupt
 	attachInterrupt(chan4, calculatePWMch4, CHANGE);
-	Serial.println("started");
+	attachInterrupt(chan3, calculatePWMch3, CHANGE);
+	attachInterrupt(chan2, calculatePWMch2, CHANGE);
+	attachInterrupt(chan1, calculatePWMch1, CHANGE);
 }
 
 void loop()
 {
-	int diff = millis() - lastPassTime;
+	long diff = millis() - lastPassTime;
 	if (diff > loopTime)
 	{
 		// Run update for the current mode
-		if (onAuto && onRC) Mode_Auto_RC();
-		if (onAuto && !onRC) Mode_Auto_NC();
-		if (!onAuto && onRC) Mode_Manual_RC();
-		if (!onAuto && !onRC) Mode_Manual_NC();
+		if (mode == 1) Mode_Auto_RC();
+		if (mode == 2) Mode_Auto_NC();
+		if (mode == 3) Mode_Manual_RC();
+		if (mode == 4) Mode_Manual_NC();
 
-		// Power check
-		checkButtonAndVoltage();
-
-		// RC check
-		if (onRC) checkIfRCstillConnected();
-
+		Serial.println("Loop");
+		Serial.println(mode);
+		//Serial.println(lastRCvalCH1);
+		//Serial.println(lastRCvalCH2);
+		//Serial.println(lastRCvalCH3);
+		//Serial.println(lastRCvalCH4);
+		//Serial.println(count);
+		//count++;
+		//if (count > 1000)count = 0;
+#if 0
+		//Power check
+		checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
+#endif
 		lastPassTime = millis();
-	}
-
-	int diffy = millis() - lastDebug;
-	if (diffy > debugTime)
-	{
-		if (onAuto && onRC) Serial.println("Mode_Auto_RC");
-		if (onAuto && !onRC) Serial.println("Mode_Auto_NC");
-		if (!onAuto && onRC) Serial.println("Mode_Manual_RC");
-		if (!onAuto && !onRC) Serial.println("Mode_Manual_NC");
-
-		lastDebug = millis();
 	}
 }
 
@@ -118,10 +115,6 @@ void Mode_Auto_RC()
 	digitalWrite(PixyPwrPIN, HIGH);		// Turn on Pixy power
 	digitalWrite(BrugiPwrPIN, HIGH);	// Turn on Brugi power
 	digitalWrite(VideoTrxPwrPIN, HIGH); // Turn on Video transmitter power
-
-	// Avslutt lytting på PWM
-	detachInterrupt(chan1);
-	detachInterrupt(chan2);
 
 	//Get vector from pixy, pass it to Brugi
 	pixySerial->serialUpdate();
@@ -155,10 +148,6 @@ void Mode_Auto_NC()
 	digitalWrite(BrugiPwrPIN, HIGH);
 	digitalWrite(VideoTrxPwrPIN, LOW);
 
-	// Stop listening to RC-PWM 
-	detachInterrupt(chan1);
-	detachInterrupt(chan2);
-
 	pixySerial->serialUpdate();
 
 	char x = getVECTx(pixySerial->getX());
@@ -189,12 +178,6 @@ void Mode_Manual_RC()
 	digitalWrite(BrugiPwrPIN, HIGH);
 	digitalWrite(VideoTrxPwrPIN, HIGH);
 
-	// Start lytting på PWM-RC
-	detachInterrupt(chan1);
-	detachInterrupt(chan2);
-	attachInterrupt(chan2, calculatePWMch2, CHANGE);
-	attachInterrupt(chan1, calculatePWMch1, CHANGE);
-
 	char x = getRCx();
 	char y = getRCy();
 	if (x != 0 || y != 0)
@@ -206,20 +189,10 @@ void Mode_Manual_RC()
 
 void Mode_Manual_NC()
 {
-	while (!onAuto && !onRC)
-	{
-		// All power off
-		digitalWrite(PixyPwrPIN, LOW);
-		digitalWrite(BrugiPwrPIN, LOW);
-		digitalWrite(VideoTrxPwrPIN, LOW);
-
-		// Stop listening to RC-PWM 
-		detachInterrupt(chan1);
-		detachInterrupt(chan2);
-
-		delay(500);
-		//sleepNow();
-	}
+	// All power off
+	digitalWrite(PixyPwrPIN, LOW);
+	digitalWrite(BrugiPwrPIN, LOW);
+	digitalWrite(VideoTrxPwrPIN, LOW);
 }
 
 // Helper routines--------------------------------------------------------------------------
@@ -229,119 +202,67 @@ void takePicture()
 	int diff = millis() - lastPictureTime;
 	if (diff > CAMERA_PICT_DELAY)
 	{
-		digitalWrite(CameraFokuPIN, HIGH);
-		delay(CAMERA_BTN_DELAY);
 		digitalWrite(CameraShtrPIN, HIGH);
 		delay(CAMERA_BTN_DELAY);
-		digitalWrite(CameraFokuPIN, LOW);
 		digitalWrite(CameraShtrPIN, LOW);
 		lastPictureTime = millis();
 	}
+	// TODO: add fokuPin for compability with DSLR's
 }
 
-void checkIfRCstillConnected()
-{
-	// Check if RC is still connected
-	rcTimeout++;
-	if (rcTimeout > 1000)
-	{
-		onRC = false;
-	}
-}
 
-int xRCmin = 1000;
-int xRCmax = 2000;
-int xRCMAPmin = -10;
-int xRCMAPmax = 10;
-int yRCmin = 1000;
-int yRCmax = 2000;
-int yRCMAPmin = -10;
-int yRCMAPmax = 10;
+#define xRCmin 1916
+#define xRCmax 1052
+#define xRCMAPmin -10
+#define xRCMAPmax 10
+#define yRCmin 1040
+#define yRCmax 1916
+#define yRCMAPmin -10
+#define yRCMAPmax 10
 char getRCx()
 {
 	// Map RC vals to degrees, X
 	//return (char)map(lastRCvalCH1, 1000, 2000, 0, 100);
-	return (char)map(lastRCvalCH1, xRCmin, xRCmax, xRCMAPmin, xRCMAPmax);
+	//int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
+	return (char)map(lastRCvalCH2, xRCmin, xRCmax, xRCMAPmin, xRCMAPmax);
 }
 char getRCy()
 {
 	// Map RC vals to degrees, Y
 	//return (char)map(lastRCvalCH2, 1000, 2000, 0, 100);
-	return (char)map(lastRCvalCH2, yRCmin, yRCmax, yRCMAPmin, yRCMAPmax);
+	//int lastRCvalCH4 = 0;  // ELEV (UP = 1916, DOWN = 1052)
+	return (char)map(lastRCvalCH4, yRCmin, yRCmax, yRCMAPmin, yRCMAPmax);
 }
 
-int xVECT_INmin = -127;
-int xVECT_INmax = 127;
-int xVECT_OUTmin = -38;
-int xVECT_OUTmax = 38;
-int yVECT_INmin = -100;
-int yVECT_INmax = 100;
-int yVECT_OUTmin = -38;
-int yVECT_OUTmax = 38;
+#define xVECT_INmin -127
+#define xVECT_INmax 127
+#define xVECT_OUTmin -38
+#define xVECT_OUTmax 38
+#define yVECT_INmin -100
+#define yVECT_INmax 100
+#define yVECT_OUTmin -38
+#define yVECT_OUTmax 38
 char getVECTx(char x)
 {
-	if (x == 0)return 0;
-	else
-	{
-		// Map pixy pixel-vector to degrees, X
-		return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
-	}
+	// Map pixy pixel-vector to degrees, X
+	if (x == 0) return 0;
+	else return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
 }
 char getVECTy(char y)
 {
-	if (y == 0)return 0;
-	else
-	{
-		// Map pixy pixel-vector to degrees, Y
-		return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
-	}
+	// Map pixy pixel-vector to degrees, Y
+	if (y == 0) return 0;
+	else return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
 }
 
 void setup_Serial()
 {
 	Serial.begin(BAUDRATE);	// Usb debug
-	Serial.println("started");
-
 	*escSerial = AimBot_Serial();
 	*pixySerial = AimBot_Serial();
 }
 
-void wakeUpNow()        // here the interrupt is handled after wakeup
-{
-	// execute code here after wake-up before returning to the loop() function
-	//setup_Serial();
-}
 
-void sleepNow()         // here we put the arduino to sleep
-{
-	/* Now is the time to set the sleep mode. In the Atmega8 datasheet
-	* http://www.atmel.com/dyn/resources/prod_documents/doc2486.pdf on page 35
-	* The 5 different modes are:
-	*     SLEEP_MODE_IDLE         -the least power savings
-	*     SLEEP_MODE_ADC
-	*     SLEEP_MODE_PWR_SAVE
-	*     SLEEP_MODE_STANDBY
-	*     SLEEP_MODE_PWR_DOWN     -the most power savings
-	*/
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);   // sleep mode is set here
-
-	sleep_enable();          // enables the sleep bit in the mcucr register
-
-	// Detach other interrupts on int.4 and attach wakeUpNow
-	detachInterrupt(chan3);  // int.4 = pin 19 //SONDRE Endret fra 3 til 20
-	attachInterrupt(chan3, wakeUpNow, HIGH); //SONDRE Endret fra 3 til 20
-
-	sleep_cpu(); ////SONDRE sleep_mode() gjør sleep_enable, sleep_cpu, sleep_disable, så siden enable og disable blir gjort over og under, trengs bare cpu her?
-	//sleep_mode();            // here the device is actually put to sleep
-	// THE PROGRAM CONTINUES FROM HERE AFTER WAKING UP
-
-	sleep_disable();         // first thing after waking from sleep
-
-	detachInterrupt(chan3);      // disables interrupt 4 on pin 19 so wakeUpNow is only run once //SONDRE Endret fra 3 til 20
-
-	// Start mode selector interrupt gets attached again
-	attachInterrupt(chan3, calculatePWMch3, CHANGE); //SONDRE Endret fra 3 til 20
-}
 
 void calculatePWMch1() // Throttle 1
 {
@@ -371,16 +292,22 @@ void calculatePWMch3() // Mode selector
 	if (timepassed3 < 2500 && timepassed3 > 900)
 	{
 		lastRCvalCH3 = timepassed3;
-		if (timepassed3 > 1800)
+		if (timepassed3 > 2000)
 		{
-			onAuto = true;
+			mode = 1;
+		}
+		else if (timepassed3 > 1600)
+		{
+			mode = 3;
+		}
+		else if (timepassed3 > 1200)
+		{
+			mode = 3;
 		}
 		else
 		{
-			onAuto = false;
+			mode = 4;
 		}
-		rcTimeout = 0;
-		onRC = true;
 	}
 }
 void calculatePWMch4() // Camera trigger
@@ -396,47 +323,35 @@ void calculatePWMch4() // Camera trigger
 
 void initButtonAndVoltage()
 {
-	pinMode(5, OUTPUT); //SONDRE endret fra 7 til 5
-	digitalWrite(5, HIGH); //SONDRE endret fra 7 til 5
-	pinMode(A0, INPUT);
-	pinMode(A1, INPUT); //SONDRE endret fra 5 til 1
+	pinMode(onOffPower, OUTPUT);
+	digitalWrite(onOffPower, HIGH);
+	pinMode(powerButton, INPUT);
+	pinMode(batVolt, INPUT);
 
 }
 
 void checkButtonAndVoltage()
 {
-	int diff = millis() - lastPowerCheck;
+	long diff = millis() - lastPowerCheck;
 	if (diff > powerCheckTime) // check every 100ms or so
 	{
-
-#if 0
-		//testing
-		String s = "ch1: ";
-		s = s + lastRCvalCH1;
-		s = s + " ch2:";
-		s = s + lastRCvalCH2;
-		s = s + " ch3: ";
-		s = s + lastRCvalCH3;
-		Serial.println(s);
-#endif
-
-		if (analogRead(0) > 140)
+		if (analogRead(powerButton) > 140)
 		{
 			delay(1000);
-			if (analogRead(0) > 140)
+			if (analogRead(powerButton) > 140)
 			{
 				// power button pressed, power off
 				delay(3000);
-				digitalWrite(5, LOW); //SONDRE endret fra 7 til 5
+				digitalWrite(onOffPower, LOW);
 				delay(1000);
 			}
 		}
 
-		if (analogRead(1) < 900) //SONDRE endret fra 5 til 1
+		if (analogRead(batVolt) < 900)
 		{
 			// bat low, power off
 			delay(1000);
-			digitalWrite(5, LOW); //SONDRE endret fra 7 til 5
+			digitalWrite(onOffPower, LOW);
 			delay(1000);
 		}
 	}
