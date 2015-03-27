@@ -63,7 +63,7 @@ struct baseArduinoSerial {
 
 	char getX() {
 		if (debug) {
-			if (m_rx[1] == VECTOR) {
+			if (m_rx[1] == VECTOR || m_rx[1] == MOV_XY)  {
 				Serial.print("Recieved X-Vector: ");
 				Serial.println((char)m_rx[2]);
 			}
@@ -71,13 +71,13 @@ struct baseArduinoSerial {
 				Serial.println("Have not recieved X");
 			}
 		}
-		if (m_rx[1] == VECTOR) return (char)m_rx[2];
+		if (m_rx[1] == VECTOR || m_rx[1] == MOV_XY)  return (char)m_rx[2];
 		else return 0;
 	}
 
 	char getY() {
 		if (debug) {
-			if (m_rx[1] == VECTOR) {
+			if (m_rx[1] == VECTOR || m_rx[1] == MOV_XY)  {
 				Serial.print("Recieved Y-Vector: ");
 				Serial.println((char)m_rx[3]);
 			}
@@ -85,7 +85,7 @@ struct baseArduinoSerial {
 				Serial.println("Have not recieved Y");
 			}
 		}
-		if (m_rx[1] == VECTOR) return (char)m_rx[3];
+		if (m_rx[1] == VECTOR || m_rx[1] == MOV_XY) return (char)m_rx[3];
 		else return 0;
 	}
 
