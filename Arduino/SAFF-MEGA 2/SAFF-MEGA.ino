@@ -31,6 +31,24 @@
 #define LOOP_TIME			100
 #define PWR_CHECK_INTERVAL	1000
 
+// RC defs
+#define xRCmin 1916
+#define xRCmax 1052
+#define xRCMAPmin -10
+#define xRCMAPmax 10
+#define yRCmin 1040
+#define yRCmax 1916
+#define yRCMAPmin -10
+#define yRCMAPmax 10
+#define xVECT_INmin -127
+#define xVECT_INmax 127
+#define xVECT_OUTmin -38
+#define xVECT_OUTmax 38
+#define yVECT_INmin -100
+#define yVECT_INmax 100
+#define yVECT_OUTmin -38
+#define yVECT_OUTmax 38
+
 // PWM-in related vars
 enum Aimbot_Mode{ //TODO: Make sleep mode?
 	AUTO_RC,
@@ -40,7 +58,7 @@ enum Aimbot_Mode{ //TODO: Make sleep mode?
 }currentMode;
 
 // Serial interface
-AimBot_Serial *m_aimSerial;
+AimBot_Serial *m_pixySerial, *m_escSerial;
  
 int lastRCvalCH1 = 0;  // Thro (min = 1052, max = 1912), TH_HOLD = 952
 int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
@@ -149,23 +167,26 @@ void Mode_Auto_RC()
 	digitalWrite(FPV_PWR, HIGH); // Turn on Video transmitter power
 
 	//Get vector from pixy, pass it to Brugi
-	m_aimSerial->serialUpdate();
+	m_pixySerial->update();
 
-	char x = getVECTx(m_aimSerial->getX());
-	char y = getVECTy(m_aimSerial->getY());
+	char x = getVECTx(m_pixySerial->getX());
+	char y = getVECTy(m_pixySerial->getY());
 
 	if (x != 0 || y != 0)
 	{
-		m_aimSerial->stopPixy(); // Stop pixy while moving
-		m_aimSerial->sendVect(x, y); // Send to Brugi if any movement
+		m_pixySerial->pixyCmd(PIXY_STOP); // Stop pixy while moving
+		m_escSerial->sendXY(x, y, VECTOR); // Send to Brugi if any movement
 
-		while (Serial2.available() < 1)
-		{
-			// Wait for Brugi feedback (brugi in position)
-		}
+		// Wait for Brugi feedback (brugi in position)
+		while (Serial2.available() < 1);
+
 		takePicture(); // Arrived at destination, take picture
-		m_aimSerial->flushBuf();
-		m_aimSerial->startPixy(); // Start pixy again
+
+		//flush both serials, reset
+		m_pixySerial->flush();
+		m_escSerial->flush();
+
+		m_pixySerial->pixyCmd(PIXY_START); // Start pixy again
 	}
 }
 
@@ -176,27 +197,26 @@ void Mode_Auto_NC()
 	digitalWrite(ESC_PWR, HIGH);
 	digitalWrite(FPV_PWR, LOW);
 
-	m_aimSerial->serialUpdate();
+	m_pixySerial->update();
 
-	char x = getVECTx(m_aimSerial->getX());
-	char y = getVECTy(m_aimSerial->getY());
+	char x = getVECTx(m_pixySerial->getX());
+	char y = getVECTy(m_pixySerial->getY());
 
 	if (x != 0 || y != 0)
 	{
-		m_aimSerial->stopPixy(); // Stop pixy while moving
-		m_aimSerial->sendVect(x, y); // Send to Brugi if any movement
+		m_pixySerial->pixyCmd(PIXY_STOP); // Stop pixy while moving
+		m_escSerial->sendXY(x, y, VECTOR); // Send to Brugi if any movement
 
-		while (Serial2.available() < 1)
-		{
-			// Wait for Brugi feedback (brugi in position)
-		}
+		// Wait for Brugi feedback (brugi in position)
+		while (Serial2.available() < 1);
+
 		takePicture(); // Arrived at destination, take picture
-		m_aimSerial->startPixy(); // Start pixy again
-		while (Serial2.available() > 0) //flush brugi serial
-		{
-			// Expecting one char, read buffer to end regardless
-			Serial2.read();
-		}
+
+		//flush both serials, reset
+		m_pixySerial->flush();
+		m_escSerial->flush();
+
+		m_pixySerial->pixyCmd(PIXY_START); // Start pixy again
 	}
 }
 
@@ -211,7 +231,7 @@ void Mode_Manual_RC()
 	if (x != 0 || y != 0)
 	{
 		// Send to Brugi if any movement
-		m_aimSerial->sendRCxy(x, y);
+		m_escSerial->sendXY(x, y,MOV_XY);
 	}
 }
 
@@ -238,15 +258,6 @@ void takePicture()
 	// TODO: add fokuPin for compability with DSLR's
 }
 
-
-#define xRCmin 1916
-#define xRCmax 1052
-#define xRCMAPmin -10
-#define xRCMAPmax 10
-#define yRCmin 1040
-#define yRCmax 1916
-#define yRCMAPmin -10
-#define yRCMAPmax 10
 char getRCx()
 {
 	// Map RC vals to degrees, X
@@ -262,14 +273,6 @@ char getRCy()
 	return (char)map(lastRCvalCH4, yRCmin, yRCmax, yRCMAPmin, yRCMAPmax);
 }
 
-#define xVECT_INmin -127
-#define xVECT_INmax 127
-#define xVECT_OUTmin -38
-#define xVECT_OUTmax 38
-#define yVECT_INmin -100
-#define yVECT_INmax 100
-#define yVECT_OUTmin -38
-#define yVECT_OUTmax 38
 char getVECTx(char x)
 {
 	// Map pixy pixel-vector to degrees, X
@@ -286,10 +289,9 @@ char getVECTy(char y)
 void setup_Serial()
 {
 	Serial.begin(BAUDRATE);	// Usb debug
-	*m_aimSerial = AimBot_Serial();
+	*m_pixySerial = AimBot_Serial(&Serial3);
+	*m_escSerial = AimBot_Serial(&Serial2);
 }
-
-
 
 void calculatePWMch1() // Throttle 1
 {
