@@ -5,8 +5,8 @@
 #define __ESC
 #include "Aimbot_Serial.h"
 
-#define bldc1 360/12/256
-#define bldc2 360/24/256
+#define bldc1 0.1171875
+#define bldc2 0.05859375
 
 float z_Float = 0, y_Float = 0;
 
@@ -24,7 +24,6 @@ AimBot_Serial *megaSerial;
 
 void setup()
 {
-
 	*megaSerial = AimBot_Serial(&Serial);
 
 	initBlController();
@@ -61,9 +60,10 @@ void loop()
 		y_Float = 0;
 	}
 	
-	z_Pos++;
-	z_Pos_Steps = z_Pos / bldc2;
-	y_Pos_Steps = y_Pos / bldc1;
+	
+	z_Pos_Steps = (int16_t) ((float)(z_Pos / bldc2));
+	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));
+	
 		
 	//gjør utregninger og flytter motorene
 	
@@ -85,6 +85,7 @@ void loop()
 					++y_Pos_Steps;
 					++y_Motor;
 				}
+				MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
 			}
 
 			if (z_Pos_Steps != 0)
@@ -99,15 +100,16 @@ void loop()
 					++z_Pos_Steps;
 					++z_Motor;
 				}
+				MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
 			}
 
-			MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
-			MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
+			
+			
 		}
 		
 		
 	}
-	if (z_Pos == 0 && y_Pos == 0)
+	if (z_Pos_Steps == 0 && y_Pos_Steps == 0)
 	{
 		megaSerial->sendPosReached();
 	}

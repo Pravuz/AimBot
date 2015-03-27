@@ -242,7 +242,6 @@ namespace AimbotC {
 	delegate void SetTextBoxDtype(System::String ^);
 
 private: System::Void Main_Load(System::Object^  sender, System::EventArgs^  e) {
-
 			 this->cboPorts->Items->AddRange(m_serial->findPorts());
 			 this->btnClose->Enabled = false;
 			 this->btnOpen->Enabled = true;
@@ -253,7 +252,6 @@ private: System::Void Main_Load(System::Object^  sender, System::EventArgs^  e) 
 }
 	
 	private: System::Void btnOpen_Click(System::Object^  sender, System::EventArgs^  e) {
-
 				 this->txtRecived->Clear();
 				 if (this->cboPorts->Text == String::Empty)
 					 MessageBox::Show("No Port Selected", "Error", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1);
@@ -304,9 +302,7 @@ private: System::Void Main_Load(System::Object^  sender, System::EventArgs^  e) 
 								txt2->Text = data[1];
 							}
 						  }
-
 						  catch (Win32Exception^ ex)
-
 						  {
 							  Console::WriteLine(ex->Message);
 						  }
@@ -326,7 +322,6 @@ private: System::Void Main_Load(System::Object^  sender, System::EventArgs^  e) 
 						 btnSend->Enabled = false;
 						 cboPorts->Enabled = true;
 						 btnRefresh->Enabled = true;
-						 
 					 }
 					 catch (UnauthorizedAccessException^ ex){
 						 MessageBox::Show(ex->Message, "Error occurred", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1);

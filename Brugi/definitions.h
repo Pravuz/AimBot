@@ -67,7 +67,7 @@ uint8_t motorNumberPitch = 0;
 uint8_t motorNumberYaw = 1;
 
 
-bool motorUpdate = false;
+static volatile bool motorUpdate = false;
 
 
 

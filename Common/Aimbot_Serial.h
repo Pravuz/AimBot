@@ -26,10 +26,10 @@ enum CMD_ID {
 	PIXY_START
 };
 
-#ifndef __PIXY
 struct baseArduinoSerial {
 
 	baseArduinoSerial(HardwareSerial *serial){
+		serial->end();
 		m_serial = serial;
 		m_serial->begin(BAUDRATE);
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
@@ -125,7 +125,7 @@ protected:
 	uint8_t *m_tx, *m_rx;
 	HardwareSerial *m_serial;
 };
-#endif
+
 #ifdef __MEGA
 struct AimBot_Serial : public baseArduinoSerial
 {
@@ -234,7 +234,7 @@ struct AimBot_Serial {
 				switch (m_rx[1]) {
 				case PIXY_PARAM_NOFP:
 					uint16_t m_nOfP;
-					m_nOfP = m_rx[2] | m_rx[3] << 8 ;
+					m_nOfP = m_rx[2] << 8 | m_rx[3];
 					g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
 					g_greyShades.reset();
 					break;

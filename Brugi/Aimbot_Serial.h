@@ -29,6 +29,7 @@ enum CMD_ID {
 struct baseArduinoSerial {
 
 	baseArduinoSerial(HardwareSerial *serial){
+		serial->end();
 		m_serial = serial;
 		m_serial->begin(BAUDRATE);
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
