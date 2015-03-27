@@ -1,247 +1,175 @@
 #ifndef SERIAL_H
 #define SERIAL_H
-
 #define BAUDRATE 115200
-
-enum CMD_ID {
-	AIM_SYNC = 0xa5,
-	VECTOR,
-	PIXY_PARAM_NOFP,
-	PIXY_PARAM_DELTAP,
-	PIXY_STOP,
-	PIXY_START,
-	MOV_X,
-	MOV_Y,
-	POS_REACHED,
-	MOV_XY
-};
 #ifdef __MEGA
+#include <Arduino.h>
+#endif
+#ifdef __ESC
+#include <Arduino.h>
+#endif 
 #ifdef __DEBUG
 #define DEBUG 1
 #else
 #define DEBUG 0
 #endif
-#include <Arduino.h>
 
 bool debug = DEBUG;
 
-struct AimBot_Serial
-{
-	AimBot_Serial() {
-		Serial2.begin(BAUDRATE);
-		Serial3.begin(BAUDRATE);
-		m_rx1 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
-		m_rx2 = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+enum CMD_ID {
+	AIM_SYNC = 0xa5,
+	VECTOR,
+	MOV_XY,
+	POS_REACHED,
+	PIXY_PARAM_NOFP,
+	PIXY_PARAM_DELTAP,
+	PIXY_STOP,
+	PIXY_START
+};
+
+struct baseArduinoSerial {
+
+	baseArduinoSerial(HardwareSerial *serial){
+		m_serial = serial;
+		m_serial->begin(BAUDRATE);
+		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 	}
 
-	~AimBot_Serial() {
-		free(m_rx1);
-		free(m_rx2);
+	void flush() {
+		m_serial->flush();
+		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+		free(m_rx);
 		free(m_tx);
 	}
 
-	void serialUpdate() {
-		//ESC Serial
-		if (Serial2.available()) {
+	bool update(){
+		if (m_serial->available()) {
 			int len = 0;
-			syncEsc();
+			if (!sync()) {
+				if (debug) Serial.println("Serial update failed");
+				return false;
+			}
 			while (true) {
-				m_rx1[len] = Serial2.read();
+				m_rx[len] = m_serial->read();
 				len++;
-				if (Serial2.peek() == AIM_SYNC) break;
+				if (m_serial->peek() == AIM_SYNC) break;
 			}
-		}
-		if (debug) {
-			Serial.println("Serial update complete");
-			int temp = 0;
-		}
-
-		//Pixy Serial
-		if (Serial3.available()) {
-			int len = 0;
-			syncPixy();
-			while (true) {
-				m_rx2[len] = Serial3.read();
-				len++;
-				if (Serial3.peek() == AIM_SYNC) break;
-			}
-		}
-		if (debug) {
-			Serial.println("Serial update complete");
-			int temp = 0;
-			switch (m_rx2[1])
-			{
-			case PIXY_PARAM_DELTAP:
-				Serial.print("Pixy is now using deltaP setting = ");
-				temp = (int)((char)(m_rx2[2] << 8) | (byte)m_rx2[3]);
-				Serial.println(temp);
-				break;
-			case PIXY_PARAM_NOFP:
-				Serial.print("Pixy is now using Number of Pixel-changes treshold setting = ");
-				Serial.println(m_rx2[2]);
-				break;
-			default:
-				break;
-			}
+			if (debug) Serial.println("Serial update complete");
+			return true;
 		}
 	}
 
 	char getX() {
 		if (debug) {
-			Serial.print("Recieved X-Vector: ");
-			Serial.println((char)m_rx2[2]);
-		}
-		if (m_rx2[1] == VECTOR) return (char)m_rx2[2];
-		else return 0;
-	}
-
-	char getY() {
-		if (debug) {
-			Serial.print("Recieved Y-Vector: ");
-			Serial.println((char)m_rx2[3]);
-		}
-		if (m_rx2[1] == VECTOR) return (char)m_rx2[3];
-		else return 0;
-	}
-
-	void sendVect(char x, char y) {
-		m_tx[0] = AIM_SYNC;
-		m_tx[1] = VECTOR;
-		m_tx[2] = x;
-		m_tx[3] = y;
-		if (debug) {
-			Serial.println("Sending Vector");
-			Serial.write(m_tx, sizeof(uint8_t)* 4);
-		}
-		Serial2.write(m_tx, sizeof(uint8_t)* 4);
-	}
-	void sendRCxy(char x, char y) {
-		m_tx[0] = AIM_SYNC;  // Sync
-		m_tx[1] = MOV_XY;// Signal the brugi it's in RC mode
-		m_tx[2] = x;
-		m_tx[3] = y;
-		if (debug) {
-			Serial.println("Sending RC xy");  // For debug
-			//Serial.write(m_tx, sizeof(uint8_t)* 4);
-			for (int i = 0; i < 4; i++)
-			{
-				Serial.print(m_tx[i]);
-				Serial.print(" ");
+			if (m_rx[1] == VECTOR) {
+				Serial.print("Recieved X-Vector: ");
+				Serial.println((char)m_rx[2]);
 			}
-			Serial.println();
-		}
-		Serial2.write(m_tx, sizeof(uint8_t)* 4);  // Write to brugi
-	}
-
-	void startPixy() {
-		m_tx[0] = AIM_SYNC;
-		m_tx[1] = PIXY_START;
-		if (debug) {
-			Serial.print("Pixy command START: ");
-			Serial.println(m_tx[1]);
-		}
-		Serial3.write(m_tx, sizeof(uint8_t)* 2);
-	}
-
-	void stopPixy() {
-		m_tx[0] = AIM_SYNC;
-		m_tx[1] = PIXY_STOP;
-		if (debug) {
-			Serial.print("Pixy command STOP: ");
-			Serial.println(m_tx[1]);
-		}
-		Serial3.write(m_tx, sizeof(uint8_t)* 2);
-	}
-
-	void flushBuf() {
-		delete[] m_tx, m_rx1, m_rx2;
-		Serial2.flush();
-		Serial3.flush();
-		m_rx1 = new uint8_t[8];
-		m_rx2 = new uint8_t[8];
-		m_tx = new uint8_t[8];
-	}
-
-	void pixyNOfP(int nofp) {
-		m_tx[0] = AIM_SYNC;
-		m_tx[1] = PIXY_PARAM_NOFP;
-		m_tx[2] = (byte)nofp;
-		m_tx[3] = (char)(nofp >> 8);
-		Serial3.write(m_tx, sizeof(uint8_t)* 4);
-	}
-
-	void pixyDeltaP(char deltaP) {
-		m_tx[0] = AIM_SYNC;
-		m_tx[1] = PIXY_PARAM_DELTAP;
-		m_tx[2] = deltaP;
-		Serial3.write(m_tx, sizeof(uint8_t)* 3);
-	}
-
-private:
-
-	void syncEsc() {
-		if (Serial2.peek() != AIM_SYNC) {
-			while (1)
-			{
-				if (Serial2.peek() != AIM_SYNC)
-					Serial2.read();
-				else break;
+			else{
+				Serial.println("Have not recieved X");
 			}
 		}
-	}
-
-	void syncPixy() {
-		if (Serial3.peek() != AIM_SYNC) {
-			while (1)
-			{
-				if (Serial3.peek() != AIM_SYNC)
-					Serial3.read();
-				else break;
-			}
-		}
-	}
-
-	uint8_t *m_tx, *m_rx1, *m_rx2;
-	unsigned int len;
-};
-#endif
-#ifdef __ESC
-
-struct AimBot_Serial
-{
-	AimBot_Serial() {
-		Serial.begin(BAUDRATE);
-		m_rx = new uint8_t[8];
-		m_tx = new uint8_t[8];
-	}
-
-	~AimBot_Serial() {
-		delete[] m_rx, m_tx;
-	}
-
-	void serialUpdate() {
-		//ESC Serial
-		if (Serial.available()) {
-			int len = 0;
-			sync();
-			while (true) {
-				m_rx[len] = Serial.read();
-				len++;
-				if (Serial.peek() == AIM_SYNC) break;
-			}
-		}
-	}
-
-	char getX() {
 		if (m_rx[1] == VECTOR) return (char)m_rx[2];
 		else return 0;
 	}
 
 	char getY() {
+		if (debug) {
+			if (m_rx[1] == VECTOR) {
+				Serial.print("Recieved Y-Vector: ");
+				Serial.println((char)m_rx[3]);
+			}
+			else{
+				Serial.println("Have not recieved Y");
+			}
+		}
 		if (m_rx[1] == VECTOR) return (char)m_rx[3];
 		else return 0;
 	}
+
+	void sendXY(char x, char y, CMD_ID type){
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = type;
+		m_tx[2] = x;
+		m_tx[3] = y;
+		if (debug) {
+			Serial.println("Sending XY");
+		}
+		m_serial->write(m_tx, sizeof(uint8_t)* 4);
+	}
+
+protected:
+	~baseArduinoSerial(){
+		m_serial->end();
+		free(m_rx);
+		free(m_tx);
+	}
+
+	bool sync(){
+		if (m_serial->peek() != AIM_SYNC) {
+			unsigned int timeout = 0;
+			while (1)
+			{
+				if (timeout > 1000) return false;
+				if (m_serial->peek() != AIM_SYNC){
+					m_serial->read();
+					timeout++;
+				}
+				else return true;
+			}
+		}
+	}
+
+	uint8_t *m_tx, *m_rx;
+	HardwareSerial *m_serial;
+};
+
+#ifdef __MEGA
+struct AimBot_Serial : public baseArduinoSerial
+{
+
+	AimBot_Serial(HardwareSerial *serial) : baseArduinoSerial(serial){}
+
+	void pixyCmd(CMD_ID cmd){
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = cmd;
+		if (debug) {
+			Serial.print("Pixy command: ");
+			Serial.println(m_tx[1]);
+		}
+		m_serial->write(m_tx, sizeof(uint8_t)* 2);
+	}
+
+	void pixyCmd(CMD_ID cmd, unsigned int value){
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = cmd;
+		switch (cmd)
+		{
+		case PIXY_PARAM_NOFP:
+			m_tx[2] = value;
+			m_tx[3] = value >> 8;
+			Serial3.write(m_tx, sizeof(uint8_t)* 4);
+			break;
+		case PIXY_PARAM_DELTAP:
+			m_tx[2] = value;
+			m_serial->write(m_tx, sizeof(uint8_t)* 3);
+			break;
+		}
+	}
+
+	void pixyDeltaP(char deltaP) {
+		m_tx[0] = AIM_SYNC;
+		m_tx[1] = PIXY_PARAM_DELTAP;
+	}
+};
+#endif
+#ifdef __ESC
+
+struct AimBot_Serial : baseArduinoSerial
+{
+	AimBot_Serial(HardwareSerial *serial) : baseArduinoSerial(serial){}
+
 	void sendPosReached() {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = POS_REACHED;
@@ -252,13 +180,6 @@ struct AimBot_Serial
 		if (m_rx[1] == VECTOR) return false;
 		else return true;
 	}
-
-private:
-	void sync(){
-
-	}
-	uint8_t *m_tx, *m_rx;
-	unsigned int len;
 };
 #endif
 #ifdef __PIXY
