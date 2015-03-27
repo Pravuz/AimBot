@@ -1,5 +1,6 @@
 #include "BLcontroller.h"
 #include "Interupts_.h"
+//#include "definitions.h"
 #include <Wire\Wire.h>
 #define __ESC
 #include "Aimbot_Serial.h"
@@ -12,6 +13,7 @@ float z_Float = 0, y_Float = 0;
 uint8_t z_axe = 0, y_axe = 0;
 int16_t z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0;
+uint8_t z_Motor = 0, y_Motor = 0;
 
 boolean RCin = true;
 boolean crib = false;
@@ -65,7 +67,7 @@ void loop()
 		
 	//gjør utregninger og flytter motorene
 	
-	while (z_Pos!=0 & y_Pos!=0)
+	while (z_Pos!=0 || y_Pos!=0)
 	{
 		if (motorUpdate)
 		{
@@ -76,10 +78,12 @@ void loop()
 				if (y_Pos_Steps > 0)
 				{
 					--y_Pos_Steps;
+					--y_Motor;
 				}
 				else if (y_Pos_Steps < 0)
 				{
 					++y_Pos_Steps;
+					++y_Motor;
 				}
 			}
 
@@ -88,17 +92,19 @@ void loop()
 				if (z_Pos_Steps > 0)
 				{
 					--z_Pos_Steps;
+					--z_Motor;
 				}
 				else if (z_Pos_Steps < 0)
 				{
 					++z_Pos_Steps;
+					++z_Motor;
 				}
 			}
 		}
-		MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 180);
-		MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 180);
+		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 180);
+		MoveMotorPosSpeed(motorNumberYaw, y_Motor, 180);
 	}
-	if (z_Pos == 0 & y_Pos == 0)
+	if (z_Pos == 0 && y_Pos == 0)
 	{
 		megaSerial->sendPosReached();
 	}
@@ -146,22 +152,7 @@ void loop()
 	//	MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 180);
 	//	MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 180);
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		/*MoveMotorPosSpeed(motorNumberPitch, y_axe, 180);
 		MoveMotorPosSpeed(motorNumberYaw, z_axe, 180);
 		if (updown)
