@@ -59,7 +59,7 @@ enum Aimbot_Mode{ //TODO: Make sleep mode?
 
 // Serial interface
 AimBot_Serial *m_pixySerial, *m_escSerial;
- 
+
 int lastRCvalCH1 = 0;  // Thro (min = 1052, max = 1912), TH_HOLD = 952
 int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
 int lastRCvalCH3 = 0;  // GEAR (1052 = 0, 1912 = 1, ) needs ACRO-MODE
@@ -148,8 +148,8 @@ void loop()
 		//Serial.println(count);
 		//count++;
 		//if (count > 1000)count = 0;
-		
-#if 0
+
+#if 1
 		//TODO: Make routine to check what our power source is.
 		//Power check
 		checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
@@ -231,7 +231,7 @@ void Mode_Manual_RC()
 	if (x != 0 || y != 0)
 	{
 		// Send to Brugi if any movement
-		m_escSerial->sendXY(x, y,MOV_XY);
+		m_escSerial->sendXY(x, y, MOV_XY);
 	}
 }
 
@@ -345,32 +345,28 @@ void initButtonAndVoltage()
 	digitalWrite(RIG_PWR, HIGH);
 	pinMode(BTN_PWR, INPUT);
 	pinMode(BAT_VOLTAGE, INPUT);
-
 }
 
 void checkButtonAndVoltage()
 {
-	long diff = millis() - lastPowerCheck;
-	if (diff > PWR_CHECK_INTERVAL) // check every 100ms or so
+	if (analogRead(BTN_PWR) > 140)
 	{
+		delay(1000);
 		if (analogRead(BTN_PWR) > 140)
 		{
-			delay(1000);
-			if (analogRead(BTN_PWR) > 140)
-			{
-				// power button pressed, power off
-				delay(3000);
-				digitalWrite(RIG_PWR, LOW);
-				delay(1000);
-			}
-		}
-
-		if (analogRead(BAT_VOLTAGE) < 900)
-		{
-			// bat low, power off
-			delay(1000);
+			// power button pressed, power off
+			delay(3000);
 			digitalWrite(RIG_PWR, LOW);
 			delay(1000);
 		}
 	}
+#if 0
+	if (analogRead(BAT_VOLTAGE) < 900)
+	{
+		// bat low, power off
+		delay(1000);
+		digitalWrite(RIG_PWR, LOW);
+		delay(1000);
+	}
+#endif
 }
