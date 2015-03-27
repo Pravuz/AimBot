@@ -24,7 +24,7 @@ AimBot_Serial *megaSerial;
 
 void setup()
 {
-
+	
 	*megaSerial = AimBot_Serial(&Serial);
 
 	initBlController();
