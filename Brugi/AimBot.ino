@@ -39,14 +39,18 @@ void setup()
 void loop()
 {
 
-	megaSerial->update();
+	//megaSerial->update();
 
-	RCin = megaSerial->isRCmode();
+	//RCin = megaSerial->isRCmode();
 
-	z_Pos = megaSerial->getX();
-	y_Pos = megaSerial->getY();
+	++z_Pos_Steps; 
 
-	if (RCin)
+	//z_Pos = (int16_t) megaSerial->getX();
+	//y_Pos = (int16_t) megaSerial->getY();
+
+	Serial.println(z_Pos_Steps);
+
+	/*if (RCin)
 	{
 		z_Float += z_Pos*0.1;
 		y_Float += y_Pos*0.1;
@@ -54,15 +58,15 @@ void loop()
 		z_Pos = z_Float;
 		y_Pos = y_Float;
 	}
-	else if (!RCin)
+	else
 	{
-		z_Float = 1;
+		z_Float = 0;
 		y_Float = 0;
 	}
 	
 	
 	z_Pos_Steps = (int16_t) ((float)(z_Pos / bldc2));
-	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));
+	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));*/
 	
 		
 	//gjør utregninger og flytter motorene
@@ -86,6 +90,7 @@ void loop()
 					++y_Motor;
 				}
 				MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
+				y_Float = 0;
 			}
 
 			if (z_Pos_Steps != 0)
@@ -101,6 +106,7 @@ void loop()
 					++z_Motor;
 				}
 				MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
+				z_Float = 0;
 			}
 
 			
@@ -111,7 +117,7 @@ void loop()
 	}
 	if (z_Pos_Steps == 0 && y_Pos_Steps == 0)
 	{
-		megaSerial->sendPosReached();
+		//megaSerial->sendPosReached();
 	}
 	
 
