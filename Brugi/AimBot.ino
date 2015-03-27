@@ -47,7 +47,7 @@ void loop()
 	z_Pos = megaSerial->getX();
 	y_Pos = megaSerial->getY();
 
-	/*if (RCin)
+	if (RCin)
 	{
 		z_Float += z_Pos*0.1;
 		y_Float += y_Pos*0.1;
@@ -59,7 +59,7 @@ void loop()
 	{
 		z_Float = 1;
 		y_Float = 0;
-	}*/
+	}
 	
 	z_Pos++;
 	z_Pos_Steps = z_Pos / bldc2;
@@ -67,7 +67,7 @@ void loop()
 		
 	//gjør utregninger og flytter motorene
 	
-	while (z_Pos_Steps!=0 || y_Pos_Steps!=0)
+	while ((z_Pos_Steps!=0) || (y_Pos_Steps!=0))
 	{
 		if (motorUpdate)
 		{
@@ -100,9 +100,12 @@ void loop()
 					++z_Motor;
 				}
 			}
+
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
 		}
-		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 180);
-		MoveMotorPosSpeed(motorNumberYaw, y_Motor, 180);
+		
+		
 	}
 	if (z_Pos == 0 && y_Pos == 0)
 	{
@@ -116,42 +119,13 @@ void loop()
 
 	//	//Verdi i x og z, omdreining i grader, mottatt serielt.
 	//	//Verdien blir brukt til nedtelling for pwm-moduleringen.
-	//			
-	//	if (crib)
-	//	{
-	//		if (y_Pos_Steps > 0)
-	//		{
-	//			--y_Pos_Steps;
-	//		}
-	//		else if (y_Pos_Steps < 0)
-	//		{
-	//			++y_Pos_Steps;
-	//		}
-	//		else
-	//		{
-	//			crib = false;
-	//		}
-	//	}
 
-	//	if (box)
-	//	{
-	//		if (z_Pos_Steps > 0)
-	//		{
-	//			--z_Pos_Steps;
-	//		}
-	//		else if (z_Pos_Steps < 0)
-	//		{
-	//			++z_Pos_Steps;
-	//		}
-	//		else
-	//		{
-	//			box = false;
-	//		}
-	//	}
+	//	++z_Pos_Steps;
+	//	--y_Pos_Steps;
 
-	//	MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 180);
-	//	MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 180);
-
+	//	MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 255);
+	//	MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 255);
+	//}
 
 		/*MoveMotorPosSpeed(motorNumberPitch, y_axe, 180);
 		MoveMotorPosSpeed(motorNumberYaw, z_axe, 180);
