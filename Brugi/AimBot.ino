@@ -25,7 +25,7 @@ AimBot_Serial *megaSerial;
 void setup()
 {
 
-	*megaSerial = AimBot_Serial();
+	*megaSerial = AimBot_Serial(&Serial);
 
 	initBlController();
 	
@@ -40,7 +40,7 @@ void setup()
 void loop()
 {
 
-	megaSerial->serialUpdate();
+	megaSerial->update();
 
 	RCin = megaSerial->isRCmode();
 

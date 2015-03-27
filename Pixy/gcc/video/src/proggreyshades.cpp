@@ -17,16 +17,19 @@
 #include "camera.h"
 #include "pixyvals.h"
 #include "lpc43xx_scu.h"
-#include "Aimbot_Serial.h"
 
 Program g_progGreyshades = { "grey", "perform shades of grey analysis",
 		greySetup, greyLoop };
 
 static GreyShades g_greyShades((uint8_t *) LAST_REGION_MEMORY);
+extern GreyShades g_greyShades;
+bool running;
+
+#include "Aimbot_Serial.h"
+
 GreyRegion currentRegion;
 sPoint16 m_medianVector; //vector can have a negative direction, so using a signed version of the point struct.
 
-bool running;
 AimBot_Serial m_serial;
 
 GreyShades::GreyShades(uint8_t *lastRegionMem) {
