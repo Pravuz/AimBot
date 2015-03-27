@@ -47,7 +47,7 @@ void loop()
 	z_Pos = megaSerial->getX();
 	y_Pos = megaSerial->getY();
 
-	if (RCin)
+	/*if (RCin)
 	{
 		z_Float += z_Pos*0.1;
 		y_Float += y_Pos*0.1;
@@ -57,17 +57,17 @@ void loop()
 	}
 	else if (!RCin)
 	{
-		z_Float = 0;
+		z_Float = 1;
 		y_Float = 0;
-	}
+	}*/
 	
-
+	z_Pos++;
 	z_Pos_Steps = z_Pos / bldc2;
 	y_Pos_Steps = y_Pos / bldc1;
 		
 	//gjør utregninger og flytter motorene
 	
-	while (z_Pos!=0 || y_Pos!=0)
+	while (z_Pos_Steps!=0 || y_Pos_Steps!=0)
 	{
 		if (motorUpdate)
 		{
