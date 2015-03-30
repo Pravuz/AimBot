@@ -20,11 +20,11 @@ boolean crib = false;
 boolean box = false;
 
 
-AimBot_Serial *megaSerial;
+static AimBot_Serial megaSerial(Serial);
 
 void setup()
 {
-	*megaSerial = AimBot_Serial(&Serial);
+	Serial.begin(BAUDRATE);
 
 	initBlController();
 	
@@ -38,22 +38,15 @@ void setup()
 
 void loop()
 {
+	if (!(megaSerial.update())) return; //no new instructions, so nothing more to do. 
 
-	//megaSerial->update();
+	z_Pos = (int16_t)megaSerial.getX();
+	y_Pos = (int16_t)megaSerial.getY();
 
-	//RCin = megaSerial->isRCmode();
-
-	++z_Pos_Steps; 
-
-	//z_Pos = (int16_t) megaSerial->getX();
-	//y_Pos = (int16_t) megaSerial->getY();
-
-	Serial.println(z_Pos_Steps);
-
-	/*if (RCin)
+	if (megaSerial.isRCmode())
 	{
-		z_Float += z_Pos*0.1;
-		y_Float += y_Pos*0.1;
+		z_Float += z_Pos*0.5; //todo: factor here should be setting
+		y_Float += y_Pos*0.5;
 
 		z_Pos = z_Float;
 		y_Pos = y_Float;
@@ -63,20 +56,18 @@ void loop()
 		z_Float = 0;
 		y_Float = 0;
 	}
-	
-	
-	z_Pos_Steps = (int16_t) ((float)(z_Pos / bldc2));
-	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));*/
-	
-		
-	//gjør utregninger og flytter motorene
-	
+
+	//converting angle to motor steps.
+	z_Pos_Steps = (int16_t) ((float)(z_Pos / bldc2)); //todo: bldc1/2 should be setting.
+	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));
+
+	//do calcs and move motors
 	while ((z_Pos_Steps!=0) || (y_Pos_Steps!=0))
 	{
 		if (motorUpdate)
 		{
 			motorUpdate = false;
-			
+
 			if (y_Pos_Steps != 0)
 			{
 				if (y_Pos_Steps > 0)
@@ -108,32 +99,27 @@ void loop()
 				MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
 				z_Float = 0;
 			}
-
-			
-			
-		}
-		
-		
+		}		
 	}
 	if (z_Pos_Steps == 0 && y_Pos_Steps == 0)
 	{
-		//megaSerial->sendPosReached();
+		megaSerial.sendPosReached();
 	}
-	
+#if 0
 
-	//if (motorUpdate)
-	//{
-	//	motorUpdate = false;
+	if (motorUpdate)
+	{
+		motorUpdate = false;
 
-	//	//Verdi i x og z, omdreining i grader, mottatt serielt.
-	//	//Verdien blir brukt til nedtelling for pwm-moduleringen.
+		//Verdi i x og z, omdreining i grader, mottatt serielt.
+		//Verdien blir brukt til nedtelling for pwm-moduleringen.
 
-	//	++z_Pos_Steps;
-	//	--y_Pos_Steps;
+		++z_Pos_Steps;
+		--y_Pos_Steps;
 
-	//	MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 255);
-	//	MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 255);
-	//}
+		MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 255);
+		MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 255);
+	}
 
 		/*MoveMotorPosSpeed(motorNumberPitch, y_axe, 180);
 		MoveMotorPosSpeed(motorNumberYaw, z_axe, 180);
@@ -146,14 +132,14 @@ void loop()
 		{
 			updown = true;
 		}*/
-	//}
+	}
 
-	//int32_t computePID(int16_t accValue, int16_t Kp, int16_t Ki, int16_t Kd)
-	//{
-	//	/*error = Setpoint - accValue
-	//	output = Kp * error*/
-	//
-	//	//return output;
-	//}
-
+	int32_t computePID(int16_t accValue, int16_t Kp, int16_t Ki, int16_t Kd)
+	{
+		/*error = Setpoint - accValue
+		output = Kp * error*/
+	
+		//return output;
+	}
+#endif
 }

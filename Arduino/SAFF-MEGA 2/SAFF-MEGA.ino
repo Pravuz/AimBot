@@ -4,13 +4,13 @@
 #include <avr/sleep.h>
 
 // Interrupt numbers for each PWM chanel
-#define CHAN1_INTERRUPT		5	// pin 18
+#define CHAN1_INTERRUPT		3	// pin 20
 #define CHAN2_INTERRUPT		4	// pin 19
-#define CHAN3_INTERRUPT		3	// pin 20
+#define CHAN3_INTERRUPT		5	// pin 18
 #define CHAN4_INTERRUPT		2	// pin 21
-#define CHAN1_DIGIN			18	
+#define CHAN1_DIGIN			20	
 #define CHAN2_DIGIN			19	
-#define CHAN3_DIGIN			20	
+#define CHAN3_DIGIN			18	
 #define CHAN4_DIGIN			21	
 
 // Power switching
@@ -28,7 +28,7 @@
 #define CAM_FOCUS			7
 
 // MISC
-#define LOOP_TIME			100
+#define LOOP_TIME			50 // changed from 100
 #define PWR_CHECK_INTERVAL	1000
 
 // RC defs
@@ -49,7 +49,7 @@
 #define yVECT_OUTmin -38
 #define yVECT_OUTmax 38
 
-// PWM-in related vars
+bool megaDebug = true;
 enum Aimbot_Mode{ //TODO: Make sleep mode?
 	AUTO_RC,
 	AUTO_NC,
@@ -57,9 +57,7 @@ enum Aimbot_Mode{ //TODO: Make sleep mode?
 	MANUAL_NC
 }currentMode;
 
-// Serial interface
-AimBot_Serial *m_pixySerial, *m_escSerial;
-
+// PWM-in related vars
 int lastRCvalCH1 = 0;  // Thro (min = 1052, max = 1912), TH_HOLD = 952
 int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
 int lastRCvalCH3 = 0;  // GEAR (1052 = 0, 1912 = 1, ) needs ACRO-MODE
@@ -85,22 +83,29 @@ int count = 0;
 // Power check
 volatile unsigned long lastPowerCheck = 0;
 
+// Serial interface
+static AimBot_Serial m_pixySerial(Serial3);
+static AimBot_Serial m_escSerial(Serial2);
+
 void setup()
 {
-	// Initial Mode
-	currentMode = AUTO_NC;
-
 	// Setup serial
-	setup_Serial();
+	if (megaDebug) Serial.begin(BAUDRATE);	// Usb debug
+	if (megaDebug) Serial.println("Setup started");
+	Serial2.begin(BAUDRATE); //m_pixySerial begin
+	Serial3.begin(BAUDRATE); //m_escSerial begin
+
+	// Initial Mode
+	currentMode = MANUAL_NC;
 
 	// Relay setup
 	initButtonAndVoltage();
 
-	// interrupt pins int.4-2
-	pinMode(CHAN1_DIGIN, INPUT); // int.5 -- throttle  (CHAN1_INTERRUPT)
-	pinMode(CHAN2_DIGIN, INPUT); // aile 4  CHAN2_INTERRUPT
-	pinMode(CHAN3_DIGIN, INPUT); // elev 3   CHAN3_INTERRUPT
-	pinMode(CHAN4_DIGIN, INPUT);
+	// RC channels
+	pinMode(CHAN1_DIGIN, INPUT); // throttle 
+	pinMode(CHAN2_DIGIN, INPUT); // aile 
+	pinMode(CHAN3_DIGIN, INPUT); // elev 
+	pinMode(CHAN4_DIGIN, INPUT); // rudd 
 
 	// power pins
 	pinMode(CAM_TRIGGER, OUTPUT);
@@ -108,11 +113,13 @@ void setup()
 	pinMode(ESC_PWR, OUTPUT);
 	pinMode(FPV_PWR, OUTPUT);
 
-	//Start mode selector interrupt
+	//Start mode selector interrupt (on RC channels)
 	attachInterrupt(CHAN4_INTERRUPT, calculatePWMch4, CHANGE);
 	attachInterrupt(CHAN3_INTERRUPT, calculatePWMch3, CHANGE);
 	attachInterrupt(CHAN2_INTERRUPT, calculatePWMch2, CHANGE);
 	attachInterrupt(CHAN1_INTERRUPT, calculatePWMch1, CHANGE);
+
+	if (megaDebug) Serial.println("Setup complete");
 }
 
 void loop()
@@ -124,32 +131,23 @@ void loop()
 		switch (currentMode)
 		{
 		case AUTO_RC:
-			Mode_Auto_RC();
+			Mode_Auto();
 			break;
 		case AUTO_NC:
-			Mode_Auto_NC();
+			Mode_Auto();
 			break;
 		case MANUAL_RC:
 			Mode_Manual_RC();
 			break;
 		case MANUAL_NC:
-			Mode_Manual_NC();
+			//Mode_Manual_NC();
 			break;
 		default:
-			Mode_Auto_NC();
+			Mode_Auto();
 			break;
 		}
 
-		Serial.println("Loop");
-		//Serial.println(lastRCvalCH1);
-		//Serial.println(lastRCvalCH2);
-		//Serial.println(lastRCvalCH3);
-		//Serial.println(lastRCvalCH4);
-		//Serial.println(count);
-		//count++;
-		//if (count > 1000)count = 0;
-
-#if 1
+#if 0
 		//TODO: Make routine to check what our power source is.
 		//Power check
 		checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
@@ -159,23 +157,18 @@ void loop()
 }
 
 // Mode selection routines--------------------------------------------------------------------------
-void Mode_Auto_RC()
+
+void Mode_Auto()
 {
-	// Auto mode, video feed on
-	digitalWrite(PIX_PWR, HIGH); // Turn on Pixy power
-	digitalWrite(ESC_PWR, HIGH); // Turn on Brugi power
-	digitalWrite(FPV_PWR, HIGH); // Turn on Video transmitter power
+	if (!m_pixySerial.update()) return; // update failed, nothing more to do, returning
 
-	//Get vector from pixy, pass it to Brugi
-	m_pixySerial->update();
-
-	char x = getVECTx(m_pixySerial->getX());
-	char y = getVECTy(m_pixySerial->getY());
+	char x = getVECTx(m_pixySerial.getX());
+	char y = getVECTy(m_pixySerial.getY());
 
 	if (x != 0 || y != 0)
 	{
-		m_pixySerial->pixyCmd(PIXY_STOP); // Stop pixy while moving
-		m_escSerial->sendXY(x, y, VECTOR); // Send to Brugi if any movement
+		m_pixySerial.pixyCmd(PIXY_STOP); // Stop pixy while moving
+		m_escSerial.sendXY(x, y, VECTOR); // Send to Brugi if any movement
 
 		// Wait for Brugi feedback (brugi in position)
 		while (Serial2.available() < 1);
@@ -183,66 +176,28 @@ void Mode_Auto_RC()
 		takePicture(); // Arrived at destination, take picture
 
 		//flush both serials, reset
-		m_pixySerial->flush();
-		m_escSerial->flush();
+		m_pixySerial.flush();
+		m_escSerial.flush();
 
-		m_pixySerial->pixyCmd(PIXY_START); // Start pixy again
-	}
-}
-
-void Mode_Auto_NC()
-{
-	// Auto, no video feed
-	digitalWrite(PIX_PWR, HIGH);
-	digitalWrite(ESC_PWR, HIGH);
-	digitalWrite(FPV_PWR, LOW);
-
-	m_pixySerial->update();
-
-	char x = getVECTx(m_pixySerial->getX());
-	char y = getVECTy(m_pixySerial->getY());
-
-	if (x != 0 || y != 0)
-	{
-		m_pixySerial->pixyCmd(PIXY_STOP); // Stop pixy while moving
-		m_escSerial->sendXY(x, y, VECTOR); // Send to Brugi if any movement
-
-		// Wait for Brugi feedback (brugi in position)
-		while (Serial2.available() < 1);
-
-		takePicture(); // Arrived at destination, take picture
-
-		//flush both serials, reset
-		m_pixySerial->flush();
-		m_escSerial->flush();
-
-		m_pixySerial->pixyCmd(PIXY_START); // Start pixy again
+		m_pixySerial.pixyCmd(PIXY_START); // Start pixy again
 	}
 }
 
 void Mode_Manual_RC()
 {
-	digitalWrite(PIX_PWR, LOW);
-	digitalWrite(ESC_PWR, HIGH);
-	digitalWrite(FPV_PWR, HIGH);
-
 	char x = getRCx();
 	char y = getRCy();
 	if (x != 0 || y != 0)
 	{
 		// Send to Brugi if any movement
-		m_escSerial->sendXY(x, y, MOV_XY);
+		m_escSerial.sendXY(x, y, MOV_XY);
 	}
 }
-
+#if 0 // no longer used.
 void Mode_Manual_NC()
 {
-	// All power off
-	digitalWrite(PIX_PWR, LOW);
-	digitalWrite(ESC_PWR, LOW);
-	digitalWrite(FPV_PWR, LOW);
 }
-
+#endif
 // Helper routines--------------------------------------------------------------------------
 void takePicture()
 {
@@ -261,15 +216,11 @@ void takePicture()
 char getRCx()
 {
 	// Map RC vals to degrees, X
-	//return (char)map(lastRCvalCH1, 1000, 2000, 0, 100);
-	//int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
 	return (char)map(lastRCvalCH2, xRCmin, xRCmax, xRCMAPmin, xRCMAPmax);
 }
 char getRCy()
 {
 	// Map RC vals to degrees, Y
-	//return (char)map(lastRCvalCH2, 1000, 2000, 0, 100);
-	//int lastRCvalCH4 = 0;  // ELEV (UP = 1916, DOWN = 1052)
 	return (char)map(lastRCvalCH4, yRCmin, yRCmax, yRCMAPmin, yRCMAPmax);
 }
 
@@ -277,20 +228,13 @@ char getVECTx(char x)
 {
 	// Map pixy pixel-vector to degrees, X
 	if (x == 0) return 0;
-	else return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
+	return (char)map(x, xVECT_INmin, xVECT_INmax, xVECT_OUTmin, xVECT_OUTmax);
 }
 char getVECTy(char y)
 {
 	// Map pixy pixel-vector to degrees, Y
 	if (y == 0) return 0;
-	else return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
-}
-
-void setup_Serial()
-{
-	Serial.begin(BAUDRATE);	// Usb debug
-	*m_pixySerial = AimBot_Serial(&Serial3);
-	*m_escSerial = AimBot_Serial(&Serial2);
+	return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
 }
 
 void calculatePWMch1() // Throttle 1
@@ -298,33 +242,65 @@ void calculatePWMch1() // Throttle 1
 	timepassed1 = micros() - oldtime1;
 	oldtime1 = micros();
 
-	if (timepassed1 > 900 && timepassed1 < 2100)
-	{
-		lastRCvalCH1 = timepassed1;
-	}
+	if (timepassed1 > 900 && timepassed1 < 2100) lastRCvalCH1 = timepassed1;
 }
 void calculatePWMch2() // Throttle 2
 {
 	timepassed2 = micros() - oldtime2;
 	oldtime2 = micros();
 
-	if (timepassed2 > 900 && timepassed2 < 2100)
-	{
-		lastRCvalCH2 = timepassed2;
-	}
+	if (timepassed2 > 900 && timepassed2 < 2100) lastRCvalCH2 = timepassed2;
 }
 void calculatePWMch3() // Mode selector
 {
 	timepassed3 = micros() - oldtime3;
 	oldtime3 = micros();
 
-	if (timepassed3 < 2500 && timepassed3 > 900)
+	if (timepassed3 < 2100 && timepassed3 > 900)
 	{
 		lastRCvalCH3 = timepassed3;
-		if (timepassed3 > 2000) currentMode = AUTO_RC;
-		else if (timepassed3 > 1600) currentMode = AUTO_NC;
-		else if (timepassed3 > 1200) currentMode = MANUAL_RC;
-		else currentMode = MANUAL_NC;
+		if (timepassed3 > 1800){
+			if (currentMode != AUTO_RC && megaDebug) Serial.println("Mode is now set to Auto_RC");
+			if (currentMode != AUTO_RC)
+			{
+				// Auto mode, video feed on
+				digitalWrite(PIX_PWR, HIGH); // Turn on Pixy power
+				digitalWrite(ESC_PWR, HIGH); // Turn on Brugi power
+				digitalWrite(FPV_PWR, HIGH); // Turn on Video transmitter power
+			}
+			currentMode = AUTO_RC;
+		}
+		else if (timepassed3 > 1500)  {
+			if (currentMode != AUTO_NC && megaDebug) Serial.println("Mode is now set to Auto_NC");
+			if (currentMode != AUTO_NC)
+			{
+				// Auto, no video feed
+				digitalWrite(PIX_PWR, HIGH);
+				digitalWrite(ESC_PWR, HIGH);
+				digitalWrite(FPV_PWR, LOW);
+			}
+			currentMode = AUTO_NC;
+		}
+		else if (timepassed3 > 1200){
+			if (currentMode != MANUAL_RC && megaDebug) Serial.println("Mode is now set to Manual_RC");
+			if (currentMode != MANUAL_RC){
+				// Manual, no pixy feed
+				digitalWrite(PIX_PWR, LOW);
+				digitalWrite(ESC_PWR, HIGH);
+				digitalWrite(FPV_PWR, HIGH);
+			}
+			currentMode = MANUAL_RC;
+		}
+		else {
+			if (currentMode != MANUAL_NC && megaDebug) Serial.println("Mode is now set to Manual_NC");
+			if (currentMode != MANUAL_NC){
+				// All power off
+				digitalWrite(PIX_PWR, LOW);
+				digitalWrite(ESC_PWR, LOW);
+				digitalWrite(FPV_PWR, LOW);
+			}
+			currentMode = MANUAL_NC;
+		}
 
 	}
 }
@@ -333,10 +309,7 @@ void calculatePWMch4() // Camera trigger
 	timepassed4 = micros() - oldtime4;
 	oldtime4 = micros();
 
-	if (timepassed4 > 900 && timepassed4 < 2100)
-	{
-		lastRCvalCH4 = timepassed4;
-	}
+	if (timepassed4 > 900 && timepassed4 < 2100) lastRCvalCH4 = timepassed4;
 }
 
 void initButtonAndVoltage()
@@ -360,7 +333,7 @@ void checkButtonAndVoltage()
 			delay(1000);
 		}
 	}
-#if 0
+#if 0 //enable before release, fix power source detect first. 
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
 		// bat low, power off
