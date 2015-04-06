@@ -1,6 +1,7 @@
 #define __DEBUG
 #define __MEGA
 #include "Aimbot_Serial.h"
+#include "Aimbot_EEPROM.h"
 #include <avr/sleep.h>
 
 // Interrupt numbers for each PWM chanel
@@ -24,6 +25,7 @@
 // Camera (GoPro/DSLR)
 #define CAM_BTN_DELAY		100
 #define CAM_TRIGGER_DELAY	500
+#define CAM_FOCUS_DELAY		200
 #define CAM_TRIGGER			6
 #define CAM_FOCUS			7
 
@@ -54,7 +56,8 @@ enum Aimbot_Mode{ //TODO: Make sleep mode?
 	AUTO_RC,
 	AUTO_NC,
 	MANUAL_RC,
-	MANUAL_NC
+	MANUAL_NC,
+	SETTINGS
 }currentMode;
 
 // PWM-in related vars
@@ -75,6 +78,7 @@ volatile unsigned long timepassed4;
 
 // Take picture routine
 int lastPictureTime = 0;
+bool isDSLR = false;
 
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
@@ -142,6 +146,9 @@ void loop()
 		case MANUAL_NC:
 			//Mode_Manual_NC();
 			break;
+		case SETTINGS:
+			//SETTINGS()
+			break;
 		default:
 			Mode_Auto();
 			break;
@@ -201,16 +208,32 @@ void Mode_Manual_NC()
 // Helper routines--------------------------------------------------------------------------
 void takePicture()
 {
-	// Check that there is a set time between pictures
-	int diff = millis() - lastPictureTime;
-	if (diff > CAM_TRIGGER_DELAY)
+	if (isDSLR) // DSLR's require focus before trigger
 	{
-		digitalWrite(CAM_TRIGGER, HIGH);
-		delay(CAM_BTN_DELAY);
-		digitalWrite(CAM_TRIGGER, LOW);
-		lastPictureTime = millis();
+		// Check that there is a set time between pictures
+		int diff = millis() - lastPictureTime;
+		if (diff > CAM_TRIGGER_DELAY)
+		{
+			digitalWrite(CAM_FOCUS, HIGH);
+			delay(CAM_FOCUS_DELAY);
+			digitalWrite(CAM_FOCUS, LOW);
+			digitalWrite(CAM_TRIGGER, HIGH);
+			delay(CAM_BTN_DELAY);
+			digitalWrite(CAM_TRIGGER, LOW);
+			lastPictureTime = millis();
+		}
 	}
-	// TODO: add fokuPin for compability with DSLR's
+	else
+	{
+		int diff = millis() - lastPictureTime;
+		if (diff > CAM_TRIGGER_DELAY)
+		{
+			digitalWrite(CAM_TRIGGER, HIGH);
+			delay(CAM_BTN_DELAY);
+			digitalWrite(CAM_TRIGGER, LOW);
+			lastPictureTime = millis();
+		}
+	}
 }
 
 char getRCx()
