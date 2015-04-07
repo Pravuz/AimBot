@@ -1,5 +1,10 @@
-//Writes a 16 bit uint to EEPROM
-void EEPROMWriteUint16(int p_address, int p_value)
+#include <EEPROM\EEPROM.h>
+
+// There is 4K (4096 bytes) EEPROM storage on ATmega2560
+
+
+//Writes a 16 bit int to EEPROM
+void EEPROMWriteInt16(int p_address, int p_value)
 {
      byte lowByte = ((p_value >> 0) & 0xFF); // everything above the first eight bits is set to zero
      byte highByte = ((p_value >> 8) & 0xFF);
@@ -8,8 +13,8 @@ void EEPROMWriteUint16(int p_address, int p_value)
      EEPROM.write(p_address + 1, highByte);
 }
 
-// Reads a 16 bit uint from EEPROM
-unsigned int EEPROMReadUint16(int p_address)
+// Reads a 16 bit int from EEPROM
+int EEPROMReadInt16(int p_address)
 {
      byte lowByte = EEPROM.read(p_address);
      byte highByte = EEPROM.read(p_address + 1);
@@ -17,23 +22,16 @@ unsigned int EEPROMReadUint16(int p_address)
      return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
 }
 
-
-// TODO: implement below
-//Writes a 16 bit signed int to EEPROM
-void EEPROMWriteInt16(int p_address, int p_value)
+// Write byte
+void EEPROMWriteByte(int p_address, byte p_value)
 {
-     byte lowByte = ((p_value >> 0) & 0xFF);
-     byte highByte = ((p_value >> 8) & 0xFF);
-
-     EEPROM.write(p_address, lowByte);
-     EEPROM.write(p_address + 1, highByte);
+	EEPROM.write(p_address, p_value);
 }
 
-// Reads a 16 bit signed int from EEPROM
-unsigned int EEPROMReadInt16(int p_address)
+// Read byte
+byte EEPROMReadByte(int p_address)
 {
-     byte lowByte = EEPROM.read(p_address);
-     byte highByte = EEPROM.read(p_address + 1);
-
-     return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
+	return EEPROM.read(p_address);
 }
+
+

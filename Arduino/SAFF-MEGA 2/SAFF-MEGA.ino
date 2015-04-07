@@ -33,6 +33,10 @@
 #define LOOP_TIME			50 // changed from 100
 #define PWR_CHECK_INTERVAL	1000
 
+// USB
+#define USBconnectedPIN		31
+bool USBisConnected = false;
+
 // RC defs
 #define xRCmin 1916
 #define xRCmax 1052
@@ -128,39 +132,50 @@ void setup()
 
 void loop()
 {
-	long diff = millis() - lastPassTime;
-	if (diff > LOOP_TIME)
+	if (USBisConnected) // Settings & debug
 	{
-		// Run update for the current mode
-		switch (currentMode)
+		communicateWithPC();
+	}
+	else // normal operation:
+	{
+		checkCameraTrigger();
+
+		long diff = millis() - lastPassTime;
+		if (diff > LOOP_TIME)
 		{
-		case AUTO_RC:
-			Mode_Auto();
-			break;
-		case AUTO_NC:
-			Mode_Auto();
-			break;
-		case MANUAL_RC:
-			Mode_Manual_RC();
-			break;
-		case MANUAL_NC:
-			//Mode_Manual_NC();
-			break;
-		case SETTINGS:
-			//SETTINGS()
-			break;
-		default:
-			Mode_Auto();
-			break;
-		}
+			// Run update for the current mode
+			switch (currentMode)
+			{
+			case AUTO_RC:
+				Mode_Auto();
+				break;
+			case AUTO_NC:
+				Mode_Auto();
+				break;
+			case MANUAL_RC:
+				Mode_Manual_RC();
+				break;
+			case MANUAL_NC:
+				//Mode_Manual_NC();
+				break;
+			case SETTINGS:
+				//SETTINGS()
+				break;
+			default:
+				Mode_Auto();
+				break;
+			}
 
 #if 0
-		//TODO: Make routine to check what our power source is.
-		//Power check
-		checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
+			//TODO: Make routine to check what our power source is.
+			//Power check
+			checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
 #endif
-		lastPassTime = millis();
+			lastPassTime = millis();
+		}
 	}
+	
+	USBisConnected = isUSBconnected(); // Check if usb is connected
 }
 
 // Mode selection routines--------------------------------------------------------------------------
@@ -206,6 +221,11 @@ void Mode_Manual_NC()
 }
 #endif
 // Helper routines--------------------------------------------------------------------------
+void checkCameraTrigger()
+{
+
+}
+
 void takePicture()
 {
 	if (isDSLR) // DSLR's require focus before trigger
@@ -276,10 +296,11 @@ void calculatePWMch2() // Throttle 2
 }
 void calculatePWMch3() // Mode selector
 {
+	// Mode select uses ORX flap gyro switch with 3 modes
 	timepassed3 = micros() - oldtime3;
 	oldtime3 = micros();
 
-	if (timepassed3 < 2100 && timepassed3 > 900)
+	if (timepassed3 < 2100 && timepassed3 > 900) 
 	{
 		lastRCvalCH3 = timepassed3;
 		if (timepassed3 > 1800){
@@ -293,7 +314,7 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = AUTO_RC;
 		}
-		else if (timepassed3 > 1500)  {
+		else if (timepassed3 > 1200)  {
 			if (currentMode != AUTO_NC && megaDebug) Serial.println("Mode is now set to Auto_NC");
 			if (currentMode != AUTO_NC)
 			{
@@ -304,7 +325,7 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = AUTO_NC;
 		}
-		else if (timepassed3 > 1200){
+		else {
 			if (currentMode != MANUAL_RC && megaDebug) Serial.println("Mode is now set to Manual_RC");
 			if (currentMode != MANUAL_RC){
 				// Manual, no pixy feed
@@ -314,17 +335,6 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = MANUAL_RC;
 		}
-		else {
-			if (currentMode != MANUAL_NC && megaDebug) Serial.println("Mode is now set to Manual_NC");
-			if (currentMode != MANUAL_NC){
-				// All power off
-				digitalWrite(PIX_PWR, LOW);
-				digitalWrite(ESC_PWR, LOW);
-				digitalWrite(FPV_PWR, LOW);
-			}
-			currentMode = MANUAL_NC;
-		}
-
 	}
 }
 void calculatePWMch4() // Camera trigger
@@ -365,4 +375,14 @@ void checkButtonAndVoltage()
 		delay(1000);
 	}
 #endif
+}
+
+bool isUSBconnected()
+{
+	return digitalRead(USBconnectedPIN);
+}
+
+void communicateWithPC()
+{
+
 }

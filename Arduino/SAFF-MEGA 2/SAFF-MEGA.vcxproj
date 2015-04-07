@@ -73,6 +73,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aimbot_EEPROM.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Aimbot_Serial.h" />
     <ClInclude Include="Visual Micro\.SAFF-MEGA 2.vsarduino.h" />
     <ClInclude Include="Visual Micro\.SAFF-MEGA.vsarduino.h" />
