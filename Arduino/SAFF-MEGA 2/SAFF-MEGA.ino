@@ -138,7 +138,7 @@ void loop()
 	}
 	else // normal operation:
 	{
-		checkCameraTrigger();
+		if(checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
 
 		long diff = millis() - lastPassTime;
 		if (diff > LOOP_TIME)
@@ -221,9 +221,11 @@ void Mode_Manual_NC()
 }
 #endif
 // Helper routines--------------------------------------------------------------------------
-void checkCameraTrigger()
+bool checkCameraTrigger()
 {
-
+	// check if trigger is pressed
+	if (lastRCvalCH4 > 1500) return true;
+	else return false;
 }
 
 void takePicture()
@@ -384,5 +386,7 @@ bool isUSBconnected()
 
 void communicateWithPC()
 {
+	// TODO: Add pc-communication stuff here
+	// update variables etc
 
 }
