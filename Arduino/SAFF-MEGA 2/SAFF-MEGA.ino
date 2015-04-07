@@ -23,37 +23,37 @@
 #define BAT_VOLTAGE			A1
 
 // Camera (GoPro/DSLR)
-#define CAM_BTN_DELAY		100
-#define CAM_TRIGGER_DELAY	500
-#define CAM_FOCUS_DELAY		200
+int CAM_BTN_DELAY = 100;
+int CAM_TRIGGER_DELAY = 500;
+int CAM_FOCUS_DELAY = 200;
 #define CAM_TRIGGER			6
 #define CAM_FOCUS			7
 
 // MISC
-#define LOOP_TIME			50 // changed from 100
-#define PWR_CHECK_INTERVAL	1000
+int LOOP_TIME = 50; 
+int PWR_CHECK_INTERVAL = 1000;
 
 // USB
 #define USBconnectedPIN		31
 bool USBisConnected = false;
 
 // RC defs
-#define xRCmin 1916
-#define xRCmax 1052
-#define xRCMAPmin -10
-#define xRCMAPmax 10
-#define yRCmin 1040
-#define yRCmax 1916
-#define yRCMAPmin -10
-#define yRCMAPmax 10
-#define xVECT_INmin -127
-#define xVECT_INmax 127
-#define xVECT_OUTmin -38
-#define xVECT_OUTmax 38
-#define yVECT_INmin -100
-#define yVECT_INmax 100
-#define yVECT_OUTmin -38
-#define yVECT_OUTmax 38
+int xRCmin = 1916;
+int xRCmax = 1052;
+int xRCMAPmin = -10;
+int xRCMAPmax = 10;
+int yRCmin = 1040;
+int yRCmax = 1916;
+int yRCMAPmin = -10;
+int yRCMAPmax = 10;
+int xVECT_INmin = -127;
+int xVECT_INmax = 127;
+int xVECT_OUTmin = -38;
+int xVECT_OUTmax = 38;
+int yVECT_INmin = -100;
+int yVECT_INmax = 100;
+int yVECT_OUTmin = -38;
+int yVECT_OUTmax = 38;
 
 bool megaDebug = true;
 enum Aimbot_Mode{ //TODO: Make sleep mode?
@@ -389,4 +389,59 @@ void communicateWithPC()
 	// TODO: Add pc-communication stuff here
 	// update variables etc
 
+}
+
+void saveSettingsToEEPROM()
+{
+	// Saves all settings to EEPROM
+	int i = 0;
+	EEPROMWriteBool(i, isDSLR); i++;
+	EEPROMWriteInt16(i, CAM_BTN_DELAY); i++; i++;
+	EEPROMWriteInt16(i, CAM_TRIGGER_DELAY); i++; i++;
+	EEPROMWriteInt16(i, CAM_FOCUS_DELAY); i++; i++;
+	EEPROMWriteInt16(i, LOOP_TIME); i++; i++;
+	EEPROMWriteInt16(i, PWR_CHECK_INTERVAL); i++; i++;
+	EEPROMWriteInt16(i, xRCmin); i++; i++;
+	EEPROMWriteInt16(i, xRCmax); i++; i++;
+	EEPROMWriteInt16(i, xRCMAPmin); i++; i++;
+	EEPROMWriteInt16(i, xRCMAPmax); i++; i++;
+	EEPROMWriteInt16(i, yRCmin); i++; i++;
+	EEPROMWriteInt16(i, yRCmax); i++; i++;
+	EEPROMWriteInt16(i, yRCMAPmin); i++; i++;
+	EEPROMWriteInt16(i, yRCMAPmax); i++; i++;
+	EEPROMWriteInt16(i, xVECT_INmin); i++; i++;
+	EEPROMWriteInt16(i, xVECT_INmax); i++; i++;
+	EEPROMWriteInt16(i, xVECT_OUTmin); i++; i++;
+	EEPROMWriteInt16(i, xVECT_OUTmax); i++; i++;
+	EEPROMWriteInt16(i, yVECT_INmin); i++; i++;
+	EEPROMWriteInt16(i, yVECT_INmax); i++; i++;
+	EEPROMWriteInt16(i, yVECT_OUTmin); i++; i++;
+	EEPROMWriteInt16(i, yVECT_OUTmax); i++; i++;
+}
+
+void loadSettingsFromEEPROM()
+{
+	int i = 0;
+	bool isdslr = EEPROMReadBool(i); i++;
+	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
+	int CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
+	int CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
+	int LOOP_TIME = EEPROMReadInt16(i); i++; i++;
+	int PWR_CHECK_INTERVAL = EEPROMReadInt16(i); i++; i++;
+	int xRCmin = EEPROMReadInt16(i); i++; i++;
+	int xRCmax = EEPROMReadInt16(i); i++; i++;
+	int xRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	int xRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	int yRCmin = EEPROMReadInt16(i); i++; i++;
+	int yRCmax = EEPROMReadInt16(i); i++; i++;
+	int yRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	int yRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	int xVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	int xVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	int xVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	int xVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
+	int yVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	int yVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	int yVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	int yVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
 }
