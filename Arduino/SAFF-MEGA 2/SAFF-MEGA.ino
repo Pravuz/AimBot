@@ -388,6 +388,80 @@ void communicateWithPC()
 {
 	// TODO: Add pc-communication stuff here
 	// update variables etc
+	if (Serial.available() >= 5)
+	{
+		String inString = "";
+		for (int i = 0; i < 5; i++) // read 5 times to string
+		{
+			inString += (char)Serial.read();
+		}
+		if (inString == "setup") // Recieve new settings
+		{
+			inString = "";
+			int i = 0;
+			int settings[21];
+			while (i <= 21)
+			{
+				char last = Serial.read();
+				if (last == ',')
+				{
+					settings[i] = inString.toInt();
+					inString = "";
+					i++;
+				}
+				else inString += last;
+			}
+			isDSLR = settings[0];
+			CAM_BTN_DELAY = settings[1];
+			CAM_TRIGGER_DELAY = settings[2];
+			CAM_FOCUS_DELAY = settings[3];
+			LOOP_TIME = settings[4];
+			PWR_CHECK_INTERVAL = settings[5];
+			xRCmin = settings[6];
+			xRCmax = settings[7];
+			xRCMAPmin = settings[8];
+			xRCMAPmax = settings[9];
+			yRCmin = settings[10];
+			yRCmax = settings[11];
+			yRCMAPmin = settings[12];
+			yRCMAPmax = settings[13];
+			xVECT_INmin = settings[14];
+			xVECT_INmax = settings[15];
+			xVECT_OUTmin = settings[16];
+			xVECT_OUTmax = settings[17];
+			yVECT_INmin = settings[18];
+			yVECT_INmax = settings[19];
+			yVECT_OUTmin = settings[20];
+			yVECT_OUTmax = settings[21];
+
+		}
+		else if (inString == "sendx") // Send current settings back
+		{
+			inString = "";
+			Serial.print(isDSLR, DEC); Serial.print(",");
+			Serial.print(CAM_BTN_DELAY, DEC); Serial.print(",");
+			Serial.print(CAM_TRIGGER_DELAY, DEC); Serial.print(",");
+			Serial.print(CAM_FOCUS_DELAY, DEC); Serial.print(",");
+			Serial.print(LOOP_TIME, DEC); Serial.print(",");
+			Serial.print(PWR_CHECK_INTERVAL, DEC); Serial.print(",");
+			Serial.print(xRCmin, DEC); Serial.print(",");
+			Serial.print(xRCmax, DEC); Serial.print(",");
+			Serial.print(xRCMAPmin, DEC); Serial.print(",");
+			Serial.print(xRCMAPmax, DEC); Serial.print(",");
+			Serial.print(yRCmin, DEC); Serial.print(",");
+			Serial.print(yRCmax, DEC); Serial.print(",");
+			Serial.print(yRCMAPmin, DEC); Serial.print(",");
+			Serial.print(yRCMAPmax, DEC); Serial.print(",");
+			Serial.print(xVECT_INmin, DEC); Serial.print(",");
+			Serial.print(xVECT_INmax, DEC); Serial.print(",");
+			Serial.print(xVECT_OUTmin, DEC); Serial.print(",");
+			Serial.print(xVECT_OUTmax, DEC); Serial.print(",");
+			Serial.print(yVECT_INmin, DEC); Serial.print(",");
+			Serial.print(yVECT_INmax, DEC); Serial.print(",");
+			Serial.print(yVECT_OUTmin, DEC); Serial.print(",");
+			Serial.print(yVECT_OUTmax, DEC); Serial.print(",");
+		}
+	}
 
 }
 
