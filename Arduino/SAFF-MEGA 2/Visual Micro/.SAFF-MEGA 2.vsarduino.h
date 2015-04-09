@@ -11,7 +11,7 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define ARDUINO 160
+#define ARDUINO 158
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__
@@ -79,5 +79,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <SAFF-MEGA.ino>
+#include <Aimbot_EEPROM.h>
 #include <Aimbot_Serial.h>
 #endif
