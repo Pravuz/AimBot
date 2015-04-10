@@ -35,7 +35,8 @@ int LOOP_TIME = 50;
 int PWR_CHECK_INTERVAL = 1000;
 
 // USB
-#define USBconnectedPIN		31
+#define USBconnectedPIN		26
+#define USBpulldownPIN		28
 bool USBisConnected = false;
 
 // RC defs
@@ -57,12 +58,11 @@ int yVECT_OUTmin = -38;
 int yVECT_OUTmax = 38;
 
 bool megaDebug = true;
-enum Aimbot_Mode{ //TODO: Make sleep mode?
-	AUTO_RC,
-	AUTO_NC,
-	MANUAL_RC,
-	MANUAL_NC,
-	SETTINGS
+enum Aimbot_Mode
+{ 
+	SLEEP_MODE,
+	AUTO,
+	MANUAL,
 }currentMode;
 
 // PWM-in related vars
@@ -106,10 +106,15 @@ void setup()
 	Serial3.begin(BAUDRATE); //m_escSerial begin
 
 	// Initial Mode
-	currentMode = MANUAL_NC;
+	currentMode = MANUAL;
 
 	// Relay setup
 	initButtonAndVoltage();
+
+	// USB setup
+	pinMode(USBpulldownPIN, OUTPUT);
+	pinMode(USBconnectedPIN, INPUT);
+	digitalWrite(USBpulldownPIN, LOW);
 
 	// RC channels
 	pinMode(CHAN1_DIGIN, INPUT); // throttle 
@@ -134,7 +139,7 @@ void setup()
 
 void loop()
 {
-	if (USBisConnected) // Settings & debug
+	if (isUSBconnected()) // Settings & debug
 	{
 		communicateWithPC();
 	}
@@ -148,40 +153,29 @@ void loop()
 			// Run update for the current mode
 			switch (currentMode)
 			{
-			case AUTO_RC:
+			case AUTO:
 				Mode_Auto();
 				break;
-			case AUTO_NC:
-				Mode_Auto();
-				break;
-			case MANUAL_RC:
+			case MANUAL:
 				Mode_Manual_RC();
 				break;
-			case MANUAL_NC:
-				//Mode_Manual_NC();
-				break;
-			case SETTINGS:
-				//SETTINGS()
-				break;
 			default:
-				Mode_Auto();
+				Sleep_mode();
 				break;
 			}
 
-#if 0
-			//TODO: Make routine to check what our power source is.
 			//Power check
-			checkButtonAndVoltage(); // OY! fucks everything up when powered from USB!
-#endif
+			checkButtonAndVoltage(); 
 			lastPassTime = millis();
 		}
 	}
-	
-	USBisConnected = isUSBconnected(); // Check if usb is connected
 }
 
 // Mode selection routines--------------------------------------------------------------------------
-
+void Sleep_mode()
+{
+	// Nope.
+}
 void Mode_Auto()
 {
 	if (!m_pixySerial.update()) return; // update failed, nothing more to do, returning
@@ -217,11 +211,7 @@ void Mode_Manual_RC()
 		m_escSerial.sendXY(x, y, MOV_XY);
 	}
 }
-#if 0 // no longer used.
-void Mode_Manual_NC()
-{
-}
-#endif
+
 // Helper routines--------------------------------------------------------------------------
 bool checkCameraTrigger()
 {
@@ -308,36 +298,36 @@ void calculatePWMch3() // Mode selector
 	{
 		lastRCvalCH3 = timepassed3;
 		if (timepassed3 > 1800){
-			if (currentMode != AUTO_RC && megaDebug) Serial.println("Mode is now set to Auto_RC");
-			if (currentMode != AUTO_RC)
+			if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
+			if (currentMode != SLEEP_MODE)
 			{
 				// Auto mode, video feed on
-				digitalWrite(PIX_PWR, HIGH); // Turn on Pixy power
-				digitalWrite(ESC_PWR, HIGH); // Turn on Brugi power
-				digitalWrite(FPV_PWR, HIGH); // Turn on Video transmitter power
+				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
+				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
+				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
 			}
-			currentMode = AUTO_RC;
+			currentMode = SLEEP_MODE;
 		}
 		else if (timepassed3 > 1200)  {
-			if (currentMode != AUTO_NC && megaDebug) Serial.println("Mode is now set to Auto_NC");
-			if (currentMode != AUTO_NC)
+			if (currentMode != AUTO && megaDebug) Serial.println("Mode is now set to AUTO");
+			if (currentMode != AUTO)
 			{
 				// Auto, no video feed
 				digitalWrite(PIX_PWR, HIGH);
 				digitalWrite(ESC_PWR, HIGH);
 				digitalWrite(FPV_PWR, LOW);
 			}
-			currentMode = AUTO_NC;
+			currentMode = AUTO;
 		}
 		else {
-			if (currentMode != MANUAL_RC && megaDebug) Serial.println("Mode is now set to Manual_RC");
-			if (currentMode != MANUAL_RC){
+			if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
+			if (currentMode != MANUAL){
 				// Manual, no pixy feed
 				digitalWrite(PIX_PWR, LOW);
 				digitalWrite(ESC_PWR, HIGH);
 				digitalWrite(FPV_PWR, HIGH);
 			}
-			currentMode = MANUAL_RC;
+			currentMode = MANUAL;
 		}
 	}
 }
@@ -370,7 +360,6 @@ void checkButtonAndVoltage()
 			delay(1000);
 		}
 	}
-#if 0 //enable before release, fix power source detect first. 
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
 		// bat low, power off
@@ -378,14 +367,10 @@ void checkButtonAndVoltage()
 		digitalWrite(RIG_PWR, LOW);
 		delay(1000);
 	}
-#endif
 }
 
 bool isUSBconnected()
 {
-#if 1
-	return true;
-#endif
 	return digitalRead(USBconnectedPIN);
 }
 
@@ -395,7 +380,7 @@ void communicateWithPC()
 	{
 		inString += (char)Serial.read();
 
-		if (inString.length() >= 5) 
+		if (inString.length() >= 5)
 		{
 			if (inString == "setup") // Recieve new settings
 			{
@@ -466,18 +451,16 @@ void communicateWithPC()
 				Serial.print(yVECT_INmax, DEC); Serial.print(",");
 				Serial.print(yVECT_OUTmin, DEC); Serial.print(",");
 				Serial.print(yVECT_OUTmax, DEC); Serial.print(",");
-#if 1
-				Serial.println("");
-#endif
+				Serial.println(""); // prints newline so it's more convenient when using debug console
 			}
 			else
 			{
 				inString = "";
 			}
-		}
-		while (Serial.available() > 0)
-		{
-			Serial.read(); // flush serial in
+			while (Serial.available() > 0)
+			{
+				Serial.read(); // flush serial in
+			}
 		}
 	}
 
