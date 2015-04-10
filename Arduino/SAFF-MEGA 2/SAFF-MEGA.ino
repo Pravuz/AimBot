@@ -71,15 +71,15 @@ int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
 int lastRCvalCH3 = 0;  // GEAR (1052 = 0, 1912 = 1, ) needs ACRO-MODE
 int lastRCvalCH4 = 0;  // ELEV (UP = 1916, DOWN = 1052)
 
-//timing 
+//timing, volatile due to interrupts
 volatile unsigned long oldtime1 = 0;
-volatile unsigned long timepassed1;
+volatile int timepassed1;
 volatile unsigned long oldtime2 = 0;
-volatile unsigned long timepassed2;
+volatile int timepassed2;
 volatile unsigned long oldtime3 = 0;
-volatile unsigned long timepassed3;
+volatile int timepassed3;
 volatile unsigned long oldtime4 = 0;
-volatile unsigned long timepassed4;
+volatile int timepassed4;
 
 // Take picture routine
 int lastPictureTime = 0;
@@ -87,7 +87,6 @@ bool isDSLR = false;
 
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
-int count = 0;
 
 // Power check
 volatile unsigned long lastPowerCheck = 0;
@@ -95,7 +94,7 @@ volatile unsigned long lastPowerCheck = 0;
 // Serial interface
 static AimBot_Serial m_pixySerial(Serial3);
 static AimBot_Serial m_escSerial(Serial2);
-String inString = "";
+String inString = "";  // buffer for PC communication
 
 void setup()
 {
@@ -378,13 +377,12 @@ void communicateWithPC()
 {
 	if (Serial.available() > 0)
 	{
-		inString += (char)Serial.read();
+		inString += (char)Serial.read(); // Read to bufferstring
 
-		if (inString.length() >= 5)
+		if (inString.length() >= 5) // All commands are 5 chars long
 		{
 			if (inString == "setup") // Recieve new settings
 			{
-
 				inString = "";
 				int i = 0;
 				int settings[23];
@@ -401,7 +399,7 @@ void communicateWithPC()
 					else inString += last;
 				}
 
-				isDSLR = settings[0];
+				isDSLR = settings[0]; // no casting, a bool is really a uint8 in disguise
 				CAM_BTN_DELAY = settings[1];
 				CAM_TRIGGER_DELAY = settings[2];
 				CAM_FOCUS_DELAY = settings[3];
@@ -455,11 +453,11 @@ void communicateWithPC()
 			}
 			else
 			{
-				inString = "";
+				inString = "";  // Serial might be out of sync, flush bufferstring
 			}
 			while (Serial.available() > 0)
 			{
-				Serial.read(); // flush serial in
+				Serial.read(); // Flush serial in
 			}
 		}
 	}
@@ -468,10 +466,10 @@ void communicateWithPC()
 
 void saveSettingsToEEPROM()
 {
-	// Saves all settings to EEPROM
+	// Each address on the EEPROM is 8 bits
 	int i = 0;
-	EEPROMWriteBool(i, isDSLR); i++;
-	EEPROMWriteInt16(i, CAM_BTN_DELAY); i++; i++;
+	EEPROMWriteBool(i, isDSLR); i++; // bool uses only one 8bit block
+	EEPROMWriteInt16(i, CAM_BTN_DELAY); i++; i++; // an int is 16 bits and uses two blocks
 	EEPROMWriteInt16(i, CAM_TRIGGER_DELAY); i++; i++;
 	EEPROMWriteInt16(i, CAM_FOCUS_DELAY); i++; i++;
 	EEPROMWriteInt16(i, LOOP_TIME); i++; i++;
@@ -496,9 +494,9 @@ void saveSettingsToEEPROM()
 
 void loadSettingsFromEEPROM()
 {
-	int i = 0;
-	bool isdslr = EEPROMReadBool(i); i++;
-	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
+	int i = 0; 
+	bool isdslr = EEPROMReadBool(i); i++; 
+	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++; 
 	int CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
 	int CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
 	int LOOP_TIME = EEPROMReadInt16(i); i++; i++;
