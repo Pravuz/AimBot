@@ -395,16 +395,17 @@ void communicateWithPC()
 	{
 		inString += (char)Serial.read();
 
-		if (inString.length() >= 5)
+		if (inString.length() >= 5) 
 		{
 			if (inString == "setup") // Recieve new settings
 			{
+
 				inString = "";
 				int i = 0;
 				int settings[23];
 				while (i <= 21)
 				{
-					while (Serial.available() < 1){}
+					while (Serial.available() < 1){} // wait for next var
 					char last = Serial.read();
 					if (last == ',') // comma signals next variable
 					{
@@ -474,7 +475,10 @@ void communicateWithPC()
 				inString = "";
 			}
 		}
-		while (Serial.available() > 0) Serial.read(); // flush serial in
+		while (Serial.available() > 0)
+		{
+			Serial.read(); // flush serial in
+		}
 	}
 
 }
