@@ -3,7 +3,6 @@
 #include "Aimbot_Serial.h"
 #include "eeprom.h"
 #include "Aimbot_EEPROM.h"
-#include <avr/sleep.h>
 
 // Interrupt numbers for each PWM chanel
 #define CHAN1_INTERRUPT		3	// pin 20
