@@ -314,6 +314,8 @@ void GreyShades::reset() {
 }
 
 int greySetup() {
+	m_serial.setupSerial();
+
 //initial currentRegion
 	currentRegion = REG_A1;
 // setup camera mode
