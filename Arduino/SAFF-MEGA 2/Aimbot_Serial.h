@@ -34,7 +34,8 @@ struct baseArduinoSerial {
 	}
 
 	void flush() {
-		m_serial.flush();
+		//m_serial.flush();
+		while (m_serial.available() > 0){ m_serial.read(); }
 		free(m_rx);
 		free(m_tx);
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);

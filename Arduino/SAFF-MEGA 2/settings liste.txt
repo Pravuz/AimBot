@@ -1,4 +1,14 @@
-Variabelliste for EEPROM:
+
+Default settings:
+0,100,500,200,5,1000,1916,1052,-10,10,1040,1916,-10,10,-127,127,-38,38,-100,100,-38,38,
+
+Example commands:
+sendx // Asks arduino to send current settings
+
+setup0,100,500,200,5,1000,1916,1052,-10,10,1040,1916,-10,10,-127,127,-38,38,-100,100,-38,322, // Sets values for all settings
+
+VAR's i rekkefølge:
+------------------------------
 bool isdslr = false;
 int CAM_BTN_DELAY = 100;
 int CAM_TRIGGER_DELAY = 500;

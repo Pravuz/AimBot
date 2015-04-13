@@ -45,8 +45,8 @@ void loop()
 
 	if (megaSerial.isRCmode())
 	{
-		z_Float += z_Pos*0.5; //todo: factor here should be setting
-		y_Float += y_Pos*0.5;
+		z_Float += z_Pos*0.1; //todo: factor here should be setting
+		y_Float += y_Pos*0.1;
 
 		z_Pos = z_Float;
 		y_Pos = y_Float;

@@ -137,7 +137,7 @@ void setup()
 
 void loop()
 {
-	if (isUSBconnected()) // Settings & debug
+	if (isUSBconnected() & !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
 	}
