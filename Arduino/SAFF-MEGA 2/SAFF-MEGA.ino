@@ -30,7 +30,7 @@ int CAM_FOCUS_DELAY = 200;
 #define CAM_FOCUS			7
 
 // MISC
-int LOOP_TIME = 50; 
+int LOOP_TIME = 50;
 int PWR_CHECK_INTERVAL = 1000;
 
 // USB
@@ -56,9 +56,10 @@ int yVECT_INmax = 100;
 int yVECT_OUTmin = -38;
 int yVECT_OUTmax = 38;
 
-bool megaDebug = true;
+bool megaDebug = false;
+
 enum Aimbot_Mode
-{ 
+{
 	SLEEP_MODE,
 	AUTO,
 	MANUAL,
@@ -98,13 +99,13 @@ String inString = "";  // buffer for PC communication
 void setup()
 {
 	// Setup serial
-	if (megaDebug) Serial.begin(BAUDRATE);	// Usb debug
+	Serial.begin(BAUDRATE);	// Usb debug
 	if (megaDebug) Serial.println("Setup started");
 	Serial2.begin(BAUDRATE); //m_pixySerial begin
 	Serial3.begin(BAUDRATE); //m_escSerial begin
 
 	// Initial Mode
-	currentMode = MANUAL;
+	currentMode = SLEEP_MODE; // Start with externals off
 
 	// Relay setup
 	initButtonAndVoltage();
@@ -137,13 +138,16 @@ void setup()
 
 void loop()
 {
+	//if (isUSBconnected())megaDebug = true;
+	//else megaDebug = false;
+
 	if (isUSBconnected() & !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
 	}
 	else // normal operation:
 	{
-		if(checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
+		if (checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
 
 		long diff = millis() - lastPassTime;
 		if (diff > LOOP_TIME)
@@ -163,7 +167,7 @@ void loop()
 			}
 
 			//Power check
-			checkButtonAndVoltage(); 
+			checkButtonAndVoltage();
 			lastPassTime = millis();
 		}
 	}
@@ -292,7 +296,7 @@ void calculatePWMch3() // Mode selector
 	timepassed3 = micros() - oldtime3;
 	oldtime3 = micros();
 
-	if (timepassed3 < 2100 && timepassed3 > 900) 
+	if (timepassed3 < 2100 && timepassed3 > 900)
 	{
 		lastRCvalCH3 = timepassed3;
 		if (timepassed3 > 1800){
@@ -340,31 +344,38 @@ void calculatePWMch4() // Camera trigger
 void initButtonAndVoltage()
 {
 	pinMode(RIG_PWR, OUTPUT);
-	digitalWrite(RIG_PWR, HIGH);
+	digitalWrite(RIG_PWR, LOW);
 	pinMode(BTN_PWR, INPUT);
 	pinMode(BAT_VOLTAGE, INPUT);
 }
 
 void checkButtonAndVoltage()
 {
-	if (analogRead(BTN_PWR) > 140)
+
+	if (megaDebug)Serial.println(analogRead(BTN_PWR));
+	if (analogRead(BTN_PWR) < 70)
 	{
 		delay(1000);
-		if (analogRead(BTN_PWR) > 140)
+		if (analogRead(BTN_PWR) < 70)
 		{
+			if (megaDebug)Serial.println("button - shutdown");
 			// power button pressed, power off
 			delay(3000);
-			digitalWrite(RIG_PWR, LOW);
+			digitalWrite(RIG_PWR, HIGH);
 			delay(1000);
 		}
 	}
+	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
 		// bat low, power off
+		if (megaDebug)Serial.println("voltage - shutdown");
 		delay(1000);
-		digitalWrite(RIG_PWR, LOW);
+		digitalWrite(RIG_PWR, HIGH);
 		delay(1000);
 	}
+#if 0 
+#endif
 }
 
 bool isUSBconnected()
@@ -493,9 +504,9 @@ void saveSettingsToEEPROM()
 
 void loadSettingsFromEEPROM()
 {
-	int i = 0; 
-	bool isdslr = EEPROMReadBool(i); i++; 
-	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++; 
+	int i = 0;
+	bool isdslr = EEPROMReadBool(i); i++;
+	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
 	int CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
 	int CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
 	int LOOP_TIME = EEPROMReadInt16(i); i++; i++;
