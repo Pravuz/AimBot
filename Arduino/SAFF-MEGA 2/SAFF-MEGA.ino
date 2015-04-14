@@ -163,7 +163,7 @@ void loop()
 			}
 
 			//Power check
-			checkButtonAndVoltage(); 
+			//checkButtonAndVoltage(); 
 			lastPassTime = millis();
 		}
 	}
@@ -340,7 +340,7 @@ void calculatePWMch4() // Camera trigger
 void initButtonAndVoltage()
 {
 	pinMode(RIG_PWR, OUTPUT);
-	digitalWrite(RIG_PWR, HIGH);
+	digitalWrite(RIG_PWR, LOW);
 	pinMode(BTN_PWR, INPUT);
 	pinMode(BAT_VOLTAGE, INPUT);
 }
@@ -354,7 +354,7 @@ void checkButtonAndVoltage()
 		{
 			// power button pressed, power off
 			delay(3000);
-			digitalWrite(RIG_PWR, LOW);
+			digitalWrite(RIG_PWR, HIGH);
 			delay(1000);
 		}
 	}
@@ -362,7 +362,7 @@ void checkButtonAndVoltage()
 	{
 		// bat low, power off
 		delay(1000);
-		digitalWrite(RIG_PWR, LOW);
+		digitalWrite(RIG_PWR, HIGH);
 		delay(1000);
 	}
 }
