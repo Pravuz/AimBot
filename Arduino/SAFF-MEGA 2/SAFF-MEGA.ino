@@ -1,4 +1,4 @@
-#define __DEBUG
+//#define __DEBUG
 #define __MEGA
 #include "Aimbot_Serial.h"
 #include "eeprom.h"
@@ -98,6 +98,11 @@ String inString = "";  // buffer for PC communication
 
 void setup()
 {
+#if 0
+	// Load config from persistent storage
+	loadSettingsFromEEPROM();
+	// Skip this during dev
+#endif
 	// Setup serial
 	Serial.begin(BAUDRATE);	// Usb debug
 	if (megaDebug) Serial.println("Setup started");
@@ -460,6 +465,10 @@ void communicateWithPC()
 				Serial.print(yVECT_OUTmin, DEC); Serial.print(",");
 				Serial.print(yVECT_OUTmax, DEC); Serial.print(",");
 				Serial.println(""); // prints newline so it's more convenient when using debug console
+			}
+			else if (inString == "savex") // Save to EEPROM
+			{
+				saveSettingsToEEPROM();
 			}
 			else
 			{
