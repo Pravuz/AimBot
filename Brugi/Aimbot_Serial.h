@@ -35,11 +35,17 @@ struct baseArduinoSerial {
 	}
 
 	void flush() {
-		while (m_serial.available > 0) m_serial.read(); //flushing incoming buffer.
+		//flushing incoming buffer.
+		//while (m_serial.available() > 0) m_serial.read(); 
+
+		//flush local rx buffer
+		for (int i = 0; i <= 3; i++) m_tx[i] = 0;
+#if 0
 		free(m_rx);
 		free(m_tx);
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+#endif
 	}
 
 	bool update() {

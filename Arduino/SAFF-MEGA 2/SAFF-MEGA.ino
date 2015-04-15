@@ -30,7 +30,7 @@ int CAM_FOCUS_DELAY = 200;
 #define CAM_FOCUS			7
 
 // MISC
-int LOOP_TIME = 50; 
+int LOOP_TIME = 0; 
 int PWR_CHECK_INTERVAL = 1000;
 
 // USB

@@ -38,15 +38,27 @@ void setup()
 
 void loop()
 {
+#if 0
 	if (!(megaSerial.update())) return; //no new instructions, so nothing more to do. 
-
+	//megaSerial.update();
 	z_Pos = (int16_t)megaSerial.getX();
 	y_Pos = (int16_t)megaSerial.getY();
 
+	//megaSerial.flush();
+#endif
+	if (megaSerial.update()){
+		z_Pos = (int16_t)megaSerial.getX();
+		y_Pos = (int16_t)megaSerial.getY();	
+	}
+	else{
+		z_Pos = 0;
+		y_Pos = 0;
+	}
+
 	if (megaSerial.isRCmode())
 	{
-		z_Float += z_Pos*0.5; //todo: factor here should be setting
-		y_Float += y_Pos*0.5;
+		z_Float += z_Pos*0.2; //todo: factor here should be setting
+		y_Float += y_Pos*0.2;
 
 		z_Pos = z_Float;
 		y_Pos = y_Float;
@@ -57,9 +69,11 @@ void loop()
 		y_Float = 0;
 	}
 
+	megaSerial.flush();
+
 	//converting angle to motor steps.
-	z_Pos_Steps = (int16_t) ((float)(z_Pos / bldc2)); //todo: bldc1/2 should be setting.
-	y_Pos_Steps = (int16_t) ((float)(y_Pos / bldc1));
+	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
+	y_Pos_Steps = y_Pos / bldc1;
 
 	//do calcs and move motors
 	while ((z_Pos_Steps!=0) || (y_Pos_Steps!=0))
