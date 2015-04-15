@@ -212,11 +212,11 @@ void Mode_Manual_RC()
 {
 	char x = getRCx();
 	char y = getRCy();
-	if (x != 0 || y != 0)
-	{
+	//if (x != 0 || y != 0)
+	//{
 		// Send to Brugi if any movement
 		m_escSerial.sendXY(x, y, MOV_XY);
-	}
+	//}
 }
 
 // Helper routines--------------------------------------------------------------------------

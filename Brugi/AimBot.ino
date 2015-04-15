@@ -7,18 +7,16 @@
 
 #define bldc1 0.1171875
 #define bldc2 0.05859375
+#define DIR_MASK 0x80
+#define SPEED_FACTOR 40
+#define Y_MIN_LIMIT -250
+#define Y_MAX_LIMIT 80
 
-float z_Float = 0, y_Float = 0;
-
-uint8_t z_axe = 0, y_axe = 0;
-int16_t z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
-int16_t z_Pos_Steps = 0, y_Pos_Steps = 0;
+char z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
+int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
-
-boolean RCin = true;
-boolean crib = false;
-boolean box = false;
-
+int8_t z_count, y_count;
+bool rc_mode = false;
 
 static AimBot_Serial megaSerial(Serial);
 
@@ -27,54 +25,48 @@ void setup()
 	Serial.begin(BAUDRATE);
 
 	initBlController();
-	
+
 	initMotorStuff();
 
 	motorPowerOff();
 
 	sei();
-}
 
+#if 1
+	//moving to 0 pos. 
+	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
+	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
+#endif
+}
 
 void loop()
 {
-#if 0
-	if (!(megaSerial.update())) return; //no new instructions, so nothing more to do. 
-	//megaSerial.update();
-	z_Pos = (int16_t)megaSerial.getX();
-	y_Pos = (int16_t)megaSerial.getY();
-
-	//megaSerial.flush();
-#endif
 	if (megaSerial.update()){
-		z_Pos = (int16_t)megaSerial.getX();
-		y_Pos = (int16_t)megaSerial.getY();	
-	}
-	else{
-		z_Pos = 0;
-		y_Pos = 0;
+		rc_mode = megaSerial.isRCmode();
+		z_Pos = megaSerial.getX();
+		y_Pos = megaSerial.getY();
+
+		if (!z_Pos) z_count = 0;
+		if (!y_Pos) y_count = 0;
+
+		if (!rc_mode) moveToPos();
 	}
 
-	if (megaSerial.isRCmode())
-	{
-		z_Float += z_Pos*0.2; //todo: factor here should be setting
-		y_Float += y_Pos*0.2;
-		z_Pos = z_Float;
-		y_Pos = y_Float;
-	}
-	else
-	{
-		z_Float = 0;
-		y_Float = 0;
-	}
+	if (rc_mode) moveWithSpeed();
 
 	megaSerial.flush();
+}
+
+void moveToPos(){
+	z_count = 0;
+	y_count = 0;
+	
+	if (!(z_Pos  | y_Pos)) return; // z and y is 0, nothing to do
 
 	//converting angle to motor steps.
 	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
 	y_Pos_Steps = y_Pos / bldc1;
 
-	//do calcs and move motors
 	while ((z_Pos_Steps!=0) || (y_Pos_Steps!=0))
 	{
 		if (motorUpdate)
@@ -85,18 +77,24 @@ void loop()
 			{
 				if (y_Pos_Steps > 0)
 				{
-					--y_Pos_Steps;
-					--y_Motor;
+					if (y_Motor_Signed > Y_MIN_LIMIT){
+						y_Motor--;
+						y_Motor_Signed--;
+						y_Pos_Steps--;
+					}
+					else y_Pos_Steps = 0;
 				}
 				else if (y_Pos_Steps < 0)
 				{
-					++y_Pos_Steps;
-					++y_Motor;
+					if (y_Motor_Signed < Y_MAX_LIMIT){
+						y_Motor++;
+						y_Motor_Signed++;
+						y_Pos_Steps++;
+					}
+					else y_Pos_Steps = 0;
 				}
 				MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
-				y_Float = 0;
 			}
-
 			if (z_Pos_Steps != 0)
 			{
 				if (z_Pos_Steps > 0)
@@ -110,49 +108,38 @@ void loop()
 					++z_Motor;
 				}
 				MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
-				z_Float = 0;
 			}
 		}		
 	}
-	if (z_Pos_Steps == 0 && y_Pos_Steps == 0)
-	{
-		megaSerial.sendPosReached();
-	}
-#if 0
+	if (z_Pos_Steps == 0 && y_Pos_Steps == 0) megaSerial.sendPosReached();
+}
 
-	if (motorUpdate)
-	{
+void moveWithSpeed(){
+
+	if (motorUpdate){
 		motorUpdate = false;
+		
+		if(z_Pos > 1 || z_Pos < -1) z_count += z_Pos;
+		if(y_Pos > 1 || y_Pos < -1) y_count += y_Pos;
 
-		//Verdi i x og z, omdreining i grader, mottatt serielt.
-		//Verdien blir brukt til nedtelling for pwm-moduleringen.
-
-		++z_Pos_Steps;
-		--y_Pos_Steps;
-
-		MoveMotorPosSpeed(motorNumberPitch, z_Pos_Steps, 255);
-		MoveMotorPosSpeed(motorNumberYaw, y_Pos_Steps, 255);
-	}
-
-		/*MoveMotorPosSpeed(motorNumberPitch, y_axe, 180);
-		MoveMotorPosSpeed(motorNumberYaw, z_axe, 180);
-		if (updown)
-		{
-			++z_axe;
-			 updown = false;
+		if (z_count >= SPEED_FACTOR || z_count <= -SPEED_FACTOR){
+			z_count = 0;
+			if (z_Pos & DIR_MASK) z_Motor--;
+			else z_Motor++;
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
 		}
-		else
-		{
-			updown = true;
-		}*/
-	}
 
-	int32_t computePID(int16_t accValue, int16_t Kp, int16_t Ki, int16_t Kd)
-	{
-		/*error = Setpoint - accValue
-		output = Kp * error*/
-	
-		//return output;
+		if (y_count >= SPEED_FACTOR || y_count <= -SPEED_FACTOR){
+			y_count = 0;
+			if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
+				y_Motor--;
+				y_Motor_Signed--;
+			}
+			else if (y_Motor_Signed < Y_MAX_LIMIT){
+				y_Motor++;
+				y_Motor_Signed++;
+			}
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
+		}
 	}
-#endif
 }
