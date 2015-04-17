@@ -154,7 +154,6 @@ void loop()
 	{
 		communicateWithPC();
 	}
-
 	else if(modeSequenceHasBeenDone) // normal operation:
 	{
 		if (checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
@@ -394,9 +393,9 @@ void checkButtonAndVoltage()
 		}
 	}
 	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
-#if 0
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
+<<<<<<< HEAD
 <<<<<<< HEAD
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
@@ -421,8 +420,17 @@ void checkButtonAndVoltage()
 			delay(5000);
 		}
 >>>>>>> origin/master
+=======
+		// bat low, power off
+		if (megaDebug)Serial.println("voltage - shutdown");
+		digitalWrite(PIX_PWR, LOW);
+		digitalWrite(ESC_PWR, LOW);
+		digitalWrite(FPV_PWR, LOW);
+		delay(1500);
+		digitalWrite(RIG_PWR, HIGH);
+		delay(5000);
+>>>>>>> parent of d8a0bca... #if
 	}
-#endif
 #if 0 
 #endif
 }
