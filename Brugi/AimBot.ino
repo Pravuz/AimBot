@@ -13,6 +13,7 @@
 #define Y_MAX_LIMIT 150
 
 char z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
+char last_z_Pos = 0, last_y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
 int8_t z_count, y_count;
@@ -49,12 +50,22 @@ void loop()
 		if (!z_Pos) z_count = 0;
 		if (!y_Pos) y_count = 0;
 
+		lowPassFilter();
+
 		if (!rc_mode) moveToPos();
 	}
 
 	if (rc_mode) moveWithSpeed();
 
 	megaSerial.flush();
+}
+
+void lowPassFilter()
+{
+	z_Pos = (0.5*z_Pos) + (0.5*last_z_Pos);
+	y_Pos = (0.5*y_Pos) + (0.5*last_y_Pos);
+	last_y_Pos = y_Pos;
+	last_z_Pos = z_Pos;
 }
 
 void moveToPos(){
