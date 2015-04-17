@@ -288,14 +288,14 @@ char getVECTy(char y)
 	return (char)map(y, yVECT_INmin, yVECT_INmax, yVECT_OUTmin, yVECT_OUTmax);
 }
 
-void calculatePWMch1() // Throttle 1
+void calculatePWMch1() // Gear
 {
 	timepassed1 = micros() - oldtime1;
 	oldtime1 = micros();
 
 	if (timepassed1 > 900 && timepassed1 < 2100) lastRCvalCH1 = timepassed1;
 }
-void calculatePWMch2() // Throttle 2
+void calculatePWMch2() // Aile
 {
 	timepassed2 = micros() - oldtime2;
 	oldtime2 = micros();
@@ -346,7 +346,7 @@ void calculatePWMch3() // Mode selector
 		}
 	}
 }
-void calculatePWMch4() // Camera trigger
+void calculatePWMch4() // Elev
 {
 	timepassed4 = micros() - oldtime4;
 	oldtime4 = micros();
