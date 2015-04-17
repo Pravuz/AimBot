@@ -339,8 +339,7 @@ int greyLoop() {
 	m_serial.updateSerial();
 
 //handle images in parts.
-	if (running)
-		g_greyShades.handleImage();
+	if (running) g_greyShades.handleImage();
 
 	return 0;
 }

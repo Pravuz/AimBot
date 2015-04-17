@@ -249,6 +249,7 @@ struct AimBot_Serial {
 		scu_pinmux(0x1, 4, (MD_PLN | MD_EZI | MD_ZI | MD_EHS), FUNC0);// turn SSP1_MOSI into GPIO0[11]
 
 		UART_CFG_Type ucfg;
+		UART_FIFO_CFG_Type ufifocfg;
 		// regular config
 		ucfg.Baud_rate = 115200;
 		ucfg.Databits = UART_DATABIT_8;
@@ -256,6 +257,13 @@ struct AimBot_Serial {
 		ucfg.Stopbits = UART_STOPBIT_1;
 		ucfg.Clock_Speed = CLKFREQ;
 		UART_Init(LPC_USART0, &ucfg);
+
+		ufifocfg.FIFO_DMAMode = DISABLE;
+		ufifocfg.FIFO_Level = UART_FIFO_TRGLEV0;
+		ufifocfg.FIFO_ResetRxBuf = ENABLE;
+		ufifocfg.FIFO_ResetTxBuf = ENABLE;
+		UART_FIFOConfig(LPC_USART0, &ufifocfg);
+
 		UART_TxCmd(LPC_USART0, ENABLE);
 
 		//m_tx = new uint8_t[4];
@@ -264,116 +272,90 @@ struct AimBot_Serial {
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 	}
 
-	uint32_t updateSerial() {
+	uint8_t updateSerial() {
 
 		//Checking if line is busy
-		uint8_t timeOut = 250;
+		uint8_t timeOut = 255;
 		while (UART_CheckBusy(LPC_USART0) == SET) {
-			if (timeOut = 0) return 0;
+			if (timeOut == 0) return 0;
 			timeOut--;
 		}
-
+#if 1 //blocking
 		//waiting for line to be ready
 		timeOut = UART_BLOCKING_TIMEOUT;
 		while (!(LPC_USART0->LSR & UART_LSR_RDR)) {
 			if (timeOut == 0) return 0;
 			timeOut--;
 		}
-
+#endif
+#if 0 //none_blocking
+		if(!(LPC_USART0->LSR & UART_LSR_RDR)) return 0;
+#endif
 		//Synchronizing
 		timeOut = 20;
-		while(true) {
-			if(LPC_USART0->LSR & UART_LSR_RDR) {
-				m_rx[0] = UART_ReceiveByte(LPC_USART0);
-				if(m_rx[0] == AIM_SYNC) break; //now in sync
-				if(timeOut == 0) return 0;//Data is corrupted or something is terribly wrong.
-				timeOut--;
-			}
+		while(timeOut>0) {
+			m_rx[0] = UART_ReceiveByte(LPC_USART0);
+			if(m_rx[0] == AIM_SYNC) break;		//now in sync
+			timeOut--;
 		}
+		if(timeOut == 0) return 0;
 
 		//handling package.
-		if(LPC_USART0->LSR & UART_LSR_RDR && m_rx[0] == AIM_SYNC) { //need to test if we actually recieved a package with sync.
-			m_rx[1] =UART_ReceiveByte(LPC_USART0);
-			switch (m_rx[1]) {
-				case PIXY_PARAM_NOFP:
-				uint16_t m_nOfP;
+		m_rx[1] = UART_ReceiveByte(LPC_USART0);
 
-				//recieve the rest of the package
-				m_rx[2] = UART_ReceiveByte(LPC_USART0);
-				m_rx[3] = UART_ReceiveByte(LPC_USART0);
+		switch (m_rx[1]) {
+			case PIXY_PARAM_NOFP:
+			uint16_t m_nOfP;
 
-				m_nOfP = m_rx[2] << 8 | m_rx[3];
-				g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
+			//recieve the rest of the package
+			m_rx[2] = UART_ReceiveByte(LPC_USART0);
+			m_rx[3] = UART_ReceiveByte(LPC_USART0);
+			if(!(m_rx[2] | m_rx[3])) return 0;//recieved 0's
+
+			m_nOfP = m_rx[2] << 8 | m_rx[3];
+
+			g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
+			g_greyShades.reset();
+
+			echoBack(m_rx, 4);
+			break;
+
+			case PIXY_PARAM_DELTAP:
+			uint8_t m_deltaP;
+
+			//recieve the rest of the package
+			m_rx[2] = UART_ReceiveByte(LPC_USART0);
+			if(!m_rx[2]) return 0;//received 0
+
+			m_deltaP = m_rx[2];
+
+			g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
+			g_greyShades.reset();
+
+			echoBack(m_rx, 3);
+			break;
+
+			case PIXY_START:
+			if (!running) {
+				running = true;
 				g_greyShades.reset();
-				break;
+			}
+			echoBack(m_rx, 2);
+			break;
 
-				case PIXY_PARAM_DELTAP:
-				uint8_t m_deltaP;
-
-				//recieve the rest of the package
-				m_rx[2] = UART_ReceiveByte(LPC_USART0);
-
-				m_deltaP = m_rx[2];
-				g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
+			case PIXY_STOP:
+			if (running) {
+				running = false;
 				g_greyShades.reset();
-				break;
-
-				case PIXY_START:
-				if (!running) {
-					running = true;
-					g_greyShades.reset();
-				}
-				break;
-
-				case PIXY_STOP:
-				if (running) {
-					running = false;
-					g_greyShades.reset();
-				}
-				break;
 			}
-			m_rx[0] = 0; //making sure this sync will count for next update.
-			return 1;//win
+			echoBack(m_rx, 2);
+			break;
+
+			default:
+			return 0;
+			break;
 		}
-#if 0
-		if (UART_Receive(LPC_USART0, m_rx, 6, BLOCKING)
-				> 0) {
-			if (m_rx[0] == AIM_SYNC) {
-				switch (m_rx[1]) {
-					case PIXY_PARAM_NOFP:
-					uint16_t m_nOfP;
-					m_nOfP = m_rx[2] << 8 | m_rx[3];
-					g_greyShades.setParams(g_greyShades.deltaP, m_nOfP);
-					g_greyShades.reset();
-					break;
-					case PIXY_PARAM_DELTAP:
-					uint8_t m_deltaP;
-					m_deltaP = m_rx[2];
-					g_greyShades.setParams(m_deltaP, g_greyShades.nOfP);
-					g_greyShades.reset();
-					break;
-					case PIXY_START:
-					if (!running) {
-						running = true;
-						g_greyShades.reset();
-					}
-					break;
-					case PIXY_STOP:
-					if (running) {
-						running = false;
-						g_greyShades.reset();
-					}
-					break;
-				}
-				return 1;
-			} else {
-				sync();
-			}
-		}
-#endif
-		//propably never reached.
-		m_rx[0] = 0;//making sure this sync will count for next update.
-		return 0;//fail
+		return 1;
 	}
 
 	uint32_t sendVector(sPoint16 &p) {
@@ -391,16 +373,33 @@ struct AimBot_Serial {
 		m_tx[3] = (int8_t) p.m_y;
 
 #endif
-		uint8_t timeout = 250;
+		uint8_t timeout = 0xFF;
 		while (UART_CheckBusy(LPC_USART0) == SET) {
+			if (timeout == 0) return 0;
 			timeout--;
-			if (timeout = 0)
-			return 0;
 		}
-		return UART_Send(LPC_USART0, m_tx, 4 * sizeof(uint8_t), BLOCKING);
+		return UART_Send(LPC_USART0, m_tx, 4, NONE_BLOCKING);
 	}
 
 private:
+	void echoBack(uint8_t *tx, uint8_t len) {
+		uint8_t timeOut = 0xFF;
+		while (UART_CheckBusy(LPC_USART0) == SET) {
+			timeOut--;
+			if (timeOut == 0) return;
+		}
+		UART_Send(LPC_USART0, tx, len, NONE_BLOCKING);
+	}
+
+	uint8_t readByte() {
+		uint32_t timeOut = UART_BLOCKING_TIMEOUT;
+		while (!(LPC_USART0->LSR & UART_LSR_RDR)) {
+			timeOut--;
+			if (timeOut == 0) return 0;
+		}
+		return UART_ReceiveByte(LPC_USART0);
+	}
+
 	uint8_t *m_tx, *m_rx;
 };
 #endif

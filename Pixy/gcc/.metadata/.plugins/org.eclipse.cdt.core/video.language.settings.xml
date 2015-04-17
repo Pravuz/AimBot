@@ -42,7 +42,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/system_LPC43xx.c">
+					<resource project-relative-path="src/crp.c">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -61,7 +61,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/crp.c">
+					<resource project-relative-path="src/system_LPC43xx.c">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -236,7 +236,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/spi.cpp">
+					<resource project-relative-path="src/qqueue.cpp">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
@@ -255,7 +255,7 @@
 						<entry kind="macro" name="__MULTICORE_MASTER_SLAVE_M0APP" value=""/>
 						<entry kind="macro" name="__NEWLIB__" value=""/>
 					</resource>
-					<resource project-relative-path="src/qqueue.cpp">
+					<resource project-relative-path="src/spi.cpp">
 						<entry kind="includePath" name="/${ProjName}/inc">
 							<flag value="VALUE_WORKSPACE_PATH"/>
 						</entry>
