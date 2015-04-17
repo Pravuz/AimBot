@@ -216,11 +216,9 @@ void Mode_Manual_RC()
 {
 	char x = getRCx();
 	char y = getRCy();
-	//if (x != 0 || y != 0)
-	//{
-		// Send to Brugi if any movement
-		m_escSerial.sendXY(x, y, MOV_XY);
-	//}
+
+	// Send to Brugi if any movement (or 0)
+	m_escSerial.sendXY(x, y, MOV_XY);
 }
 
 // Helper routines--------------------------------------------------------------------------
@@ -312,10 +310,6 @@ void calculatePWMch3() // Mode selector
 			if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
 			if (currentMode != SLEEP_MODE)
 			{
-<<<<<<< HEAD
-				// sleep mode, all power off
-=======
->>>>>>> origin/master
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
 				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
 				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
@@ -374,71 +368,27 @@ void checkButtonAndVoltage()
 		{
 			if (megaDebug)Serial.println("button - shutdown");
 			// power button pressed, power off
-<<<<<<< HEAD
-			//delay(1000);
-
 			digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
 			digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
 			digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
+			delay(1500);
 			digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
 			delay(3000); //wait for MosFet to discharge  
-=======
-			digitalWrite(PIX_PWR, LOW);
-			digitalWrite(ESC_PWR, LOW);
-			digitalWrite(FPV_PWR, LOW);
-			delay(1500);
-			digitalWrite(RIG_PWR, HIGH);
-			delay(5000);
->>>>>>> origin/master
 		}
 	}
 	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
-		//delay(1000);
-
-		digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
-		digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
-		digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
-		digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
-		delay(3000); //wait for MosFet to discharge
-=======
-		delay(1000);
-		if (analogRead(BAT_VOLTAGE) < 900)
-		{
-			// bat low, power off
-			if (megaDebug)Serial.println("voltage - shutdown");
-			digitalWrite(PIX_PWR, LOW);
-			digitalWrite(ESC_PWR, LOW);
-			digitalWrite(FPV_PWR, LOW);
-			delay(1500);
-			digitalWrite(RIG_PWR, HIGH);
-			delay(5000);
-		}
->>>>>>> origin/master
-=======
-=======
->>>>>>> parent of d8a0bca... #if
-		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
 		digitalWrite(PIX_PWR, LOW);
 		digitalWrite(ESC_PWR, LOW);
 		digitalWrite(FPV_PWR, LOW);
 		delay(1500);
 		digitalWrite(RIG_PWR, HIGH);
-		delay(5000);
-<<<<<<< HEAD
->>>>>>> parent of d8a0bca... #if
-=======
->>>>>>> parent of d8a0bca... #if
+		delay(3000);
 	}
-#if 0 
-#endif
 }
 
 bool isUSBconnected()
