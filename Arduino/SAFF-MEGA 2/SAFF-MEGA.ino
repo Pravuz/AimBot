@@ -68,10 +68,10 @@ enum Aimbot_Mode
 }currentMode;
 
 // PWM-in related vars
-int lastRCvalCH1 = 0;  // Thro (min = 1052, max = 1912), TH_HOLD = 952
+int lastRCvalCH1 = 0;  // cam trigger (gear)
 int lastRCvalCH2 = 0;  // L/R (Left = 1916) (RIGHT = 1052)
-int lastRCvalCH3 = 0;  // GEAR (1052 = 0, 1912 = 1, ) needs ACRO-MODE
-int lastRCvalCH4 = 0;  // ELEV (UP = 1916, DOWN = 1052)
+int lastRCvalCH3 = 0;  // mode select (flap gyro)
+int lastRCvalCH4 = 0;  // up down (UP = 1916, DOWN = 1052)
 
 //timing, volatile due to interrupts
 volatile unsigned long oldtime1 = 0;
@@ -150,7 +150,7 @@ void setup()
 
 void loop()
 {
-	Serial.println(lastRCvalCH4);
+	//Serial.println(lastRCvalCH4);
 	if (isUSBconnected() && !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
@@ -159,7 +159,6 @@ void loop()
 	{
 		if (checkCameraTrigger())
 		{
-			Serial.println("PICTURE!");
 			takePicture(); // Check trigger and take picture if pressed
 		}
 
@@ -230,7 +229,7 @@ void Mode_Manual_RC()
 bool checkCameraTrigger()
 {
 	// check if trigger is pressed
-	if (lastRCvalCH4 > 1500) return true;
+	if (lastRCvalCH1 > 1500) return true;
 	else return false;
 }
 
