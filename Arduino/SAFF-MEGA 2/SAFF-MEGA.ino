@@ -397,6 +397,7 @@ void checkButtonAndVoltage()
 	{
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
 		//delay(1000);
@@ -421,6 +422,8 @@ void checkButtonAndVoltage()
 		}
 >>>>>>> origin/master
 =======
+=======
+>>>>>>> parent of d8a0bca... #if
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
 		digitalWrite(PIX_PWR, LOW);
@@ -429,6 +432,9 @@ void checkButtonAndVoltage()
 		delay(1500);
 		digitalWrite(RIG_PWR, HIGH);
 		delay(5000);
+<<<<<<< HEAD
+>>>>>>> parent of d8a0bca... #if
+=======
 >>>>>>> parent of d8a0bca... #if
 	}
 #if 0 
