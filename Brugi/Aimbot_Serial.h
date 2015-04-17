@@ -35,24 +35,15 @@ struct baseArduinoSerial {
 	}
 
 	void flush() {
-		//flushing incoming buffer.
-		//while (m_serial.available() > 0) m_serial.read(); 
-
 		//flush local rx buffer
-		for (int i = 0; i <= 3; i++) m_tx[i] = 0;
-#if 0
-		free(m_rx);
-		free(m_tx);
-		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
-		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
-#endif
+		for (int i = 0; i <= 3; i++) m_rx[i] = 0;
 	}
 
 	bool update() {
 		if (m_serial.available()>4) {
 			int len = 0;
 			if (!sync()) {
-				if (debug) Serial.println("Serial update failed");
+				if (debug) Serial.println("Serial update: failed");
 				return false;
 			}
 			while (true) {
@@ -62,12 +53,14 @@ struct baseArduinoSerial {
 			}
 			if (debug)
 			{
-				Serial.println("Serial update complete");
+				Serial.println("Serial update: complete");
 				for (int i = 0; i <= len; i++) Serial.print(m_rx[i], HEX);
 				Serial.println();
 			}
 			return true;
 		}
+		if (debug) Serial.println("Serial update: Nothing recieved");
+		return false;
 	}
 
 	char getX() {
@@ -149,6 +142,11 @@ struct AimBot_Serial : public baseArduinoSerial
 {
 	AimBot_Serial(Stream &serial): baseArduinoSerial(serial) {}
 
+	void flush(){
+		while (m_serial.available() > 0) m_serial.read();
+		for (int i = 0; i <= 3; i++) m_rx[i] = 0;
+	}
+	
 	void pixyCmd(CMD_ID cmd) {
 		m_tx[0] = AIM_SYNC;
 		m_tx[1] = cmd;

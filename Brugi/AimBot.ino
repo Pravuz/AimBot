@@ -10,7 +10,7 @@
 #define DIR_MASK 0x80
 #define SPEED_FACTOR 40
 #define Y_MIN_LIMIT -250
-#define Y_MAX_LIMIT 80
+#define Y_MAX_LIMIT 150
 
 char z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;

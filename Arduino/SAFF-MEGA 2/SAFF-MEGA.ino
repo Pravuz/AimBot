@@ -1,4 +1,4 @@
-//#define __DEBUG
+#define __DEBUG
 #define __MEGA
 #include "Aimbot_Serial.h"
 #include "eeprom.h"
@@ -56,7 +56,7 @@ int yVECT_INmax = 100;
 int yVECT_OUTmin = -38;
 int yVECT_OUTmax = 38;
 
-bool megaDebug = false;
+bool megaDebug = DEBUG;
 
 enum Aimbot_Mode
 {
@@ -143,10 +143,7 @@ void setup()
 
 void loop()
 {
-	//if (isUSBconnected())megaDebug = true;
-	//else megaDebug = false;
-
-	if (isUSBconnected() & !DEBUG) // Settings & debug
+	if (isUSBconnected() && !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
 	}
@@ -308,7 +305,7 @@ void calculatePWMch3() // Mode selector
 			if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
 			if (currentMode != SLEEP_MODE)
 			{
-				// Auto mode, video feed on
+				// sleep mode, all power off
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
 				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
 				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
@@ -356,7 +353,7 @@ void initButtonAndVoltage()
 
 void checkButtonAndVoltage()
 {
-
+	if (isUSBconnected()) return; // usb is connected, no need to check bat voltage etc.
 	if (megaDebug)Serial.println(analogRead(BTN_PWR));
 	if (analogRead(BTN_PWR) < 70)
 	{
@@ -365,9 +362,13 @@ void checkButtonAndVoltage()
 		{
 			if (megaDebug)Serial.println("button - shutdown");
 			// power button pressed, power off
-			delay(3000);
-			digitalWrite(RIG_PWR, HIGH);
-			delay(1000);
+			//delay(1000);
+
+			digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
+			digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
+			digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
+			digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
+			delay(3000); //wait for MosFet to discharge  
 		}
 	}
 	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
@@ -375,9 +376,13 @@ void checkButtonAndVoltage()
 	{
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
-		delay(1000);
-		digitalWrite(RIG_PWR, HIGH);
-		delay(1000);
+		//delay(1000);
+
+		digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
+		digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
+		digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
+		digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
+		delay(3000); //wait for MosFet to discharge
 	}
 #if 0 
 #endif
