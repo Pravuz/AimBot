@@ -157,6 +157,7 @@ void loop()
 	{
 		communicateWithPC();
 	}
+
 	else if(modeSequenceHasBeenDone) // normal operation:
 	{
 		if (checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
@@ -382,17 +383,23 @@ void checkButtonAndVoltage()
 		}
 	}
 	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
+#if 0
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
-		// bat low, power off
-		if (megaDebug)Serial.println("voltage - shutdown");
-		digitalWrite(PIX_PWR, LOW);
-		digitalWrite(ESC_PWR, LOW);
-		digitalWrite(FPV_PWR, LOW);
-		delay(1500);
-		digitalWrite(RIG_PWR, HIGH);
-		delay(5000);
+		delay(1000);
+		if (analogRead(BAT_VOLTAGE) < 900)
+		{
+			// bat low, power off
+			if (megaDebug)Serial.println("voltage - shutdown");
+			digitalWrite(PIX_PWR, LOW);
+			digitalWrite(ESC_PWR, LOW);
+			digitalWrite(FPV_PWR, LOW);
+			delay(1500);
+			digitalWrite(RIG_PWR, HIGH);
+			delay(5000);
+		}
 	}
+#endif
 #if 0 
 #endif
 }
