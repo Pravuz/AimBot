@@ -150,13 +150,18 @@ void setup()
 
 void loop()
 {
+	Serial.println(lastRCvalCH4);
 	if (isUSBconnected() && !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
 	}
-	else if(modeSequenceHasBeenDone) // normal operation:
+	if(modeSequenceHasBeenDone) // normal operation:
 	{
-		if (checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
+		if (checkCameraTrigger())
+		{
+			Serial.println("PICTURE!");
+			takePicture(); // Check trigger and take picture if pressed
+		}
 
 		long diff = millis() - lastPassTime;
 		if (diff > LOOP_TIME)
@@ -251,6 +256,7 @@ void takePicture()
 		int diff = millis() - lastPictureTime;
 		if (diff > CAM_TRIGGER_DELAY)
 		{
+			Serial.println("PICTURE!");
 			digitalWrite(CAM_TRIGGER, HIGH);
 			delay(CAM_BTN_DELAY);
 			digitalWrite(CAM_TRIGGER, LOW);

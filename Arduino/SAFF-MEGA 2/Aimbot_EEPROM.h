@@ -1,7 +1,4 @@
-
-
 // There is 4K (4096 bytes) EEPROM storage on ATmega2560
-
 
 //Writes a 16 bit int to EEPROM
 void EEPROMWriteInt16(int p_address, int p_value)
