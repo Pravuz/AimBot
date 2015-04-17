@@ -32,6 +32,8 @@ int CAM_FOCUS_DELAY = 200;
 // MISC
 int LOOP_TIME = 50;
 int PWR_CHECK_INTERVAL = 1000;
+bool modeSequenceHasBeenDone = false; // At each restart mode has to go to sleep before start to avoid
+									// sudden start in auto/RC with bad consecuences
 
 // USB
 #define USBconnectedPIN		26
@@ -131,12 +133,17 @@ void setup()
 	pinMode(CAM_FOCUS, OUTPUT);
 	pinMode(ESC_PWR, OUTPUT);
 	pinMode(FPV_PWR, OUTPUT);
+	digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
+	digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
+	digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
 
 	//Start mode selector interrupt (on RC channels)
 	attachInterrupt(CHAN4_INTERRUPT, calculatePWMch4, CHANGE);
 	attachInterrupt(CHAN3_INTERRUPT, calculatePWMch3, CHANGE);
 	attachInterrupt(CHAN2_INTERRUPT, calculatePWMch2, CHANGE);
 	attachInterrupt(CHAN1_INTERRUPT, calculatePWMch1, CHANGE);
+
+
 
 	if (megaDebug) Serial.println("Setup complete");
 }
@@ -147,7 +154,8 @@ void loop()
 	{
 		communicateWithPC();
 	}
-	else // normal operation:
+
+	else if(modeSequenceHasBeenDone) // normal operation:
 	{
 		if (checkCameraTrigger()) takePicture(); // Check trigger and take picture if pressed
 
@@ -305,16 +313,21 @@ void calculatePWMch3() // Mode selector
 			if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
 			if (currentMode != SLEEP_MODE)
 			{
+<<<<<<< HEAD
 				// sleep mode, all power off
+=======
+>>>>>>> origin/master
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
 				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
 				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
 			}
 			currentMode = SLEEP_MODE;
+			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
+											 // safety precaution
 		}
 		else if (timepassed3 > 1200)  {
 			if (currentMode != AUTO && megaDebug) Serial.println("Mode is now set to AUTO");
-			if (currentMode != AUTO)
+			if (currentMode != AUTO && modeSequenceHasBeenDone)
 			{
 				// Auto, no video feed
 				digitalWrite(PIX_PWR, HIGH);
@@ -325,7 +338,7 @@ void calculatePWMch3() // Mode selector
 		}
 		else {
 			if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
-			if (currentMode != MANUAL){
+			if (currentMode != MANUAL && modeSequenceHasBeenDone){
 				// Manual, no pixy feed
 				digitalWrite(PIX_PWR, LOW);
 				digitalWrite(ESC_PWR, HIGH);
@@ -362,6 +375,7 @@ void checkButtonAndVoltage()
 		{
 			if (megaDebug)Serial.println("button - shutdown");
 			// power button pressed, power off
+<<<<<<< HEAD
 			//delay(1000);
 
 			digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
@@ -369,11 +383,21 @@ void checkButtonAndVoltage()
 			digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
 			digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
 			delay(3000); //wait for MosFet to discharge  
+=======
+			digitalWrite(PIX_PWR, LOW);
+			digitalWrite(ESC_PWR, LOW);
+			digitalWrite(FPV_PWR, LOW);
+			delay(1500);
+			digitalWrite(RIG_PWR, HIGH);
+			delay(5000);
+>>>>>>> origin/master
 		}
 	}
 	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
+#if 0
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
+<<<<<<< HEAD
 		// bat low, power off
 		if (megaDebug)Serial.println("voltage - shutdown");
 		//delay(1000);
@@ -383,7 +407,22 @@ void checkButtonAndVoltage()
 		digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
 		digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
 		delay(3000); //wait for MosFet to discharge
+=======
+		delay(1000);
+		if (analogRead(BAT_VOLTAGE) < 900)
+		{
+			// bat low, power off
+			if (megaDebug)Serial.println("voltage - shutdown");
+			digitalWrite(PIX_PWR, LOW);
+			digitalWrite(ESC_PWR, LOW);
+			digitalWrite(FPV_PWR, LOW);
+			delay(1500);
+			digitalWrite(RIG_PWR, HIGH);
+			delay(5000);
+		}
+>>>>>>> origin/master
 	}
+#endif
 #if 0 
 #endif
 }
