@@ -8,16 +8,21 @@
 #define bldc1 0.1171875
 #define bldc2 0.05859375
 #define DIR_MASK 0x80
-#define SPEED_FACTOR 40
+#define SPEED_FACTOR 10
 #define Y_MIN_LIMIT -250
 #define Y_MAX_LIMIT 150
+#define MOTORPOWER 150 // 0 to 255
 
 char z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
-char last_z_Pos = 0, last_y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
 int8_t z_count, y_count;
 bool rc_mode = false;
+
+// Low-pass filter
+char last_z_Pos = 0, last_y_Pos = 0;
+#define LAST_TO_NEW_RATIO 0.9  //ex 0.7 gives: 0.7 old and 0.3 new
+
 
 static AimBot_Serial megaSerial(Serial);
 
@@ -62,8 +67,8 @@ void loop()
 
 void lowPassFilter()
 {
-	z_Pos = (0.5*z_Pos) + (0.5*last_z_Pos);
-	y_Pos = (0.5*y_Pos) + (0.5*last_y_Pos);
+	z_Pos = ((1 - LAST_TO_NEW_RATIO)*z_Pos) + (LAST_TO_NEW_RATIO*last_z_Pos);
+	y_Pos = ((1 - LAST_TO_NEW_RATIO)*y_Pos) + (LAST_TO_NEW_RATIO*last_y_Pos);
 	last_y_Pos = y_Pos;
 	last_z_Pos = z_Pos;
 }
@@ -104,7 +109,7 @@ void moveToPos(){
 					}
 					else y_Pos_Steps = 0;
 				}
-				MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
+				MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 			}
 			if (z_Pos_Steps != 0)
 			{
@@ -118,7 +123,7 @@ void moveToPos(){
 					++z_Pos_Steps;
 					++z_Motor;
 				}
-				MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
+				MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 			}
 		}		
 	}
@@ -137,7 +142,7 @@ void moveWithSpeed(){
 			z_count = 0;
 			if (z_Pos & DIR_MASK) z_Motor--;
 			else z_Motor++;
-			MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 		}
 
 		if (y_count >= SPEED_FACTOR || y_count <= -SPEED_FACTOR){
@@ -150,7 +155,7 @@ void moveWithSpeed(){
 				y_Motor++;
 				y_Motor_Signed++;
 			}
-			MoveMotorPosSpeed(motorNumberYaw, y_Motor, 255);
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 		}
 	}
 }
