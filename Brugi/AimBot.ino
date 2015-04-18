@@ -20,7 +20,7 @@ int8_t z_count, y_count;
 bool rc_mode = false;
 
 // Low-pass filter
-char last_z_Pos = 0, last_y_Pos = 0;
+float last_z_Pos = 0, last_y_Pos = 0;
 #define LAST_TO_NEW_RATIO 0.9  //ex 0.7 gives: 0.7 old and 0.3 new
 
 
@@ -67,10 +67,10 @@ void loop()
 
 void lowPassFilter()
 {
-	z_Pos = ((1 - LAST_TO_NEW_RATIO)*z_Pos) + (LAST_TO_NEW_RATIO*last_z_Pos);
-	y_Pos = ((1 - LAST_TO_NEW_RATIO)*y_Pos) + (LAST_TO_NEW_RATIO*last_y_Pos);
-	last_y_Pos = y_Pos;
-	last_z_Pos = z_Pos;
+	last_z_Pos = ((1 - LAST_TO_NEW_RATIO)*z_Pos) + (LAST_TO_NEW_RATIO*last_z_Pos);
+	last_y_Pos = ((1 - LAST_TO_NEW_RATIO)*y_Pos) + (LAST_TO_NEW_RATIO*last_y_Pos);
+	y_Pos = last_y_Pos;
+	z_Pos = last_z_Pos;
 }
 
 void moveToPos(){
