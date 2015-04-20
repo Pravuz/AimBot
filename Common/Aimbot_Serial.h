@@ -236,8 +236,7 @@ struct AimBot_Serial {
 
 		NVIC_DisableIRQ(USART0_IRQn);
 
-		//delete buffer reservation
-		//delete[] m_tx, m_rx;
+		//free buffer reservation
 		free(m_tx);
 		free(m_rx);
 	}
@@ -266,10 +265,17 @@ struct AimBot_Serial {
 
 		UART_TxCmd(LPC_USART0, ENABLE);
 
-		//m_tx = new uint8_t[4];
-		//m_rx = new uint8_t[4];
+		//allocate memory location for buffers
 		m_tx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
 		m_rx = (uint8_t*)malloc(sizeof(uint8_t)* 4);
+
+		//Setup interrupts
+	    UART_IntConfig(LPC_USART0, UART_INTCFG_RBR, ENABLE);        // enable UART0 RX interrupt
+	    //UART_IntConfig(LPC_USART0, UART_INTCFG_THRE, ENABLE);    // enable UART0 TX interrupt
+
+	    // preemption = 1, sub-priority = 1
+	    NVIC_SetPriority(USART0_IRQn, ((0x01<<3)|0x01));    // set uart0 interrupt priority
+	    NVIC_EnableIRQ(USART0_IRQn);    // enable usart0 interrupt for NVIC
 	}
 
 	uint8_t updateSerial() {

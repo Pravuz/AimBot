@@ -269,6 +269,7 @@ void GreyShades::objCalcs() {
 
 	sPoint16 m_vector;
 
+	// calculate objects vector to center of view.
 	m_vector.m_x = AIM_X
 			- (((m_largestObj.bottomRight.m_x - m_largestObj.topLeft.m_x) >> 1)
 					+ m_largestObj.topLeft.m_x);
@@ -278,6 +279,7 @@ void GreyShades::objCalcs() {
 
 	m_vectorsToCenter.push_back(m_vector);
 
+	// get median vector of last 5 vectors calculated. (filter)
 	if (m_vectorsToCenter.size() >= 5) {
 		std::list<int> medianOfVTC_x, medianOfVTC_y;
 		for (std::list<sPoint16>::iterator i = m_vectorsToCenter.begin();
@@ -301,6 +303,9 @@ void GreyShades::objCalcs() {
 
 		// We now have a vector ready for arduino
 		m_serial.sendVector(m_medianVector);
+
+		// we stop running until arduino let us know our vector is executed.
+		running = false;
 	}
 
 	while (m_vectorsToCenter.size() > 5)
