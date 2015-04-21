@@ -269,13 +269,11 @@ void GreyShades::objCalcs() {
 
 	sPoint16 m_vector;
 
-	// calculate objects vector to center of view.
-	m_vector.m_x = AIM_X
-			- (((m_largestObj.bottomRight.m_x - m_largestObj.topLeft.m_x) >> 1)
-					+ m_largestObj.topLeft.m_x);
-	m_vector.m_y = AIM_Y
-			- (((m_largestObj.topLeft.m_y - m_largestObj.bottomRight.m_y) >> 1)
-					+ m_largestObj.bottomRight.m_y);
+	// calculate vector FROM center of view TO object.
+	m_vector.m_x = (((m_largestObj.bottomRight.m_x - m_largestObj.topLeft.m_x) >> 1)
+					+ m_largestObj.topLeft.m_x) - AIM_X;
+	m_vector.m_y = (((m_largestObj.topLeft.m_y - m_largestObj.bottomRight.m_y) >> 1)
+					+ m_largestObj.bottomRight.m_y) - AIM_Y;
 
 	m_vectorsToCenter.push_back(m_vector);
 

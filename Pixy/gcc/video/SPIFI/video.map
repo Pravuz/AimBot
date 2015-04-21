@@ -680,6 +680,8 @@ Discarded input sections
                 0x00000000       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text.UART_ForceBreak
                 0x00000000        0xa C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .text.UART_IntConfig
+                0x00000000       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text.UART_GetLineStatus
                 0x00000000        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text.UART_FIFOConfigStructInit
@@ -704,6 +706,8 @@ Discarded input sections
                 0x00000000       0x18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text.UART_RS485SendData
                 0x00000000        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .rodata.CSWTCH.15
+                0x00000000        0xe C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .rodata.CSWTCH.26
                 0x00000000        0x3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text          0x00000000        0x0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
@@ -1459,24 +1463,24 @@ END GROUP
                 0x14000114                . = ALIGN (0x4)
                 0x14000114                __section_table_start = .
                 0x14000114                __data_section_table = .
-                0x14000114        0x4 LONG 0x14008b84 LOADADDR (.data)
-                0x14000118        0x4 LONG 0x100066a8 ADDR (.data)
+                0x14000114        0x4 LONG 0x14008ad4 LOADADDR (.data)
+                0x14000118        0x4 LONG 0x100065f8 ADDR (.data)
                 0x1400011c        0x4 LONG 0xcc SIZEOF (.data)
-                0x14000120        0x4 LONG 0x14006920 LOADADDR (.data_RAM2)
+                0x14000120        0x4 LONG 0x14006870 LOADADDR (.data_RAM2)
                 0x14000124        0x4 LONG 0x20000000 ADDR (.data_RAM2)
                 0x14000128        0x4 LONG 0x0 SIZEOF (.data_RAM2)
-                0x1400012c        0x4 LONG 0x14006920 LOADADDR (.data_RAM3)
+                0x1400012c        0x4 LONG 0x14006870 LOADADDR (.data_RAM3)
                 0x14000130        0x4 LONG 0x10080000 ADDR (.data_RAM3)
                 0x14000134        0x4 LONG 0x0 SIZEOF (.data_RAM3)
-                0x14000138        0x4 LONG 0x14006920 LOADADDR (.data_RAM4)
+                0x14000138        0x4 LONG 0x14006870 LOADADDR (.data_RAM4)
                 0x1400013c        0x4 LONG 0x20008000 ADDR (.data_RAM4)
                 0x14000140        0x4 LONG 0x2264 SIZEOF (.data_RAM4)
-                0x14000144        0x4 LONG 0x14008b84 LOADADDR (.data_RAM5)
+                0x14000144        0x4 LONG 0x14008ad4 LOADADDR (.data_RAM5)
                 0x14000148        0x4 LONG 0x2000c000 ADDR (.data_RAM5)
                 0x1400014c        0x4 LONG 0x0 SIZEOF (.data_RAM5)
                 0x14000150        0x4 LONG 0x14000278 LOADADDR (.text_ram)
                 0x14000154        0x4 LONG 0x10000000 ADDR (.text_ram)
-                0x14000158        0x4 LONG 0x66a0 SIZEOF (.text_ram)
+                0x14000158        0x4 LONG 0x65f0 SIZEOF (.text_ram)
                 0x1400015c                __data_section_table_end = .
                 0x1400015c                __bss_section_table = .
                 0x1400015c        0x4 LONG 0x10006800 ADDR (.bss)
@@ -1577,7 +1581,7 @@ END GROUP
 .iplt           0x14000278        0x0
  .iplt          0x00000000        0x0 ./src/cr_cpp_config.o
 
-.text_ram       0x10000000     0x66a0 load address 0x14000278
+.text_ram       0x10000000     0x65f0 load address 0x14000278
  *(.text*)
  .text._Znwj    0x10000000        0x4 ./src/cr_cpp_config.o
                 0x10000000                operator new(unsigned int)
@@ -1620,673 +1624,668 @@ END GROUP
  .text.startup.main
                 0x1000028c       0x1c ./src/main_m4.o
                 0x1000028c                main
- .text._ZN13AimBot_Serial8echoBackEPhh.isra.1
-                0x100002a8       0x30 ./src/proggreyshades.o
+ .text._ZN13AimBot_Serial8readByteEv.isra.1
+                0x100002a8       0x1c ./src/proggreyshades.o
  .text._ZN13AimBot_SerialD2Ev
-                0x100002d8       0x3c ./src/proggreyshades.o
-                0x100002d8                AimBot_Serial::~AimBot_Serial()
-                0x100002d8                AimBot_Serial::~AimBot_Serial()
+                0x100002c4       0x3c ./src/proggreyshades.o
+                0x100002c4                AimBot_Serial::~AimBot_Serial()
+                0x100002c4                AimBot_Serial::~AimBot_Serial()
  .text._ZN13AimBot_Serial11setupSerialEv
-                0x10000314       0xc0 ./src/proggreyshades.o
-                0x10000314                AimBot_Serial::setupSerial()
+                0x10000300       0xa4 ./src/proggreyshades.o
+                0x10000300                AimBot_Serial::setupSerial()
  .text._ZN10GreyShadesC2EPh
-                0x100003d4       0x14 ./src/proggreyshades.o
-                0x100003d4                GreyShades::GreyShades(unsigned char*)
-                0x100003d4                GreyShades::GreyShades(unsigned char*)
+                0x100003a4       0x14 ./src/proggreyshades.o
+                0x100003a4                GreyShades::GreyShades(unsigned char*)
+                0x100003a4                GreyShades::GreyShades(unsigned char*)
  .text._ZN10GreyShades9setParamsEht
-                0x100003e8       0x20 ./src/proggreyshades.o
-                0x100003e8                GreyShades::setParams(unsigned char, unsigned short)
+                0x100003b8       0x20 ./src/proggreyshades.o
+                0x100003b8                GreyShades::setParams(unsigned char, unsigned short)
  .text._ZN10GreyShades16convertRawToGreyEb
-                0x10000408       0xa0 ./src/proggreyshades.o
-                0x10000408                GreyShades::convertRawToGrey(bool)
+                0x100003d8       0xa0 ./src/proggreyshades.o
+                0x100003d8                GreyShades::convertRawToGrey(bool)
  .text._ZN10GreyShades15separateObjectsEv
-                0x100004a8       0xc0 ./src/proggreyshades.o
-                0x100004a8                GreyShades::separateObjects()
+                0x10000478       0xc0 ./src/proggreyshades.o
+                0x10000478                GreyShades::separateObjects()
  .text._Z14greyLoadParamsv
-                0x10000568       0x14 ./src/proggreyshades.o
-                0x10000568                greyLoadParams()
+                0x10000538       0x14 ./src/proggreyshades.o
+                0x10000538                greyLoadParams()
  .text._Z9greySetupv
-                0x1000057c       0x40 ./src/proggreyshades.o
-                0x1000057c                greySetup()
+                0x1000054c       0x40 ./src/proggreyshades.o
+                0x1000054c                greySetup()
  .text._ZNSt4listIiSaIiEE9pop_frontEv
-                0x100005bc       0x14 ./src/proggreyshades.o
-                0x100005bc                std::list<int, std::allocator<int> >::pop_front()
+                0x1000058c       0x14 ./src/proggreyshades.o
+                0x1000058c                std::list<int, std::allocator<int> >::pop_front()
  .text._ZNSt10_List_baseI14DetectedObjectSaIS0_EE8_M_clearEv
-                0x100005d0       0x16 ./src/proggreyshades.o
-                0x100005d0                std::_List_base<DetectedObject, std::allocator<DetectedObject> >::_M_clear()
+                0x100005a0       0x16 ./src/proggreyshades.o
+                0x100005a0                std::_List_base<DetectedObject, std::allocator<DetectedObject> >::_M_clear()
  .text._ZNSt10_List_baseI8sPoint16SaIS0_EE8_M_clearEv
-                0x100005e6       0x16 ./src/proggreyshades.o
-                0x100005e6                std::_List_base<sPoint16, std::allocator<sPoint16> >::_M_clear()
+                0x100005b6       0x16 ./src/proggreyshades.o
+                0x100005b6                std::_List_base<sPoint16, std::allocator<sPoint16> >::_M_clear()
  .text._ZN10GreyShadesD2Ev
-                0x100005fc       0x16 ./src/proggreyshades.o
-                0x100005fc                GreyShades::~GreyShades()
-                0x100005fc                GreyShades::~GreyShades()
- *fill*         0x10000612        0x2 
+                0x100005cc       0x16 ./src/proggreyshades.o
+                0x100005cc                GreyShades::~GreyShades()
+                0x100005cc                GreyShades::~GreyShades()
+ *fill*         0x100005e2        0x2 
  .text._ZN10GreyShades5resetEv
-                0x10000614       0x2c ./src/proggreyshades.o
-                0x10000614                GreyShades::reset()
+                0x100005e4       0x2c ./src/proggreyshades.o
+                0x100005e4                GreyShades::reset()
  .text._ZN13AimBot_Serial12updateSerialEv
-                0x10000640       0xf8 ./src/proggreyshades.o
-                0x10000640                AimBot_Serial::updateSerial()
+                0x10000610       0xc0 ./src/proggreyshades.o
+                0x10000610                AimBot_Serial::updateSerial()
  .text._ZNSt10_List_baseIiSaIiEE8_M_clearEv
-                0x10000738       0x16 ./src/proggreyshades.o
-                0x10000738                std::_List_base<int, std::allocator<int> >::_M_clear()
+                0x100006d0       0x16 ./src/proggreyshades.o
+                0x100006d0                std::_List_base<int, std::allocator<int> >::_M_clear()
  .text._ZNSt4listIiSaIiEE5mergeERS1_
-                0x1000074e       0x44 ./src/proggreyshades.o
-                0x1000074e                std::list<int, std::allocator<int> >::merge(std::list<int, std::allocator<int> >&)
+                0x100006e6       0x44 ./src/proggreyshades.o
+                0x100006e6                std::list<int, std::allocator<int> >::merge(std::list<int, std::allocator<int> >&)
  .text._ZNSt4listIiSaIiEE4sortEv
-                0x10000792       0xbc ./src/proggreyshades.o
-                0x10000792                std::list<int, std::allocator<int> >::sort()
- *fill*         0x1000084e        0x2 
+                0x1000072a       0xbc ./src/proggreyshades.o
+                0x1000072a                std::list<int, std::allocator<int> >::sort()
+ *fill*         0x100007e6        0x2 
  .text._ZN10GreyShades8objCalcsEv
-                0x10000850      0x1a8 ./src/proggreyshades.o
-                0x10000850                GreyShades::objCalcs()
+                0x100007e8      0x1a8 ./src/proggreyshades.o
+                0x100007e8                GreyShades::objCalcs()
  .text._ZN10GreyShades11handleImageEv
-                0x100009f8      0x13c ./src/proggreyshades.o
-                0x100009f8                GreyShades::handleImage()
+                0x10000990      0x13c ./src/proggreyshades.o
+                0x10000990                GreyShades::handleImage()
  .text._Z8greyLoopv
-                0x10000b34       0x24 ./src/proggreyshades.o
-                0x10000b34                greyLoop()
+                0x10000acc       0x24 ./src/proggreyshades.o
+                0x10000acc                greyLoop()
  .text.startup._GLOBAL__sub_I_g_progGreyshades
-                0x10000b58       0x4c ./src/proggreyshades.o
+                0x10000af0       0x4c ./src/proggreyshades.o
  .text.SystemInit
-                0x10000ba4       0x34 ./src/system_LPC43xx.o
-                0x10000ba4                SystemInit
- .text          0x10000bd8     0x12ec C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spifi_rom_api.o)
-                0x10000bd8                memcpy_spifi_lib
-                0x10000c02                memset_spifi_lib
-                0x10000c14                spifi_get_version
-                0x10000c1a                read_flash
-                0x10000c4c                cmd
-                0x10000c62                all_quad
-                0x10000c72                read04
-                0x10000c94                readAd
-                0x10000ca6                send04
-                0x10000cd2                wren
-                0x10000cd8                wren_send04
-                0x10000cf4                wren_sendAd
-                0x10000d3e                cancel_mem_mode
-                0x10000d7e                wait_busy
-                0x10000e58                write_stat
-                0x10000e8a                set_mem_mode
-                0x10000f1a                setWPSEL
-                0x10000f4c                setProtEnts
-                0x10000f88                getProtBytes
-                0x10000fa4                readProt
-                0x10001014                setSize
-                0x1000102a                setDev
-                0x100011d6                spifi_init
-                0x100013a8                setProt
-                0x100017c8                checkAd
-                0x10001810                send_erase_cmd
-                0x10001852                send_prog_cmd
-                0x1000186a                prog_block
-                0x1000195a                ck_erase
-                0x10001972                ck_setup
-                0x10001988                ck_prog
-                0x100019ea                check_block
-                0x10001a68                spifi_program
-                0x10001cbe                spifi_erase
- .text          0x10001ec4      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(falcon_details.o)
-                0x10001ec4                set_uart
-                0x10001efa                pullMISO
-                0x10001f10                set_spifi_io
-                0x10001f28                set_spifi_clk
- .text          0x10002024       0xa0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(amic.o)
-                0x10002024                amic
- .text          0x100020c4      0x114 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
-                0x100020c4                atm
- .text          0x100021d8       0xdc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(chi.o)
-                0x100021d8                chi
- .text          0x100022b4       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(eon.o)
-                0x100022b4                eon
- .text          0x1000236c       0xbc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(esmt.o)
-                0x1000236c                esmt
- .text          0x10002428       0xb0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(giga.o)
-                0x10002428                giga
- .text          0x100024d8      0x194 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
-                0x100024d8                mxic
- .text          0x1000266c      0x178 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(numonyx.o)
-                0x1000266c                numo_dummies
-                0x1000269e                numo
- .text          0x100027e4       0xec C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spansion.o)
-                0x100027e4                moreId
-                0x10002826                span
- .text          0x100028d0       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
-                0x100028d0                sst
- .text          0x10002988       0xfc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(winbond.o)
-                0x10002988                wbd_dummies
-                0x100029a6                wbd
+                0x10000b3c       0x34 ./src/system_LPC43xx.o
+                0x10000b3c                SystemInit
+ .text          0x10000b70     0x12ec C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spifi_rom_api.o)
+                0x10000b70                memcpy_spifi_lib
+                0x10000b9a                memset_spifi_lib
+                0x10000bac                spifi_get_version
+                0x10000bb2                read_flash
+                0x10000be4                cmd
+                0x10000bfa                all_quad
+                0x10000c0a                read04
+                0x10000c2c                readAd
+                0x10000c3e                send04
+                0x10000c6a                wren
+                0x10000c70                wren_send04
+                0x10000c8c                wren_sendAd
+                0x10000cd6                cancel_mem_mode
+                0x10000d16                wait_busy
+                0x10000df0                write_stat
+                0x10000e22                set_mem_mode
+                0x10000eb2                setWPSEL
+                0x10000ee4                setProtEnts
+                0x10000f20                getProtBytes
+                0x10000f3c                readProt
+                0x10000fac                setSize
+                0x10000fc2                setDev
+                0x1000116e                spifi_init
+                0x10001340                setProt
+                0x10001760                checkAd
+                0x100017a8                send_erase_cmd
+                0x100017ea                send_prog_cmd
+                0x10001802                prog_block
+                0x100018f2                ck_erase
+                0x1000190a                ck_setup
+                0x10001920                ck_prog
+                0x10001982                check_block
+                0x10001a00                spifi_program
+                0x10001c56                spifi_erase
+ .text          0x10001e5c      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(falcon_details.o)
+                0x10001e5c                set_uart
+                0x10001e92                pullMISO
+                0x10001ea8                set_spifi_io
+                0x10001ec0                set_spifi_clk
+ .text          0x10001fbc       0xa0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(amic.o)
+                0x10001fbc                amic
+ .text          0x1000205c      0x114 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
+                0x1000205c                atm
+ .text          0x10002170       0xdc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(chi.o)
+                0x10002170                chi
+ .text          0x1000224c       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(eon.o)
+                0x1000224c                eon
+ .text          0x10002304       0xbc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(esmt.o)
+                0x10002304                esmt
+ .text          0x100023c0       0xb0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(giga.o)
+                0x100023c0                giga
+ .text          0x10002470      0x194 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
+                0x10002470                mxic
+ .text          0x10002604      0x178 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(numonyx.o)
+                0x10002604                numo_dummies
+                0x10002636                numo
+ .text          0x1000277c       0xec C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spansion.o)
+                0x1000277c                moreId
+                0x100027be                span
+ .text          0x10002868       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
+                0x10002868                sst
+ .text          0x10002920       0xfc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(winbond.o)
+                0x10002920                wbd_dummies
+                0x1000293e                wbd
  .text._Z10cam_setAWBRKh
-                0x10002a84       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002a84                cam_setAWB(unsigned char const&)
+                0x10002a1c       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002a1c                cam_setAWB(unsigned char const&)
  .text._Z17cam_setBrightnessRKh
-                0x10002acc       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002acc                cam_setBrightness(unsigned char const&)
+                0x10002a64       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002a64                cam_setBrightness(unsigned char const&)
  .text._ZL11cam_setRegsPKhi
-                0x10002b04       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002a9c       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .text._Z11cam_setModeRKh
-                0x10002b60       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002b60                cam_setMode(unsigned char const&)
+                0x10002af8       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002af8                cam_setMode(unsigned char const&)
  .text._Z12cam_getFramePhmhtttt
-                0x10002b98       0xdc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002b98                cam_getFrame(unsigned char*, unsigned long, unsigned char, unsigned short, unsigned short, unsigned short, unsigned short)
+                0x10002b30       0xdc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002b30                cam_getFrame(unsigned char*, unsigned long, unsigned char, unsigned short, unsigned short, unsigned short, unsigned short)
  .text._Z14cam_loadParamsv
-                0x10002c74       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002c74                cam_loadParams()
+                0x10002c0c       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002c0c                cam_loadParams()
  .text._Z8cam_initv
-                0x10002cb0       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
-                0x10002cb0                cam_init()
+                0x10002c48       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002c48                cam_init()
  .text.startup._GLOBAL__sub_I_g_sccb
-                0x10002d18       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10002cb0       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .text._ZN5Chirp11handleXdataEPPv
-                0x10002d28        0x2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002d28                Chirp::handleXdata(void**)
+                0x10002cc0        0x2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002cc0                Chirp::handleXdata(void**)
  .text._ZN5Chirp4initEb
-                0x10002d2a        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002d2a                Chirp::init(bool)
+                0x10002cc2        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002cc2                Chirp::init(bool)
  .text._Z9copyAlignPcPKci
-                0x10002d2e       0x12 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002d2e                copyAlign(char*, char const*, int)
+                0x10002cc6       0x12 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002cc6                copyAlign(char*, char const*, int)
  .text._ZN5Chirp13restoreBufferEv
-                0x10002d40        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002d40                Chirp::restoreBuffer()
+                0x10002cd8        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002cd8                Chirp::restoreBuffer()
  .text._ZN5Chirp8loadArgsEPSt9__va_listPPv
-                0x10002d4c       0x84 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002d4c                Chirp::loadArgs(std::__va_list*, void**)
+                0x10002ce4       0x84 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002ce4                Chirp::loadArgs(std::__va_list*, void**)
  .text._ZN5Chirp14sendChirpRetryEhs
-                0x10002dd0       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002dd0                Chirp::sendChirpRetry(unsigned char, short)
+                0x10002d68       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002d68                Chirp::sendChirpRetry(unsigned char, short)
  .text._ZN5Chirp12reallocTableEv
-                0x10002e28       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002e28                Chirp::reallocTable()
+                0x10002dc0       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002dc0                Chirp::reallocTable()
  .text._ZN5Chirp11lookupTableEPKc
-                0x10002e6c       0x32 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002e6c                Chirp::lookupTable(char const*)
+                0x10002e04       0x32 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002e04                Chirp::lookupTable(char const*)
  .text._ZN5Chirp11updateTableEPKcPFmPS_E
-                0x10002e9e       0x54 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002e9e                Chirp::updateTable(char const*, unsigned long (*)(Chirp*))
+                0x10002e36       0x54 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002e36                Chirp::updateTable(char const*, unsigned long (*)(Chirp*))
  .text._ZN5Chirp15handleEnumerateEPcPs
-                0x10002ef2       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002ef2                Chirp::handleEnumerate(char*, short*)
+                0x10002e8a       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002e8a                Chirp::handleEnumerate(char*, short*)
  .text._ZN5Chirp7reallocEm
-                0x10002f08       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002f08                Chirp::realloc(unsigned long)
+                0x10002ea0       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002ea0                Chirp::realloc(unsigned long)
  .text._ZN5Chirp10vserializeEPS_PhmPSt9__va_list
-                0x10002f4c      0x206 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10002f4c                Chirp::vserialize(Chirp*, unsigned char*, unsigned long, std::__va_list*)
+                0x10002ee4      0x206 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10002ee4                Chirp::vserialize(Chirp*, unsigned char*, unsigned long, std::__va_list*)
  .text._ZN5Chirp9vassembleEPSt9__va_list
-                0x10003152       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003152                Chirp::vassemble(std::__va_list*)
+                0x100030ea       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100030ea                Chirp::vassemble(std::__va_list*)
  .text._ZN5Chirp8assembleEhz
-                0x1000316e       0x4e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x1000316e                Chirp::assemble(unsigned char, ...)
+                0x10003106       0x4e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003106                Chirp::assemble(unsigned char, ...)
  .text._ZN5Chirp10handleInitEPtPh
-                0x100031bc       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100031bc                Chirp::handleInit(unsigned short*, unsigned char*)
+                0x10003154       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003154                Chirp::handleInit(unsigned short*, unsigned char*)
  .text._ZN5Chirp19handleEnumerateInfoEPs
-                0x10003204       0x64 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003204                Chirp::handleEnumerateInfo(short*)
+                0x1000319c       0x64 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x1000319c                Chirp::handleEnumerateInfo(short*)
  .text._ZN5Chirp11handleChirpEhsPPv
-                0x10003268      0x1a2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003268                Chirp::handleChirp(unsigned char, short, void**)
+                0x10003200      0x1a2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003200                Chirp::handleChirp(unsigned char, short, void**)
  .text._ZN5Chirp16deserializeParseEPhmPPv
-                0x1000340a       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x1000340a                Chirp::deserializeParse(unsigned char*, unsigned long, void**)
+                0x100033a2       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100033a2                Chirp::deserializeParse(unsigned char*, unsigned long, void**)
  .text._ZN5Chirp12vdeserializeEPhmPSt9__va_list
-                0x100034c2       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100034c2                Chirp::vdeserialize(unsigned char*, unsigned long, std::__va_list*)
+                0x1000345a       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x1000345a                Chirp::vdeserialize(unsigned char*, unsigned long, std::__va_list*)
  .text._ZN5Chirp7calcCrcEPhm
-                0x100034de       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100034de                Chirp::calcCrc(unsigned char*, unsigned long)
+                0x10003476       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003476                Chirp::calcCrc(unsigned char*, unsigned long)
  .text._ZN5Chirp8sendFullEhs
-                0x100034f8       0x50 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100034f8                Chirp::sendFull(unsigned char, short)
+                0x10003490       0x50 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003490                Chirp::sendFull(unsigned char, short)
  .text._ZN5Chirp7sendAckEb
-                0x10003548       0x2e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003548                Chirp::sendAck(bool)
- *fill*         0x10003576        0x2 
+                0x100034e0       0x2e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100034e0                Chirp::sendAck(bool)
+ *fill*         0x1000350e        0x2 
  .text._ZN5Chirp10recvHeaderEPhPsb
-                0x10003578       0xf4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003578                Chirp::recvHeader(unsigned char*, short*, bool)
+                0x10003510       0xf4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003510                Chirp::recvHeader(unsigned char*, short*, bool)
  .text._ZN5Chirp8recvFullEPhPsb
-                0x1000366c       0x94 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x1000366c                Chirp::recvFull(unsigned char*, short*, bool)
+                0x10003604       0x94 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003604                Chirp::recvFull(unsigned char*, short*, bool)
  .text._ZN5Chirp8recvDataEv
-                0x10003700       0xd4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003700                Chirp::recvData()
+                0x10003698       0xd4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003698                Chirp::recvData()
  .text._ZN5Chirp9recvChirpEPhPsPPvb
-                0x100037d4       0x92 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100037d4                Chirp::recvChirp(unsigned char*, short*, void**, bool)
+                0x1000376c       0x92 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x1000376c                Chirp::recvChirp(unsigned char*, short*, void**, bool)
  .text._ZN5Chirp4callEhsz
-                0x10003866       0xf0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003866                Chirp::call(unsigned char, short, ...)
+                0x100037fe       0xf0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100037fe                Chirp::call(unsigned char, short, ...)
  .text._ZN5Chirp7getProcEPKcPFmPS_E
-                0x10003956       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003956                Chirp::getProc(char const*, unsigned long (*)(Chirp*))
+                0x100038ee       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100038ee                Chirp::getProc(char const*, unsigned long (*)(Chirp*))
  .text._ZN5Chirp10remoteInitEb
-                0x1000399a       0x4e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x1000399a                Chirp::remoteInit(bool)
+                0x10003932       0x4e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003932                Chirp::remoteInit(bool)
  .text._ZN5Chirp7setLinkEP4Link
-                0x100039e8       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x100039e8                Chirp::setLink(Link*)
+                0x10003980       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003980                Chirp::setLink(Link*)
  .text._ZN5ChirpC2EbbP4Link
-                0x10003a64       0x70 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003a64                Chirp::Chirp(bool, bool, Link*)
-                0x10003a64                Chirp::Chirp(bool, bool, Link*)
+                0x100039fc       0x70 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100039fc                Chirp::Chirp(bool, bool, Link*)
+                0x100039fc                Chirp::Chirp(bool, bool, Link*)
  .text._ZN5Chirp7recvAckEPbt
-                0x10003ad4       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003ad4                Chirp::recvAck(bool*, unsigned short)
+                0x10003a6c       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003a6c                Chirp::recvAck(bool*, unsigned short)
  .text._ZN5Chirp10sendHeaderEhs
-                0x10003b10       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003b10                Chirp::sendHeader(unsigned char, short)
+                0x10003aa8       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003aa8                Chirp::sendHeader(unsigned char, short)
  .text._ZN5Chirp8sendDataEv
-                0x10003bc8       0xa2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003bc8                Chirp::sendData()
+                0x10003b60       0xa2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003b60                Chirp::sendData()
  .text._ZN5Chirp9sendChirpEhs
-                0x10003c6a       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10003c6a                Chirp::sendChirp(unsigned char, short)
- *fill*         0x10003c9a        0x2 
+                0x10003c02       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x10003c02                Chirp::sendChirp(unsigned char, short)
+ *fill*         0x10003c32        0x2 
  .text.CGU_GetPCLKFrequency
-                0x10003c9c       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003c9c                CGU_GetPCLKFrequency
+                0x10003c34       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003c34                CGU_GetPCLKFrequency
  .text.CGU_UpdateClock
-                0x10003d18       0x8c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003d18                CGU_UpdateClock
+                0x10003cb0       0x8c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003cb0                CGU_UpdateClock
  .text.CGU_SetXTALOSC
-                0x10003da4       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003da4                CGU_SetXTALOSC
+                0x10003d3c       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003d3c                CGU_SetXTALOSC
  .text.CGU_SetDIV
-                0x10003de0       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003de0                CGU_SetDIV
+                0x10003d78       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003d78                CGU_SetDIV
  .text.CGU_EnableEntity
-                0x10003e18       0xc4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003e18                CGU_EnableEntity
+                0x10003db0       0xc4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003db0                CGU_EnableEntity
  .text.CGU_EntityConnect
-                0x10003edc       0x74 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003edc                CGU_EntityConnect
+                0x10003e74       0x74 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003e74                CGU_EntityConnect
  .text.CGU_SetPLL1
-                0x10003f50       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003f50                CGU_SetPLL1
+                0x10003ee8       0x7c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003ee8                CGU_SetPLL1
  .text.CGU_Init
-                0x10003fcc       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10003fcc                CGU_Init
+                0x10003f64       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10003f64                CGU_Init
  .text.scu_pinmux
-                0x1000400c       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
-                0x1000400c                scu_pinmux
+                0x10003fa4       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+                0x10003fa4                scu_pinmux
  .text.UART_Send.part.0
-                0x10004020       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x10003fb8       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
  .text.UART_setBaudRate
-                0x10004060      0x144 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x10004060                UART_setBaudRate
+                0x10003ff8      0x144 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x10003ff8                UART_setBaudRate
  .text.UART_Init
-                0x100041a4      0x104 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x100041a4                UART_Init
+                0x1000413c      0x104 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x1000413c                UART_Init
  .text.UART_ConfigStructInit
-                0x100042a8       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x100042a8                UART_ConfigStructInit
+                0x10004240       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x10004240                UART_ConfigStructInit
  .text.UART_ReceiveByte
-                0x100042bc        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x100042bc                UART_ReceiveByte
+                0x10004254        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x10004254                UART_ReceiveByte
  .text.UART_Send
-                0x100042c2       0x4a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x100042c2                UART_Send
- .text.UART_IntConfig
-                0x1000430c       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x1000430c                UART_IntConfig
+                0x1000425a       0x4a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x1000425a                UART_Send
  .text.UART_CheckBusy
-                0x10004348        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x10004348                UART_CheckBusy
+                0x100042a4        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x100042a4                UART_CheckBusy
  .text.UART_FIFOConfig
-                0x10004354       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x10004354                UART_FIFOConfig
+                0x100042b0       0x3c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x100042b0                UART_FIFOConfig
  .text.UART_TxCmd
-                0x10004390       0x34 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
-                0x10004390                UART_TxCmd
+                0x100042ec       0x34 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x100042ec                UART_TxCmd
  .text._Z17prm_getDataOffsetPK11ParamRecord
-                0x100043c4       0x26 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x100043c4                prm_getDataOffset(ParamRecord const*)
+                0x10004320       0x26 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x10004320                prm_getDataOffset(ParamRecord const*)
  .text._Z7prm_crcPK11ParamRecord
-                0x100043ea       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x100043ea                prm_crc(ParamRecord const*)
- *fill*         0x10004412        0x2 
+                0x10004346       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x10004346                prm_crc(ParamRecord const*)
+ *fill*         0x1000436e        0x2 
  .text._Z8prm_findPKcPh
-                0x10004414       0x4c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x10004414                prm_find(char const*, unsigned char*)
+                0x10004370       0x4c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x10004370                prm_find(char const*, unsigned char*)
  .text._Z12prm_nextFreev
-                0x10004460       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x10004460                prm_nextFree()
+                0x100043bc       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x100043bc                prm_nextFree()
  .text._Z7prm_getPKcz
-                0x10004490       0x36 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x10004490                prm_get(char const*, ...)
+                0x100043ec       0x36 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x100043ec                prm_get(char const*, ...)
  .text._Z7prm_addPKcmS0_z
-                0x100044c6       0xc4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x100044c6                prm_add(char const*, unsigned long, char const*, ...)
- *fill*         0x1000458a        0x2 
+                0x10004422       0xc4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x10004422                prm_add(char const*, unsigned long, char const*, ...)
+ *fill*         0x100044e6        0x2 
  .text._Z9prm_dirtyv
-                0x1000458c       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
-                0x1000458c                prm_dirty()
+                0x100044e8       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+                0x100044e8                prm_dirty()
  .text._Z7ADCInitv
-                0x1000459c       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x1000459c                ADCInit()
+                0x100044f8       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x100044f8                ADCInit()
  .text._Z10CameraInitv
-                0x100045c0       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x100045c0                CameraInit()
+                0x1000451c       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x1000451c                CameraInit()
  .text._Z8GPIOInitv
-                0x10004618       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x10004618                GPIOInit()
+                0x10004574       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x10004574                GPIOInit()
  .text._Z9timerInitv
-                0x1000463c       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x1000463c                timerInit()
+                0x10004598       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x10004598                timerInit()
  .text._Z10commonInitv
-                0x1000465c       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x1000465c                commonInit()
+                0x100045b8       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x100045b8                commonInit()
  .text._Z9handleAWBv
-                0x10004678       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x10004678                handleAWB()
+                0x100045d4       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x100045d4                handleAWB()
  .text._Z8periodicv
-                0x100046c0        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x100046c0                periodic()
+                0x1000461c        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x1000461c                periodic()
  .text._Z8pixyInitv
-                0x100046c4       0x50 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
-                0x100046c4                pixyInit()
+                0x10004620       0x50 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+                0x10004620                pixyInit()
  .text.delayus.constprop.0
-                0x10004714       0x2a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- *fill*         0x1000473e        0x2 
- .text.vIOInit  0x10004740      0x234 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
-                0x10004740                vIOInit
+                0x10004670       0x2a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ *fill*         0x1000469a        0x2 
+ .text.vIOInit  0x1000469c      0x234 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+                0x1000469c                vIOInit
  .text.clockInit
-                0x10004974      0x12c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
-                0x10004974                clockInit
+                0x100048d0      0x12c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+                0x100048d0                clockInit
  .text.platformInit
-                0x10004aa0       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
-                0x10004aa0                platformInit
+                0x100049fc       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+                0x100049fc                platformInit
  .text._Z10pwr_getVinv
-                0x10004ab6       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
-                0x10004ab6                pwr_getVin()
+                0x10004a12       0x16 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+                0x10004a12                pwr_getVin()
  .text._Z8pwr_initv
-                0x10004acc       0x34 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
-                0x10004acc                pwr_init()
+                0x10004a28       0x34 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+                0x10004a28                pwr_init()
  .text._ZN5CSccb9PortWriteEhh.isra.0
-                0x10004b00       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004a5c       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
  .text._ZN5CSccb5DriveEv.isra.1
-                0x10004b38       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004a94       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
  .text._ZN5CSccb8TriStateEv.isra.2
-                0x10004b5c       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004ab8       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
  .text._ZN5CSccb5StartEv.isra.3
-                0x10004b80       0x22 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004adc       0x22 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
  .text._ZN5CSccb4StopEv.isra.4
-                0x10004ba2       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004afe       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
  .text._ZN5CSccbC2Eh
-                0x10004bbc       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
-                0x10004bbc                CSccb::CSccb(unsigned char)
-                0x10004bbc                CSccb::CSccb(unsigned char)
+                0x10004b18       0x24 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004b18                CSccb::CSccb(unsigned char)
+                0x10004b18                CSccb::CSccb(unsigned char)
  .text._ZN5CSccb5WriteEh
-                0x10004be0       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
-                0x10004be0                CSccb::Write(unsigned char)
+                0x10004b3c       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004b3c                CSccb::Write(unsigned char)
  .text._ZN5CSccb5WriteEhh
-                0x10004c48       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
-                0x10004c48                CSccb::Write(unsigned char, unsigned char)
+                0x10004ba4       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004ba4                CSccb::Write(unsigned char, unsigned char)
  .text._ZN5CSccb4ReadEh
-                0x10004c74       0x88 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
-                0x10004c74                CSccb::Read(unsigned char)
+                0x10004bd0       0x88 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+                0x10004bd0                CSccb::Read(unsigned char)
  .text._ZN4Link9blockSizeEv
-                0x10004cfc        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004cfc                Link::blockSize()
+                0x10004c58        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004c58                Link::blockSize()
  .text._ZN4Link9getBufferEPPhPm
-                0x10004d00        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d00                Link::getBuffer(unsigned char**, unsigned long*)
- *fill*         0x10004d06        0x2 
+                0x10004c5c        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004c5c                Link::getBuffer(unsigned char**, unsigned long*)
+ *fill*         0x10004c62        0x2 
  .text._ZN6SMLink4sendEPKhmt
-                0x10004d08       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d08                SMLink::send(unsigned char const*, unsigned long, unsigned short)
+                0x10004c64       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004c64                SMLink::send(unsigned char const*, unsigned long, unsigned short)
  .text._ZN6SMLink7receiveEPhmt
-                0x10004d40       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d40                SMLink::receive(unsigned char*, unsigned long, unsigned short)
+                0x10004c9c       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004c9c                SMLink::receive(unsigned char*, unsigned long, unsigned short)
  .text._ZN6SMLink8setTimerEv
-                0x10004d78        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d78                SMLink::setTimer()
+                0x10004cd4        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004cd4                SMLink::setTimer()
  .text._ZN6SMLink8getTimerEv
-                0x10004d7e        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d7e                SMLink::getTimer()
+                0x10004cda        0x6 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004cda                SMLink::getTimer()
  .text._ZN6SMLink8getFlagsEh
-                0x10004d84       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004d84                SMLink::getFlags(unsigned char)
+                0x10004ce0       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004ce0                SMLink::getFlags(unsigned char)
  .text._ZN6SMLinkC2Ev
-                0x10004da4       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10004da4                SMLink::SMLink()
-                0x10004da4                SMLink::SMLink()
+                0x10004d00       0x1c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x10004d00                SMLink::SMLink()
+                0x10004d00                SMLink::SMLink()
  .text.debug_frmwrk_init_clk
-                0x10004dc0       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
-                0x10004dc0                debug_frmwrk_init_clk
- .text.fpuInit  0x10004dec       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
-                0x10004dec                fpuInit
+                0x10004d1c       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+                0x10004d1c                debug_frmwrk_init_clk
+ .text.fpuInit  0x10004d48       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+                0x10004d48                fpuInit
  .text._mbxProcess
-                0x10004e34       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+                0x10004d90       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
  .text.IPC_queryLocalMbx
-                0x10004e54       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
-                0x10004e54                IPC_queryLocalMbx
+                0x10004db0       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+                0x10004db0                IPC_queryLocalMbx
  .text.IPC_haltSlave
-                0x10004e64       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
-                0x10004e64                IPC_haltSlave
+                0x10004dc0       0x2c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+                0x10004dc0                IPC_haltSlave
  .text.M0CORE_IRQHandler
-                0x10004e90       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
-                0x10004e90                M0CORE_IRQHandler
+                0x10004dec       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+                0x10004dec                M0CORE_IRQHandler
  .text.ADC_Init
-                0x10004ec0       0x4c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004ec0                ADC_Init
+                0x10004e1c       0x4c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004e1c                ADC_Init
  .text.ADC_StartCmd
-                0x10004f0c       0x12 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004f0c                ADC_StartCmd
+                0x10004e68       0x12 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004e68                ADC_StartCmd
  .text.ADC_IntConfig
-                0x10004f1e       0x18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004f1e                ADC_IntConfig
+                0x10004e7a       0x18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004e7a                ADC_IntConfig
  .text.ADC_ChannelCmd
-                0x10004f36       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004f36                ADC_ChannelCmd
+                0x10004e92       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004e92                ADC_ChannelCmd
  .text.ADC_ChannelGetData
-                0x10004f54        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004f54                ADC_ChannelGetData
+                0x10004eb0        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004eb0                ADC_ChannelGetData
  .text.ADC_ChannelGetStatus
-                0x10004f60       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
-                0x10004f60                ADC_ChannelGetStatus
- *fill*         0x10004f7a        0x2 
- .text.delayus  0x10004f7c       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
-                0x10004f7c                delayus
- .text.adc_get  0x10004f90       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
-                0x10004f90                adc_get
+                0x10004ebc       0x1a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+                0x10004ebc                ADC_ChannelGetStatus
+ *fill*         0x10004ed6        0x2 
+ .text.delayus  0x10004ed8       0x14 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+                0x10004ed8                delayus
+ .text.adc_get  0x10004eec       0x48 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+                0x10004eec                adc_get
  .text.setTimer
-                0x10004fd8        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
-                0x10004fd8                setTimer
+                0x10004f34        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+                0x10004f34                setTimer
  .text.getTimer
-                0x10004fe4        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
-                0x10004fe4                getTimer
+                0x10004f40        0xc C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+                0x10004f40                getTimer
  .text.USB_Reset
-                0x10004ff0       0xf8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
-                0x10004ff0                USB_Reset
+                0x10004f4c       0xf8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+                0x10004f4c                USB_Reset
  .text.USB0_IRQHandler
-                0x100050e8      0x15c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
-                0x100050e8                USB0_IRQHandler
- .text          0x10005244       0xa0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_arm_truncdfsf2.o)
-                0x10005244                __truncdfsf2
-                0x10005244                __aeabi_d2f
- .text          0x100052e4       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_aeabi_uldivmod.o)
-                0x100052e4                __aeabi_uldivmod
- .text          0x10005310       0x60 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(bpabi.o)
-                0x10005310                __gnu_ldivmod_helper
-                0x10005340                __gnu_uldivmod_helper
- .text          0x10005370        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_dvmd_tls.o)
-                0x10005370                __aeabi_idiv0
-                0x10005370                __aeabi_ldiv0
- .text          0x10005374      0x29c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
-                0x10005374                __divdi3
- .text          0x10005610      0x26c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
-                0x10005610                __udivdi3
- .text.abs      0x1000587c        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-abs.o)
-                0x1000587c                abs
+                0x10005044      0x15c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+                0x10005044                USB0_IRQHandler
+ .text          0x100051a0       0xa0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_arm_truncdfsf2.o)
+                0x100051a0                __truncdfsf2
+                0x100051a0                __aeabi_d2f
+ .text          0x10005240       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_aeabi_uldivmod.o)
+                0x10005240                __aeabi_uldivmod
+ .text          0x1000526c       0x60 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(bpabi.o)
+                0x1000526c                __gnu_ldivmod_helper
+                0x1000529c                __gnu_uldivmod_helper
+ .text          0x100052cc        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_dvmd_tls.o)
+                0x100052cc                __aeabi_idiv0
+                0x100052cc                __aeabi_ldiv0
+ .text          0x100052d0      0x29c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
+                0x100052d0                __divdi3
+ .text          0x1000556c      0x26c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
+                0x1000556c                __udivdi3
+ .text.abs      0x100057d8        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-abs.o)
+                0x100057d8                abs
  .text.__aeabi_memcpy
-                0x10005884        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-aeabi_memcpy.o)
-                0x10005884                __aeabi_memcpy4
-                0x10005884                __aeabi_memcpy8
-                0x10005884                __aeabi_memcpy
+                0x100057e0        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-aeabi_memcpy.o)
+                0x100057e0                __aeabi_memcpy4
+                0x100057e0                __aeabi_memcpy8
+                0x100057e0                __aeabi_memcpy
  .text.__libc_init_array
-                0x10005888       0x4c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-init.o)
-                0x10005888                __libc_init_array
- .text.malloc   0x100058d4       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
-                0x100058d4                malloc
- .text.free     0x100058e4       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
-                0x100058e4                free
- .text.memcpy   0x100058f4       0x16 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memcpy.o)
-                0x100058f4                memcpy
- .text.memset   0x1000590a       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memset.o)
-                0x1000590a                memset
- *fill*         0x1000591a        0x2 
- .text._free_r  0x1000591c       0x88 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-freer.o)
-                0x1000591c                _free_r
+                0x100057e4       0x4c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-init.o)
+                0x100057e4                __libc_init_array
+ .text.malloc   0x10005830       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
+                0x10005830                malloc
+ .text.free     0x10005840       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
+                0x10005840                free
+ .text.memcpy   0x10005850       0x16 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memcpy.o)
+                0x10005850                memcpy
+ .text.memset   0x10005866       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memset.o)
+                0x10005866                memset
+ *fill*         0x10005876        0x2 
+ .text._free_r  0x10005878       0x88 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-freer.o)
+                0x10005878                _free_r
  .text._malloc_r
-                0x100059a4       0xac c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-mallocr.o)
-                0x100059a4                _malloc_r
- .text._sbrk_r  0x10005a50       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-sbrkr.o)
-                0x10005a50                _sbrk_r
- .text          0x10005a70       0x14 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcmp.o)
-                0x10005a70                strcmp
- .text.strcpy   0x10005a84       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcpy.o)
-                0x10005a84                strcpy
- .text.strlen   0x10005a94       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strlen.o)
-                0x10005a94                strlen
+                0x10005900       0xac c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-mallocr.o)
+                0x10005900                _malloc_r
+ .text._sbrk_r  0x100059ac       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-sbrkr.o)
+                0x100059ac                _sbrk_r
+ .text          0x100059cc       0x14 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcmp.o)
+                0x100059cc                strcmp
+ .text.strcpy   0x100059e0       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcpy.o)
+                0x100059e0                strcpy
+ .text.strlen   0x100059f0       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strlen.o)
+                0x100059f0                strlen
  .text._ZSt15get_new_handlerv
-                0x10005aa4       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
-                0x10005aa4                std::get_new_handler()
+                0x10005a00       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
+                0x10005a00                std::get_new_handler()
  .text._ZnajRKSt9nothrow_t
-                0x10005ab4        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opvnt.o)
-                0x10005ab4                operator new[](unsigned int, std::nothrow_t const&)
+                0x10005a10        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opvnt.o)
+                0x10005a10                operator new[](unsigned int, std::nothrow_t const&)
  .text._ZNSt8__detail15_List_node_base4swapERS0_S1_
-                0x10005ab8       0x4e c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
-                0x10005ab8                std::__detail::_List_node_base::swap(std::__detail::_List_node_base&, std::__detail::_List_node_base&)
+                0x10005a14       0x4e c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
+                0x10005a14                std::__detail::_List_node_base::swap(std::__detail::_List_node_base&, std::__detail::_List_node_base&)
  .text._ZNSt8__detail15_List_node_base11_M_transferEPS0_S1_
-                0x10005b06       0x1c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
-                0x10005b06                std::__detail::_List_node_base::_M_transfer(std::__detail::_List_node_base*, std::__detail::_List_node_base*)
+                0x10005a62       0x1c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
+                0x10005a62                std::__detail::_List_node_base::_M_transfer(std::__detail::_List_node_base*, std::__detail::_List_node_base*)
  .text._ZNSt8__detail15_List_node_base7_M_hookEPS0_
-                0x10005b22        0xe c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
-                0x10005b22                std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)
+                0x10005a7e        0xe c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
+                0x10005a7e                std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)
  .text._ZNSt8__detail15_List_node_base9_M_unhookEv
-                0x10005b30        0xa c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
-                0x10005b30                std::__detail::_List_node_base::_M_unhook()
+                0x10005a8c        0xa c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
+                0x10005a8c                std::__detail::_List_node_base::_M_unhook()
  .text._ZnwjRKSt9nothrow_t
-                0x10005b3a       0x22 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opnt.o)
-                0x10005b3a                operator new(unsigned int, std::nothrow_t const&)
- .text._sbrk    0x10005b5c       0x3c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
-                0x10005b5c                _sbrk
+                0x10005a96       0x22 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opnt.o)
+                0x10005a96                operator new(unsigned int, std::nothrow_t const&)
+ .text._sbrk    0x10005ab8       0x3c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+                0x10005ab8                _sbrk
  .text.__check_heap_overflow
-                0x10005b98       0x18 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
-                0x10005b98                __check_heap_overflow
- .text          0x10005bb0       0x5c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
- .text.__errno  0x10005c0c        0xc c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-errno.o)
-                0x10005c0c                __errno
+                0x10005af4       0x18 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+                0x10005af4                __check_heap_overflow
+ .text          0x10005b0c       0x5c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
+ .text.__errno  0x10005b68        0xc c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-errno.o)
+                0x10005b68                __errno
  *(.rodata .rodata.* .constdata .constdata.*)
  .rodata.str1.1
-                0x10005c18      0x2ff ./src/exec.o
+                0x10005b74      0x2ff ./src/exec.o
  .rodata.str1.1
-                0x10005f17       0x25 ./src/proggreyshades.o
- .constdata     0x10005f3c       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
-                0x10005f3c                AT25DF041E
-                0x10005f5c                AT2xDF081AE
- .constdata     0x10005f7c       0x82 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
-                0x10005f7c                MX25U80E
-                0x10005f8c                MX25U16E
-                0x10005f9c                MX25U32E
-                0x10005fac                MX25L64E
-                0x10005fc4                MX25L128E
-                0x10005fdc                MX25L256E
-                0x10005ff4                mxMasks
- *fill*         0x10005ffe        0x2 
- .constdata     0x10006000       0x78 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
-                0x10006000                SST16MbE
-                0x10006028                SST32MbE
-                0x10006050                SST64MbE
+                0x10005e73       0x25 ./src/proggreyshades.o
+ .constdata     0x10005e98       0x40 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
+                0x10005e98                AT25DF041E
+                0x10005eb8                AT2xDF081AE
+ .constdata     0x10005ed8       0x82 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
+                0x10005ed8                MX25U80E
+                0x10005ee8                MX25U16E
+                0x10005ef8                MX25U32E
+                0x10005f08                MX25L64E
+                0x10005f20                MX25L128E
+                0x10005f38                MX25L256E
+                0x10005f50                mxMasks
+ *fill*         0x10005f5a        0x2 
+ .constdata     0x10005f5c       0x78 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
+                0x10005f5c                SST16MbE
+                0x10005f84                SST32MbE
+                0x10005fac                SST64MbE
  .rodata._ZL11g_mode0Regs
-                0x10006078       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10005fd4       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .rodata._ZL11g_mode1Regs
-                0x10006096       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10005ff2       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .rodata.str1.1
-                0x100060b4       0x65 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10006010       0x65 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .rodata._ZL10g_baseRegs
-                0x10006119       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- *fill*         0x10006141        0x7 
+                0x10006075       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ *fill*         0x1000609d        0x3 
  .rodata._ZTV5Chirp
-                0x10006148       0x18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
-                0x10006148                vtable for Chirp
+                0x100060a0       0x18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+                0x100060a0                vtable for Chirp
  .rodata.CGU_ConnectAlloc_Tbl
-                0x10006160      0x2fd C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x10006160                CGU_ConnectAlloc_Tbl
- *fill*         0x1000645d        0x1 
+                0x100060b8      0x2fd C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x100060b8                CGU_ConnectAlloc_Tbl
+ *fill*         0x100063b5        0x1 
  .rodata.CGU_PERIPHERAL_Info
-                0x1000645e      0x186 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x1000645e                CGU_PERIPHERAL_Info
+                0x100063b6      0x186 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x100063b6                CGU_PERIPHERAL_Info
  .rodata.CGU_Entity_ControlReg_Offset
-                0x100065e4       0x5a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x100065e4                CGU_Entity_ControlReg_Offset
- .rodata.CSWTCH.15
-                0x1000663e        0xe C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+                0x1000653c       0x5a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x1000653c                CGU_Entity_ControlReg_Offset
  .rodata.CSWTCH.19
-                0x1000664c        0x3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- *fill*         0x1000664f        0x1 
+                0x10006596        0x3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ *fill*         0x10006599        0x7 
  .rodata._ZTV6SMLink
-                0x10006650       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
-                0x10006650                vtable for SMLink
+                0x100065a0       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+                0x100065a0                vtable for SMLink
  .rodata.str1.1
-                0x10006678        0x2 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
+                0x100065c8        0x2 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
  .rodata._ZSt7nothrow
-                0x1000667a        0x1 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
-                0x1000667a                std::nothrow
-                0x1000667c                . = ALIGN (0x4)
- *fill*         0x1000667b        0x1 
-                0x1000667c                . = ALIGN (0x4)
+                0x100065ca        0x1 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
+                0x100065ca                std::nothrow
+                0x100065cc                . = ALIGN (0x4)
+ *fill*         0x100065cb        0x1 
+                0x100065cc                . = ALIGN (0x4)
  *(.init)
- .init          0x1000667c        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crti.o
-                0x1000667c                _init
- .init          0x10006680        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtn.o
-                0x10006688                . = ALIGN (0x4)
-                0x10006688                __preinit_array_start = .
+ .init          0x100065cc        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crti.o
+                0x100065cc                _init
+ .init          0x100065d0        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtn.o
+                0x100065d8                . = ALIGN (0x4)
+                0x100065d8                __preinit_array_start = .
  *(.preinit_array)
-                0x10006688                __preinit_array_end = .
-                0x10006688                . = ALIGN (0x4)
-                0x10006688                __init_array_start = .
+                0x100065d8                __preinit_array_end = .
+                0x100065d8                . = ALIGN (0x4)
+                0x100065d8                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x10006688        0x4 ./src/proggreyshades.o
- .init_array    0x1000668c        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .init_array    0x10006690        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
-                0x10006694                __init_array_end = .
+ .init_array    0x100065d8        0x4 ./src/proggreyshades.o
+ .init_array    0x100065dc        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .init_array    0x100065e0        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
+                0x100065e4                __init_array_end = .
  *(.fini)
- .fini          0x10006694        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crti.o
-                0x10006694                _fini
- .fini          0x10006698        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtn.o
-                0x100066a0                . = ALIGN (0x4)
+ .fini          0x100065e4        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crti.o
+                0x100065e4                _fini
+ .fini          0x100065e8        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtn.o
+                0x100065f0                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x100066a0                . = ALIGN (0x4)
+                0x100065f0                . = ALIGN (0x4)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x100066a0                . = ALIGN (0x4)
+                0x100065f0                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x100066a0                __exidx_start = .
+                0x100065f0                __exidx_start = .
 
-.ARM.exidx      0x100066a0        0x8 load address 0x14006918
+.ARM.exidx      0x100065f0        0x8 load address 0x14006868
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x100066a0        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
- .ARM.exidx     0x100066a8        0x0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
+ .ARM.exidx     0x100065f0        0x8 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
+ .ARM.exidx     0x100065f8        0x0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
                                   0x8 (size before relaxing)
-                0x100066a8                __exidx_end = .
-                0x100066a8                _etext = .
+                0x100065f8                __exidx_end = .
+                0x100065f8                _etext = .
 
-.data_RAM2      0x20000000        0x0 load address 0x14006920
+.data_RAM2      0x20000000        0x0 load address 0x14006870
  FILL mask 0xff
  *(.ramfunc.$RAM2)
  *(.ramfunc.$RamAHB32)
@@ -2294,7 +2293,7 @@ END GROUP
  *(.data.$RamAHB32*)
                 0x20000000                . = ALIGN (0x4)
 
-.data_RAM3      0x10080000        0x0 load address 0x14006920
+.data_RAM3      0x10080000        0x0 load address 0x14006870
  FILL mask 0xff
  *(.ramfunc.$RAM3)
  *(.ramfunc.$RamLoc72)
@@ -2302,7 +2301,7 @@ END GROUP
  *(.data.$RamLoc72*)
                 0x10080000                . = ALIGN (0x4)
 
-.data_RAM4      0x20008000     0x2264 load address 0x14006920
+.data_RAM4      0x20008000     0x2264 load address 0x14006870
  FILL mask 0xff
                 0x20008000                __core_m0app_START__ = .
  *(.core_m0app)
@@ -2316,13 +2315,13 @@ END GROUP
  *(.data.$RamAHB16*)
                 0x2000a264                . = ALIGN (0x4)
 
-.eh_frame       0x2000a264        0x0 load address 0x14008b84
+.eh_frame       0x2000a264        0x0 load address 0x14008ad4
  .eh_frame      0x2000a264        0x0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
 
-.rel.dyn        0x2000a264        0x0 load address 0x14008b84
+.rel.dyn        0x2000a264        0x0 load address 0x14008ad4
  .rel.iplt      0x00000000        0x0 ./src/cr_cpp_config.o
 
-.data_RAM5      0x2000c000        0x0 load address 0x14008b84
+.data_RAM5      0x2000c000        0x0 load address 0x14008ad4
  FILL mask 0xff
  *(.ramfunc.$RAM5)
  *(.ramfunc.$RamAHB_ETB16)
@@ -2331,53 +2330,53 @@ END GROUP
                 0x2000c000                . = ALIGN (0x4)
 
 .uninit_RESERVED
-                0x100066a8        0x0
+                0x100065f8        0x0
  *(.bss.$RESERVED*)
-                0x100066a8                . = ALIGN (0x4)
-                0x100066a8                _end_uninit_RESERVED = .
+                0x100065f8                . = ALIGN (0x4)
+                0x100065f8                _end_uninit_RESERVED = .
 
-.data           0x100066a8       0xcc load address 0x14008b84
+.data           0x100065f8       0xcc load address 0x14008ad4
  FILL mask 0xff
-                0x100066a8                _data = .
+                0x100065f8                _data = .
  *(vtable)
  *(.ramfunc*)
  *(.data*)
  .data._ZL8g_stopM0
-                0x100066a8        0x2 ./src/exec.o
- *fill*         0x100066aa        0x2 
+                0x100065f8        0x2 ./src/exec.o
+ *fill*         0x100065fa        0x2 
  .data.g_progGreyshades
-                0x100066ac       0x10 ./src/proggreyshades.o
-                0x100066ac                g_progGreyshades
+                0x100065fc       0x10 ./src/proggreyshades.o
+                0x100065fc                g_progGreyshades
  .data.SystemCoreClock
-                0x100066bc        0x4 ./src/system_LPC43xx.o
-                0x100066bc                SystemCoreClock
+                0x1000660c        0x4 ./src/system_LPC43xx.o
+                0x1000660c                SystemCoreClock
  .data._ZL12g_getFrameM0
-                0x100066c0        0x2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10006610        0x2 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .data._ZL5g_awb
-                0x100066c2        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10006612        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .data._ZL12g_brightness
-                0x100066c3        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+                0x10006613        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
  .data._ZL6g_mode
-                0x100066c4        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- *fill*         0x100066c5        0x3 
+                0x10006614        0x1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ *fill*         0x10006615        0x3 
  .data.CGU_ClockSourceFrequency
-                0x100066c8       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
-                0x100066c8                CGU_ClockSourceFrequency
+                0x10006618       0x44 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+                0x10006618                CGU_ClockSourceFrequency
  .data.impure_data
-                0x1000670c       0x60 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
+                0x1000665c       0x60 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
  .data._impure_ptr
-                0x1000676c        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
-                0x1000676c                _impure_ptr
- .data          0x10006770        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
-                0x10006770                __dso_handle
-                0x10006774                . = ALIGN (0x4)
-                0x10006774                _edata = .
+                0x100066bc        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-impure.o)
+                0x100066bc                _impure_ptr
+ .data          0x100066c0        0x4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
+                0x100066c0                __dso_handle
+                0x100066c4                . = ALIGN (0x4)
+                0x100066c4                _edata = .
 
-.igot.plt       0x10006774        0x0 load address 0x14008c50
+.igot.plt       0x100066c4        0x0 load address 0x14008ba0
  .igot.plt      0x00000000        0x0 ./src/cr_cpp_config.o
 
-.jcr            0x10006774        0x0 load address 0x14008c50
- .jcr           0x10006774        0x0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
+.jcr            0x100066c4        0x0 load address 0x14008ba0
+ .jcr           0x100066c4        0x0 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\crtbegin.o
 
 .bss_RAM2       0x20000000        0x0
  *(.bss.$RAM2*)
@@ -2508,34 +2507,34 @@ END GROUP
                 0x20008000                PROVIDE (_vStackTop, __top_RamAHB32)
 OUTPUT(video.axf elf32-littlearm)
 
-.debug_info     0x00000000    0x1b73c
+.debug_info     0x00000000    0x1b3ef
  .debug_info    0x00000000      0x213 ./src/cr_cpp_config.o
  .debug_info    0x00000213      0x199 ./src/cr_start_m0.o
  .debug_info    0x000003ac      0x30c ./src/cr_startup_lpc43xx.o
  .debug_info    0x000006b8      0x9f2 ./src/exec.o
  .debug_info    0x000010aa      0x534 ./src/flash.o
  .debug_info    0x000015de      0x209 ./src/main_m4.o
- .debug_info    0x000017e7     0x7c45 ./src/proggreyshades.o
- .debug_info    0x0000942c      0x6b5 ./src/system_LPC43xx.o
- .debug_info    0x00009ae1     0x1227 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .debug_info    0x0000ad08     0x2e21 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
- .debug_info    0x0000db29     0x1764 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
- .debug_info    0x0000f28d      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
- .debug_info    0x0000f3bd     0x158b C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- .debug_info    0x00010948     0x1257 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
- .debug_info    0x00011b9f     0x10a9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
- .debug_info    0x00012c48     0x27ad C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- .debug_info    0x000153f5      0x443 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
- .debug_info    0x00015838      0xb18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
- .debug_info    0x00016350      0x924 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
- .debug_info    0x00016c74      0xffb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
- .debug_info    0x00017c6f      0x113 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
- .debug_info    0x00017d82     0x12e8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
- .debug_info    0x0001906a      0x608 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
- .debug_info    0x00019672      0x940 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
- .debug_info    0x00019fb2     0x15f3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
- .debug_info    0x0001b5a5      0x12d c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_info    0x0001b6d2       0x6a c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_info    0x000017e7     0x78f8 ./src/proggreyshades.o
+ .debug_info    0x000090df      0x6b5 ./src/system_LPC43xx.o
+ .debug_info    0x00009794     0x1227 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_info    0x0000a9bb     0x2e21 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_info    0x0000d7dc     0x1764 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_info    0x0000ef40      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_info    0x0000f070     0x158b C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_info    0x000105fb     0x1257 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_info    0x00011852     0x10a9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_info    0x000128fb     0x27ad C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_info    0x000150a8      0x443 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_info    0x000154eb      0xb18 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_info    0x00016003      0x924 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_info    0x00016927      0xffb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_info    0x00017922      0x113 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_info    0x00017a35     0x12e8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_info    0x00018d1d      0x608 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_info    0x00019325      0x940 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_info    0x00019c65     0x15f3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_info    0x0001b258      0x12d c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_info    0x0001b385       0x6a c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
 .debug_abbrev   0x00000000     0x45f7
  .debug_abbrev  0x00000000      0x13f ./src/cr_cpp_config.o
@@ -2566,32 +2565,32 @@ OUTPUT(video.axf elf32-littlearm)
  .debug_abbrev  0x0000449f       0xf6 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
  .debug_abbrev  0x00004595       0x62 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
-.debug_loc      0x00000000     0x8833
+.debug_loc      0x00000000     0x87f3
  .debug_loc     0x00000000       0xa5 ./src/cr_cpp_config.o
  .debug_loc     0x000000a5       0xae ./src/cr_start_m0.o
  .debug_loc     0x00000153      0x232 ./src/cr_startup_lpc43xx.o
  .debug_loc     0x00000385      0x206 ./src/exec.o
  .debug_loc     0x0000058b      0x1d8 ./src/flash.o
- .debug_loc     0x00000763     0x168e ./src/proggreyshades.o
- .debug_loc     0x00001df1      0x714 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .debug_loc     0x00002505     0x2524 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
- .debug_loc     0x00004a29      0x903 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
- .debug_loc     0x0000532c       0x42 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
- .debug_loc     0x0000536e      0xe51 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- .debug_loc     0x000061bf      0x7c1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
- .debug_loc     0x00006980       0x26 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
- .debug_loc     0x000069a6       0x13 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- .debug_loc     0x000069b9       0x75 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
- .debug_loc     0x00006a2e      0x1fb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
- .debug_loc     0x00006c29      0x338 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
- .debug_loc     0x00006f61      0x8c1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
- .debug_loc     0x00007822       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
- .debug_loc     0x00007842      0x511 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
- .debug_loc     0x00007d53      0x259 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
- .debug_loc     0x00007fac      0x1a5 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
- .debug_loc     0x00008151      0x661 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
- .debug_loc     0x000087b2       0x47 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_loc     0x000087f9       0x3a c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_loc     0x00000763     0x164e ./src/proggreyshades.o
+ .debug_loc     0x00001db1      0x714 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_loc     0x000024c5     0x2524 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_loc     0x000049e9      0x903 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_loc     0x000052ec       0x42 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_loc     0x0000532e      0xe51 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_loc     0x0000617f      0x7c1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_loc     0x00006940       0x26 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_loc     0x00006966       0x13 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_loc     0x00006979       0x75 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_loc     0x000069ee      0x1fb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_loc     0x00006be9      0x338 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_loc     0x00006f21      0x8c1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_loc     0x000077e2       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_loc     0x00007802      0x511 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_loc     0x00007d13      0x259 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_loc     0x00007f6c      0x1a5 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_loc     0x00008111      0x661 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_loc     0x00008772       0x47 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_loc     0x000087b9       0x3a c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
 .debug_aranges  0x00000000      0xc18
  .debug_aranges
@@ -2649,34 +2648,34 @@ OUTPUT(video.axf elf32-littlearm)
  .debug_aranges
                 0x00000bf8       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
-.debug_ranges   0x00000000     0x13b0
+.debug_ranges   0x00000000     0x13d8
  .debug_ranges  0x00000000       0x38 ./src/cr_cpp_config.o
  .debug_ranges  0x00000038       0x28 ./src/cr_start_m0.o
  .debug_ranges  0x00000060       0x70 ./src/cr_startup_lpc43xx.o
  .debug_ranges  0x000000d0       0xb0 ./src/exec.o
  .debug_ranges  0x00000180       0x50 ./src/flash.o
  .debug_ranges  0x000001d0       0x10 ./src/main_m4.o
- .debug_ranges  0x000001e0      0x4b0 ./src/proggreyshades.o
- .debug_ranges  0x00000690       0x10 ./src/system_LPC43xx.o
- .debug_ranges  0x000006a0      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .debug_ranges  0x00000800      0x398 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
- .debug_ranges  0x00000b98       0xa0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
- .debug_ranges  0x00000c38       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
- .debug_ranges  0x00000c48       0xd0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- .debug_ranges  0x00000d18      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
- .debug_ranges  0x00000e48       0xa8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
- .debug_ranges  0x00000ef0       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- .debug_ranges  0x00000f18       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
- .debug_ranges  0x00000f48       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
- .debug_ranges  0x00001000       0xe0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
- .debug_ranges  0x000010e0       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
- .debug_ranges  0x00001148       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
- .debug_ranges  0x00001158       0xb0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
- .debug_ranges  0x00001208       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
- .debug_ranges  0x00001270       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
- .debug_ranges  0x000012c8       0xc8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
- .debug_ranges  0x00001390       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_ranges  0x000013a0       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_ranges  0x000001e0      0x4d8 ./src/proggreyshades.o
+ .debug_ranges  0x000006b8       0x10 ./src/system_LPC43xx.o
+ .debug_ranges  0x000006c8      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_ranges  0x00000828      0x398 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_ranges  0x00000bc0       0xa0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_ranges  0x00000c60       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_ranges  0x00000c70       0xd0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_ranges  0x00000d40      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_ranges  0x00000e70       0xa8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_ranges  0x00000f18       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_ranges  0x00000f40       0x30 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_ranges  0x00000f70       0xb8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_ranges  0x00001028       0xe0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_ranges  0x00001108       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_ranges  0x00001170       0x10 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_ranges  0x00001180       0xb0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_ranges  0x00001230       0x68 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_ranges  0x00001298       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_ranges  0x000012f0       0xc8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_ranges  0x000013b8       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_ranges  0x000013c8       0x10 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
 .debug_macro    0x00000000     0x65e2
  .debug_macro   0x00000000       0xcf ./src/cr_cpp_config.o
@@ -2776,36 +2775,36 @@ OUTPUT(video.axf elf32-littlearm)
  .debug_macro   0x0000652f       0x6d ./src/system_LPC43xx.o
  .debug_macro   0x0000659c       0x46 ./src/system_LPC43xx.o
 
-.debug_line     0x00000000     0x6703
+.debug_line     0x00000000     0x6709
  .debug_line    0x00000000      0x272 ./src/cr_cpp_config.o
  .debug_line    0x00000272      0x249 ./src/cr_start_m0.o
  .debug_line    0x000004bb       0xdf ./src/cr_startup_lpc43xx.o
  .debug_line    0x0000059a      0x6e5 ./src/exec.o
  .debug_line    0x00000c7f      0x328 ./src/flash.o
  .debug_line    0x00000fa7      0x885 ./src/main_m4.o
- .debug_line    0x0000182c      0xd7b ./src/proggreyshades.o
- .debug_line    0x000025a7      0x304 ./src/system_LPC43xx.o
- .debug_line    0x000028ab      0x3de C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .debug_line    0x00002c89      0xaaa C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
- .debug_line    0x00003733      0x3ca C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
- .debug_line    0x00003afd      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
- .debug_line    0x00003c5d      0x4e4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- .debug_line    0x00004141      0x4a3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
- .debug_line    0x000045e4      0x426 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
- .debug_line    0x00004a0a      0x28c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- .debug_line    0x00004c96      0x1cb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
- .debug_line    0x00004e61      0x272 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
- .debug_line    0x000050d3      0x273 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
- .debug_line    0x00005346      0x360 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
- .debug_line    0x000056a6      0x105 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
- .debug_line    0x000057ab      0x41d C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
- .debug_line    0x00005bc8      0x28d C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
- .debug_line    0x00005e55      0x267 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
- .debug_line    0x000060bc      0x4f9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
- .debug_line    0x000065b5      0x101 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_line    0x000066b6       0x4d c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_line    0x0000182c      0xd81 ./src/proggreyshades.o
+ .debug_line    0x000025ad      0x304 ./src/system_LPC43xx.o
+ .debug_line    0x000028b1      0x3de C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_line    0x00002c8f      0xaaa C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_line    0x00003739      0x3ca C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_line    0x00003b03      0x160 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_line    0x00003c63      0x4e4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_line    0x00004147      0x4a3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_line    0x000045ea      0x426 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_line    0x00004a10      0x28c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_line    0x00004c9c      0x1cb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_line    0x00004e67      0x272 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_line    0x000050d9      0x273 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_line    0x0000534c      0x360 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_line    0x000056ac      0x105 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_line    0x000057b1      0x41d C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_line    0x00005bce      0x28d C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_line    0x00005e5b      0x267 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_line    0x000060c2      0x4f9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_line    0x000065bb      0x101 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_line    0x000066bc       0x4d c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
 
-.debug_str      0x00000000    0x1cd7a
+.debug_str      0x00000000    0x1cd77
  .debug_str     0x00000000     0x3eef ./src/cr_cpp_config.o
                                0x4015 (size before relaxing)
  .debug_str     0x00003eef      0xbbf ./src/cr_start_m0.o
@@ -2818,47 +2817,47 @@ OUTPUT(video.axf elf32-littlearm)
                                0x5dc4 (size before relaxing)
  .debug_str     0x00011dd3     0x1d7a ./src/main_m4.o
                               0x10101 (size before relaxing)
- .debug_str     0x00013b4d     0x47f9 ./src/proggreyshades.o
-                              0x1335e (size before relaxing)
- .debug_str     0x00018346      0x4d6 ./src/system_LPC43xx.o
+ .debug_str     0x00013b4d     0x46f6 ./src/proggreyshades.o
+                              0x13236 (size before relaxing)
+ .debug_str     0x00018243      0x525 ./src/system_LPC43xx.o
                                0x85a9 (size before relaxing)
- .debug_str     0x0001881c      0x625 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_str     0x00018768      0x625 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
                                 0x93e (size before relaxing)
- .debug_str     0x00018e41      0x8ff C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_str     0x00018d8d      0x8ff C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
                                 0xde1 (size before relaxing)
- .debug_str     0x00019740     0x13da C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_str     0x0001968c     0x13da C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
                                0x1602 (size before relaxing)
- .debug_str     0x0001ab1a       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_str     0x0001aa66       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
                                 0x25e (size before relaxing)
- .debug_str     0x0001ab42      0x4b1 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_str     0x0001aa8e      0x542 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
                                0x109c (size before relaxing)
- .debug_str     0x0001aff3      0x279 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_str     0x0001afd0      0x279 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
                                 0x9e2 (size before relaxing)
- .debug_str     0x0001b26c      0x384 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_str     0x0001b249      0x384 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
                                 0x96c (size before relaxing)
- .debug_str     0x0001b5f0      0x6a9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_str     0x0001b5cd      0x6a9 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
                                0x1b39 (size before relaxing)
- .debug_str     0x0001bc99       0x91 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_str     0x0001bc76       0x91 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
                                 0x3bb (size before relaxing)
- .debug_str     0x0001bd2a       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_str     0x0001bd07       0x1e C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
                                 0x3c1 (size before relaxing)
- .debug_str     0x0001bd48       0xdb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_str     0x0001bd25       0xdb C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
                                 0x49a (size before relaxing)
- .debug_str     0x0001be23       0xc3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_str     0x0001be00       0xc3 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
                                 0x587 (size before relaxing)
- .debug_str     0x0001bee6       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_str     0x0001bec3       0x38 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
                                 0x23e (size before relaxing)
- .debug_str     0x0001bf1e      0x60a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_str     0x0001befb      0x62a C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
                                0x1002 (size before relaxing)
- .debug_str     0x0001c528      0x124 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_str     0x0001c525      0x124 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
                                 0x7c6 (size before relaxing)
- .debug_str     0x0001c64c      0x138 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_str     0x0001c649      0x138 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
                                 0x55f (size before relaxing)
- .debug_str     0x0001c784      0x4fd C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_str     0x0001c781      0x4fd C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
                                0x10c9 (size before relaxing)
- .debug_str     0x0001cc81       0xd4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_str     0x0001cc7e       0xd4 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
                                 0x25a (size before relaxing)
- .debug_str     0x0001cd55       0x25 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_str     0x0001cd52       0x25 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
                                 0x1a8 (size before relaxing)
 
 .comment        0x00000000     0x1057
@@ -3075,65 +3074,65 @@ OUTPUT(video.axf elf32-littlearm)
  .arm_vfe_header
                 0x00000030        0x4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(winbond.o)
 
-.debug_frame    0x00000000     0x2dfc
+.debug_frame    0x00000000     0x2de4
  .debug_frame   0x00000000       0x70 ./src/cr_cpp_config.o
  .debug_frame   0x00000070       0x28 ./src/cr_start_m0.o
  .debug_frame   0x00000098       0xf0 ./src/cr_startup_lpc43xx.o
  .debug_frame   0x00000188      0x170 ./src/exec.o
  .debug_frame   0x000002f8       0x68 ./src/flash.o
  .debug_frame   0x00000360       0x28 ./src/main_m4.o
- .debug_frame   0x00000388      0x2a8 ./src/proggreyshades.o
- .debug_frame   0x00000630       0x20 ./src/system_LPC43xx.o
- .debug_frame   0x00000650      0x480 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spifi_rom_api.o)
- .debug_frame   0x00000ad0       0xe8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(falcon_details.o)
- .debug_frame   0x00000bb8       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(amic.o)
- .debug_frame   0x00000c14       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
- .debug_frame   0x00000c74       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(chi.o)
- .debug_frame   0x00000ccc       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(eon.o)
- .debug_frame   0x00000d2c       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(esmt.o)
- .debug_frame   0x00000d8c       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(giga.o)
- .debug_frame   0x00000dec       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
- .debug_frame   0x00000e48       0xb4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(numonyx.o)
- .debug_frame   0x00000efc       0x70 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spansion.o)
- .debug_frame   0x00000f6c       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
- .debug_frame   0x00000fc4       0xac C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(winbond.o)
- .debug_frame   0x00001070      0x28c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
- .debug_frame   0x000012fc      0x5e8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
- .debug_frame   0x000018e4      0x13c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
- .debug_frame   0x00001a20       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
- .debug_frame   0x00001a40      0x210 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
- .debug_frame   0x00001c50      0x250 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
- .debug_frame   0x00001ea0      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
- .debug_frame   0x00001fd0       0x74 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
- .debug_frame   0x00002044       0x80 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
- .debug_frame   0x000020c4      0x128 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
- .debug_frame   0x000021ec       0xc0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
- .debug_frame   0x000022ac      0x1a0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
- .debug_frame   0x0000244c       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
- .debug_frame   0x00002474      0x19c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
- .debug_frame   0x00002610       0xe4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
- .debug_frame   0x000026f4       0xa4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
- .debug_frame   0x00002798      0x234 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
- .debug_frame   0x000029cc       0x28 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x000029f4       0x50 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(bpabi.o)
- .debug_frame   0x00002a44       0x34 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
- .debug_frame   0x00002a78       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
- .debug_frame   0x00002aa8       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-abs.o)
- .debug_frame   0x00002ac8       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-aeabi_memcpy.o)
- .debug_frame   0x00002ae8       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-init.o)
- .debug_frame   0x00002b14       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
- .debug_frame   0x00002b44       0x28 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memcpy.o)
- .debug_frame   0x00002b6c       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memset.o)
- .debug_frame   0x00002b8c       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x00002bb8       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x00002be4       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x00002c10       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcpy.o)
- .debug_frame   0x00002c30       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strlen.o)
- .debug_frame   0x00002c50       0x5c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-reent.o)
- .debug_frame   0x00002cac       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
- .debug_frame   0x00002cdc       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opvnt.o)
- .debug_frame   0x00002cfc       0x68 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
- .debug_frame   0x00002d64       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opnt.o)
- .debug_frame   0x00002d90       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
- .debug_frame   0x00002dbc       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
- .debug_frame   0x00002ddc       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-errno.o)
+ .debug_frame   0x00000388      0x290 ./src/proggreyshades.o
+ .debug_frame   0x00000618       0x20 ./src/system_LPC43xx.o
+ .debug_frame   0x00000638      0x480 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spifi_rom_api.o)
+ .debug_frame   0x00000ab8       0xe8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(falcon_details.o)
+ .debug_frame   0x00000ba0       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(amic.o)
+ .debug_frame   0x00000bfc       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(atmel.o)
+ .debug_frame   0x00000c5c       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(chi.o)
+ .debug_frame   0x00000cb4       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(eon.o)
+ .debug_frame   0x00000d14       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(esmt.o)
+ .debug_frame   0x00000d74       0x60 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(giga.o)
+ .debug_frame   0x00000dd4       0x5c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(macronix.o)
+ .debug_frame   0x00000e30       0xb4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(numonyx.o)
+ .debug_frame   0x00000ee4       0x70 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(spansion.o)
+ .debug_frame   0x00000f54       0x58 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(sst.o)
+ .debug_frame   0x00000fac       0xac C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\video\src\libfalcon_m4_spifi_drv.a(winbond.o)
+ .debug_frame   0x00001058      0x28c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(camera.o)
+ .debug_frame   0x000012e4      0x5e8 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(chirp.o)
+ .debug_frame   0x000018cc      0x13c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_cgu.o)
+ .debug_frame   0x00001a08       0x20 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_scu.o)
+ .debug_frame   0x00001a28      0x210 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_uart.o)
+ .debug_frame   0x00001c38      0x250 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(param.o)
+ .debug_frame   0x00001e88      0x130 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(pixy_init.o)
+ .debug_frame   0x00001fb8       0x74 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(platform_config.o)
+ .debug_frame   0x0000202c       0x80 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(power.o)
+ .debug_frame   0x000020ac      0x128 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(sccb.o)
+ .debug_frame   0x000021d4       0xc0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(smlink.o)
+ .debug_frame   0x00002294      0x1a0 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(debug_frmwrk.o)
+ .debug_frame   0x00002434       0x28 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(fpu_init.o)
+ .debug_frame   0x0000245c      0x19c C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(ipc_mbx.o)
+ .debug_frame   0x000025f8       0xe4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(lpc43xx_adc.o)
+ .debug_frame   0x000026dc       0xa4 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(misc.o)
+ .debug_frame   0x00002780      0x234 C:\Users\ouroborus\Documents\BACHELOR\AimBot\Pixy\gcc\pixy_m4\Release\libpixy_m4.a(usbhw.o)
+ .debug_frame   0x000029b4       0x28 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x000029dc       0x50 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(bpabi.o)
+ .debug_frame   0x00002a2c       0x34 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_divdi3.o)
+ .debug_frame   0x00002a60       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp\libgcc.a(_udivdi3.o)
+ .debug_frame   0x00002a90       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-abs.o)
+ .debug_frame   0x00002ab0       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-aeabi_memcpy.o)
+ .debug_frame   0x00002ad0       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00002afc       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-malloc.o)
+ .debug_frame   0x00002b2c       0x28 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memcpy.o)
+ .debug_frame   0x00002b54       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x00002b74       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x00002ba0       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00002bcc       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x00002bf8       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strcpy.o)
+ .debug_frame   0x00002c18       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-strlen.o)
+ .debug_frame   0x00002c38       0x5c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-reent.o)
+ .debug_frame   0x00002c94       0x30 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_handler.o)
+ .debug_frame   0x00002cc4       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opvnt.o)
+ .debug_frame   0x00002ce4       0x68 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(list.o)
+ .debug_frame   0x00002d4c       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libstdc++_nano.a(new_opnt.o)
+ .debug_frame   0x00002d78       0x2c c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_sbrk.o)
+ .debug_frame   0x00002da4       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libcr_newlib_nohost.a(_cr_check_heap.o)
+ .debug_frame   0x00002dc4       0x20 c:/nxp/lpcxpresso_7.6.2_326/lpcxpresso/tools/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp\libc_nano.a(lib_a-errno.o)
