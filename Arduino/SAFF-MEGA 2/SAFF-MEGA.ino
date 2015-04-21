@@ -180,7 +180,7 @@ void loop()
 			}
 
 			//Power check
-			checkButtonAndVoltage();
+			//checkButtonAndVoltage();
 			lastPassTime = millis();
 		}
 	}
@@ -200,7 +200,7 @@ void Mode_Auto()
 
 	if (x != 0 || y != 0)
 	{
-		m_pixySerial.pixyCmd(PIXY_STOP); // Stop pixy while moving
+		//m_pixySerial.pixyCmd(PIXY_STOP); // Stop pixy while moving DEPRECATED
 		m_escSerial.sendXY(x, y, VECTOR); // Send to Brugi if any movement
 
 		// Wait for Brugi feedback (brugi in position)
