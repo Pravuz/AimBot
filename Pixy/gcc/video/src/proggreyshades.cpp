@@ -269,15 +269,15 @@ void GreyShades::objCalcs() {
 
 	sPoint16 m_vector;
 
-	m_vector.m_x = AIM_X
-			- (((m_largestObj.bottomRight.m_x - m_largestObj.topLeft.m_x) >> 1)
-					+ m_largestObj.topLeft.m_x);
-	m_vector.m_y = AIM_Y
-			- (((m_largestObj.topLeft.m_y - m_largestObj.bottomRight.m_y) >> 1)
-					+ m_largestObj.bottomRight.m_y);
+	// calculate vector FROM center of view TO object.
+	m_vector.m_x = (((m_largestObj.bottomRight.m_x - m_largestObj.topLeft.m_x) >> 1)
+					+ m_largestObj.topLeft.m_x) - AIM_X;
+	m_vector.m_y = (((m_largestObj.topLeft.m_y - m_largestObj.bottomRight.m_y) >> 1)
+					+ m_largestObj.bottomRight.m_y) - AIM_Y;
 
 	m_vectorsToCenter.push_back(m_vector);
 
+	// get median vector of last 5 vectors calculated. (filter)
 	if (m_vectorsToCenter.size() >= 5) {
 		std::list<int> medianOfVTC_x, medianOfVTC_y;
 		for (std::list<sPoint16>::iterator i = m_vectorsToCenter.begin();
@@ -301,6 +301,9 @@ void GreyShades::objCalcs() {
 
 		// We now have a vector ready for arduino
 		m_serial.sendVector(m_medianVector);
+
+		// we stop running until arduino let us know our vector is executed.
+		running = false;
 	}
 
 	while (m_vectorsToCenter.size() > 5)
