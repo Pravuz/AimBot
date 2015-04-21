@@ -48,8 +48,8 @@ struct baseArduinoSerial {
 			}
 			while (true) {
 				m_rx[len] = (uint8_t)m_serial.read();
-				len++;
 				if ((uint8_t)m_serial.peek() == AIM_SYNC) break; //next packet will have to wait.
+				len++;
 			}
 			if (debug)
 			{

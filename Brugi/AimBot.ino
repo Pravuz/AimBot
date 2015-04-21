@@ -8,7 +8,7 @@
 #define bldc1 0.1171875
 #define bldc2 0.05859375
 #define DIR_MASK 0x80
-#define SPEED_FACTOR 10
+#define SPEED_FACTOR 30
 #define Y_MIN_LIMIT -250
 #define Y_MAX_LIMIT 150
 #define MOTORPOWER 150 // 0 to 255
@@ -42,6 +42,7 @@ void setup()
 	//moving to 0 pos. 
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
+	megaSerial.sendPosReached();
 #endif
 }
 
@@ -55,14 +56,12 @@ void loop()
 		if (!z_Pos) z_count = 0;
 		if (!y_Pos) y_count = 0;
 
-		lowPassFilter();
+		//lowPassFilter();
 
 		if (!rc_mode) moveToPos();
+		megaSerial.flush();
 	}
-
 	if (rc_mode) moveWithSpeed();
-
-	megaSerial.flush();
 }
 
 void lowPassFilter()
@@ -77,7 +76,7 @@ void moveToPos(){
 	z_count = 0;
 	y_count = 0;
 	
-	if (!(z_Pos  | y_Pos)) return; // z and y is 0, nothing to do
+	//if (!(z_Pos | y_Pos)) return; // z and y is 0, nothing to do
 
 	//converting angle to motor steps.
 	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
@@ -127,7 +126,7 @@ void moveToPos(){
 			}
 		}		
 	}
-	if (z_Pos_Steps == 0 && y_Pos_Steps == 0) megaSerial.sendPosReached();
+	megaSerial.sendPosReached();
 }
 
 void moveWithSpeed(){

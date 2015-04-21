@@ -89,6 +89,7 @@ bool isDSLR = false;
 
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
+volatile bool isFirstAuto = true;
 
 // Power check
 volatile unsigned long lastPowerCheck = 0;
@@ -180,7 +181,7 @@ void loop()
 			}
 
 			//Power check
-			//checkButtonAndVoltage();
+			checkButtonAndVoltage();
 			lastPassTime = millis();
 		}
 	}
@@ -193,18 +194,35 @@ void Sleep_mode()
 }
 void Mode_Auto()
 {
+	if (isFirstAuto)
+	{
+		isFirstAuto = false;
+		// Wait for Brugi feedback (brugi in position after init)
+		while (Serial2.available() < 1){ delay(1); }
+		while (Serial2.available() > 0){ Serial2.read(); }
+		m_pixySerial.pixyCmd(PIXY_START); // Start pixy again
+	}
 	if (!m_pixySerial.update()) return; // update failed, nothing more to do, returning
 
 	char x = getVECTx(m_pixySerial.getX());
 	char y = getVECTy(m_pixySerial.getY());
-
-	if (x != 0 || y != 0)
+	//todo: add distance filter, not moving if movement is small. but take picture.
+	Serial.println("yeye"); delay(10);
+	if (x | y)
 	{
 		//m_pixySerial.pixyCmd(PIXY_STOP); // Stop pixy while moving DEPRECATED
 		m_escSerial.sendXY(x, y, VECTOR); // Send to Brugi if any movement
 
+		unsigned int timeout = 200;
 		// Wait for Brugi feedback (brugi in position)
-		while (Serial2.available() < 1);
+		while (Serial2.available() < 1)
+		{ 
+			if (timeout==0) break; //esc did not reach position, but continue regardless. 
+			Serial.println("waiting"); delay(10); 
+			timeout--;
+		}
+		//waiting for rig to settle
+		//delay(2000);
 
 		takePicture(); // Arrived at destination, take picture
 
@@ -322,6 +340,7 @@ void calculatePWMch3() // Mode selector
 			currentMode = SLEEP_MODE;
 			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
 											 // safety precaution
+			
 		}
 		else if (timepassed3 > 1200)  {
 			if (currentMode != AUTO && megaDebug) Serial.println("Mode is now set to AUTO");
@@ -331,6 +350,7 @@ void calculatePWMch3() // Mode selector
 				digitalWrite(PIX_PWR, HIGH);
 				digitalWrite(ESC_PWR, HIGH);
 				digitalWrite(FPV_PWR, LOW);
+				isFirstAuto = true;
 			}
 			currentMode = AUTO;
 		}
