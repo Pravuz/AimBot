@@ -34,6 +34,7 @@ nameStyle.variable.suffix=
 nameStyle.variable.wordDelimiter=
 org.eclipse.cdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
 org.eclipse.cdt.ui.text.templates.custom=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+scalability.detect=false
 sourceHoverBackgroundColor=255,255,225
 spelling_locale_initialized=true
 spelling_user_dictionary_encoding=Cp1252
