@@ -9,11 +9,12 @@
 #define bldc2 0.05859375
 #define DIR_MASK 0x80
 #define SPEED_FACTOR 30
-#define Y_MIN_LIMIT -250
-#define Y_MAX_LIMIT 150
-#define MOTORPOWER 150 // 0 to 255
+#define Y_MIN_LIMIT -190
+#define Y_MAX_LIMIT 370
+#define MOTORPOWER 180 // 0 to 255
+#define MOTORPOWER_HOLD 255
 
-char z_Pos = 0, y_Pos = 0; //Verdier som kommer inn serielt fra MEGA
+char z_Pos = 0, y_Pos = 0; 
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
 int8_t z_count, y_count;
@@ -42,6 +43,9 @@ void setup()
 	//moving to 0 pos. 
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
+	delay(250); 
+	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
+	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
 	megaSerial.sendPosReached();
 #endif
 }
@@ -126,6 +130,9 @@ void moveToPos(){
 			}
 		}		
 	}
+	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
+	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);	
+	delay(250);
 	megaSerial.sendPosReached();
 }
 
@@ -138,14 +145,22 @@ void moveWithSpeed(){
 		if(y_Pos > 1 || y_Pos < -1) y_count += y_Pos;
 
 		if (z_count >= SPEED_FACTOR || z_count <= -SPEED_FACTOR){
-			z_count = 0;
+#if 1
+			if (z_count > 0) z_count -= SPEED_FACTOR;
+			if (z_count < 0) z_count += SPEED_FACTOR;
+#endif
+			//z_count = 0;
 			if (z_Pos & DIR_MASK) z_Motor--;
 			else z_Motor++;
-			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
 		}
 
 		if (y_count >= SPEED_FACTOR || y_count <= -SPEED_FACTOR){
-			y_count = 0;
+#if 1
+			if (y_count > 0) y_count -= SPEED_FACTOR;
+			if (y_count < 0) y_count += SPEED_FACTOR;
+#endif
+			//y_count = 0;
 			if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
 				y_Motor--;
 				y_Motor_Signed--;
@@ -154,7 +169,7 @@ void moveWithSpeed(){
 				y_Motor++;
 				y_Motor_Signed++;
 			}
-			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
 		}
 	}
 }

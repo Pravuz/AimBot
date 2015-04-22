@@ -16,8 +16,8 @@
 
 // Power switching
 #define ESC_PWR				2
-#define FPV_PWR				4
 #define PIX_PWR				3
+#define FPV_PWR				4
 #define RIG_PWR				5
 #define BTN_PWR				A0
 #define BAT_VOLTAGE			A1
@@ -29,16 +29,11 @@ int CAM_FOCUS_DELAY = 200;
 #define CAM_TRIGGER			6
 #define CAM_FOCUS			7
 
-// MISC
-int LOOP_TIME = 50;
-int PWR_CHECK_INTERVAL = 1000;
-bool modeSequenceHasBeenDone = false; // At each restart mode has to go to sleep before start to avoid
-									// sudden start in auto/RC with bad consecuences
-
 // USB
 #define USBconnectedPIN		26
 #define USBpulldownPIN		28
 bool USBisConnected = false;
+bool megaDebug = DEBUG;
 
 // RC defs
 int xRCmin = 1916;
@@ -53,12 +48,10 @@ int xVECT_INmin = -127;
 int xVECT_INmax = 127;
 int xVECT_OUTmin = -38;
 int xVECT_OUTmax = 38;
-int yVECT_INmin = -100;
-int yVECT_INmax = 100;
-int yVECT_OUTmin = -38;
-int yVECT_OUTmax = 38;
-
-bool megaDebug = DEBUG;
+int yVECT_INmin = -98;
+int yVECT_INmax = 98;
+int yVECT_OUTmin = -18;
+int yVECT_OUTmax = 18;
 
 enum Aimbot_Mode
 {
@@ -90,9 +83,14 @@ bool isDSLR = false;
 // Mode/loop related
 volatile unsigned long lastPassTime = 0;
 volatile bool isFirstAuto = true;
+int LOOP_TIME = 50;
+bool modeSequenceHasBeenDone = false; // At each restart mode has to go to sleep before start to avoid
+// sudden start in auto/RC with bad consecuences
+uint8_t pixyUpdateCount = 0;
 
 // Power check
 volatile unsigned long lastPowerCheck = 0;
+int PWR_CHECK_INTERVAL = 1000;
 
 // Serial interface
 static AimBot_Serial m_pixySerial(Serial3);
@@ -151,11 +149,12 @@ void setup()
 
 void loop()
 {
-	//Serial.println(lastRCvalCH4);
+#if 1
 	if (isUSBconnected() && !DEBUG) // Settings & debug
 	{
 		communicateWithPC();
 	}
+#endif
 	if(modeSequenceHasBeenDone) // normal operation:
 	{
 		if (checkCameraTrigger())
@@ -192,6 +191,7 @@ void Sleep_mode()
 {
 	// Nope.
 }
+
 void Mode_Auto()
 {
 	if (isFirstAuto)
@@ -200,29 +200,39 @@ void Mode_Auto()
 		// Wait for Brugi feedback (brugi in position after init)
 		while (Serial2.available() < 1){ delay(1); }
 		while (Serial2.available() > 0){ Serial2.read(); }
-		m_pixySerial.pixyCmd(PIXY_START); // Start pixy again
+		m_pixySerial.pixyCmd(PIXY_START); // Start pixy
+		pixyUpdateCount = 0;
+		return; //pixy wont respond immediatly, so we don't need to continue here. 
 	}
-	if (!m_pixySerial.update()) return; // update failed, nothing more to do, returning
+	if (!m_pixySerial.update()){
+		pixyUpdateCount++;
+		// Making sure pixy is running, if it is then nothing happens. if it's not, then this will make sure it is. 
+		if (pixyUpdateCount >= 20){ 
+			m_pixySerial.pixyCmd(PIXY_START); 
+			pixyUpdateCount = 0;
+		}
+		return; // update failed, nothing more to do, returning
+	} 
+
 
 	char x = getVECTx(m_pixySerial.getX());
 	char y = getVECTy(m_pixySerial.getY());
+
 	//todo: add distance filter, not moving if movement is small. but take picture.
-	Serial.println("yeye"); delay(10);
 	if (x | y)
 	{
-		//m_pixySerial.pixyCmd(PIXY_STOP); // Stop pixy while moving DEPRECATED
 		m_escSerial.sendXY(x, y, VECTOR); // Send to Brugi if any movement
-
-		unsigned int timeout = 200;
+		uint8_t timeout = 200;
 		// Wait for Brugi feedback (brugi in position)
-		while (Serial2.available() < 1)
+		while (Serial2.available() == 0)
 		{ 
 			if (timeout==0) break; //esc did not reach position, but continue regardless. 
-			Serial.println("waiting"); delay(10); 
+			Serial.println("waiting"); delay(20); 
 			timeout--;
 		}
+		while (Serial2.available() > 0){ Serial2.read(); }
 		//waiting for rig to settle
-		//delay(2000);
+		delay(500);
 
 		takePicture(); // Arrived at destination, take picture
 
@@ -330,12 +340,12 @@ void calculatePWMch3() // Mode selector
 	{
 		lastRCvalCH3 = timepassed3;
 		if (timepassed3 > 1800){
-			if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
 			if (currentMode != SLEEP_MODE)
 			{
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
 				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
 				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
+				if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
 			}
 			currentMode = SLEEP_MODE;
 			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
@@ -343,7 +353,16 @@ void calculatePWMch3() // Mode selector
 			
 		}
 		else if (timepassed3 > 1200)  {
-			if (currentMode != AUTO && megaDebug) Serial.println("Mode is now set to AUTO");
+			if (currentMode != MANUAL && modeSequenceHasBeenDone){
+				// Manual, no pixy feed
+				digitalWrite(PIX_PWR, LOW);
+				digitalWrite(ESC_PWR, HIGH);
+				digitalWrite(FPV_PWR, HIGH);
+				if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
+			}
+			currentMode = MANUAL;
+		}
+		else {
 			if (currentMode != AUTO && modeSequenceHasBeenDone)
 			{
 				// Auto, no video feed
@@ -351,18 +370,9 @@ void calculatePWMch3() // Mode selector
 				digitalWrite(ESC_PWR, HIGH);
 				digitalWrite(FPV_PWR, LOW);
 				isFirstAuto = true;
+				if (currentMode != AUTO && megaDebug) Serial.println("Mode is now set to AUTO");
 			}
-			currentMode = AUTO;
-		}
-		else {
-			if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
-			if (currentMode != MANUAL && modeSequenceHasBeenDone){
-				// Manual, no pixy feed
-				digitalWrite(PIX_PWR, LOW);
-				digitalWrite(ESC_PWR, HIGH);
-				digitalWrite(FPV_PWR, HIGH);
-			}
-			currentMode = MANUAL;
+			currentMode = AUTO;			
 		}
 	}
 }
@@ -405,7 +415,6 @@ void checkButtonAndVoltage()
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
 		// bat low, power off
-		if (megaDebug)Serial.println("voltage - shutdown");
 		if (megaDebug)Serial.println("voltage - shutdown");
 		digitalWrite(PIX_PWR, LOW);
 		digitalWrite(ESC_PWR, LOW);

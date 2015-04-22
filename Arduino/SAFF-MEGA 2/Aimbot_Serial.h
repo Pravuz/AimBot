@@ -40,7 +40,7 @@ struct baseArduinoSerial {
 	}
 
 	bool update() {
-		if (m_serial.available()>4) {
+		if (m_serial.available()>3) {
 			int len = 0;
 			if (!sync()) {
 				if (debug) Serial.println("Serial update: failed");
@@ -48,6 +48,7 @@ struct baseArduinoSerial {
 			}
 			while (true) {
 				m_rx[len] = (uint8_t)m_serial.read();
+				if (m_serial.available() == 0) break;
 				if ((uint8_t)m_serial.peek() == AIM_SYNC) break; //next packet will have to wait.
 				len++;
 			}
