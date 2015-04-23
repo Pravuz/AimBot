@@ -9,12 +9,13 @@
 #define bldc2 0.05859375
 #define DIR_MASK 0x80
 #define SPEED_FACTOR 30
-#define Y_MIN_LIMIT -190
-#define Y_MAX_LIMIT 370
-#define MOTORPOWER 180 // 0 to 255
-#define MOTORPOWER_HOLD 255
+#define SPEED_FACTOR_PIXY 20
+#define Y_MIN_LIMIT -160
+#define Y_MAX_LIMIT 320
+#define MOTORPOWER 100 // 0 to 255
+#define MOTORPOWER_HOLD 150
 
-char z_Pos = 0, y_Pos = 0; 
+char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
 int8_t z_count, y_count;
@@ -43,7 +44,7 @@ void setup()
 	//moving to 0 pos. 
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
-	delay(250); 
+	delay(250);
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
 	megaSerial.sendPosReached();
@@ -79,20 +80,40 @@ void lowPassFilter()
 void moveToPos(){
 	z_count = 0;
 	y_count = 0;
-	
+
 	//if (!(z_Pos | y_Pos)) return; // z and y is 0, nothing to do
 
 	//converting angle to motor steps.
 	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
 	y_Pos_Steps = y_Pos / bldc1;
 
-	while ((z_Pos_Steps!=0) || (y_Pos_Steps!=0))
+	uint16_t y_skipCount = 0, z_skipCount = 0;
+#if 0
+	uint8_t generalSpeedFactor = 0;
+#endif
+	while ((z_Pos_Steps != 0) || (y_Pos_Steps != 0))
 	{
 		if (motorUpdate)
 		{
 			motorUpdate = false;
+#if 0
+			/* The speed of the motorcontroller is constant, updating once every 31.5 microseconds. 
+			we want to slow this down, using generalSpeedFactor in the following way. 
+			*/
+			if (generalSpeedFactor) {
+				generalSpeedFactor--;
+				continue; //skips this iteration, waiting for the next time motorUpdate is set. 
+			}
+			else generalSpeedFactor = 4;
+#endif
+			//when we are closing in on our position, we want to slow down gradually
+			if (!y_skipCount && abs(y_Pos_Steps) < SPEED_FACTOR_PIXY/2) y_skipCount = SPEED_FACTOR_PIXY/2 - abs(y_Pos_Steps);
+			if(y_skipCount) y_skipCount--;
+			if (!z_skipCount && abs(z_Pos_Steps) < SPEED_FACTOR_PIXY) z_skipCount = SPEED_FACTOR_PIXY - abs(y_Pos_Steps);
+			if(z_skipCount) z_skipCount--;
 
-			if (y_Pos_Steps != 0)
+
+			if (!y_skipCount && y_Pos_Steps != 0)
 			{
 				if (y_Pos_Steps > 0)
 				{
@@ -114,7 +135,7 @@ void moveToPos(){
 				}
 				MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 			}
-			if (z_Pos_Steps != 0)
+			if (!z_skipCount && z_Pos_Steps != 0)
 			{
 				if (z_Pos_Steps > 0)
 				{
@@ -128,11 +149,13 @@ void moveToPos(){
 				}
 				MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 			}
-		}		
+		}
 	}
+#if 0
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
-	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);	
+	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
 	delay(250);
+#endif
 	megaSerial.sendPosReached();
 }
 
@@ -140,9 +163,9 @@ void moveWithSpeed(){
 
 	if (motorUpdate){
 		motorUpdate = false;
-		
-		if(z_Pos > 1 || z_Pos < -1) z_count += z_Pos;
-		if(y_Pos > 1 || y_Pos < -1) y_count += y_Pos;
+
+		if (z_Pos > 1 || z_Pos < -1) z_count += z_Pos;
+		if (y_Pos > 1 || y_Pos < -1) y_count += y_Pos;
 
 		if (z_count >= SPEED_FACTOR || z_count <= -SPEED_FACTOR){
 #if 1

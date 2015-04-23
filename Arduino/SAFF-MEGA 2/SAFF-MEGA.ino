@@ -1,4 +1,4 @@
-#define __DEBUG
+//#define __DEBUG
 #define __MEGA
 #include "Aimbot_Serial.h"
 #include "eeprom.h"
@@ -46,8 +46,8 @@ int yRCMAPmin = -10;
 int yRCMAPmax = 10;
 int xVECT_INmin = -127;
 int xVECT_INmax = 127;
-int xVECT_OUTmin = -38;
-int xVECT_OUTmax = 38;
+int xVECT_OUTmin = -31;
+int xVECT_OUTmax = 31;
 int yVECT_INmin = -98;
 int yVECT_INmax = 98;
 int yVECT_OUTmin = -18;
@@ -105,8 +105,8 @@ void setup()
 	// Skip this during dev
 #endif
 	// Setup serial
-	Serial.begin(BAUDRATE);	// Usb debug
-	if (megaDebug) Serial.println("Setup started");
+	if(megaDebug || isUSBconnected()) Serial.begin(BAUDRATE);	// Usb debug
+	if(megaDebug) Serial.println("Setup started");
 	Serial2.begin(BAUDRATE); //m_pixySerial begin
 	Serial3.begin(BAUDRATE); //m_escSerial begin
 
@@ -150,7 +150,7 @@ void setup()
 void loop()
 {
 #if 1
-	if (isUSBconnected() && !DEBUG) // Settings & debug
+	if (isUSBconnected() && !megaDebug) // Settings & debug
 	{
 		communicateWithPC();
 	}
@@ -227,12 +227,13 @@ void Mode_Auto()
 		while (Serial2.available() == 0)
 		{ 
 			if (timeout==0) break; //esc did not reach position, but continue regardless. 
-			Serial.println("waiting"); delay(20); 
+			if(megaDebug) Serial.println("waiting"); 
+			delay(10); 
 			timeout--;
 		}
 		while (Serial2.available() > 0){ Serial2.read(); }
 		//waiting for rig to settle
-		delay(500);
+		delay(250);
 
 		takePicture(); // Arrived at destination, take picture
 
@@ -283,7 +284,7 @@ void takePicture()
 		int diff = millis() - lastPictureTime;
 		if (diff > CAM_TRIGGER_DELAY)
 		{
-			Serial.println("PICTURE!");
+			if(megaDebug) Serial.println("PICTURE!");
 			digitalWrite(CAM_TRIGGER, HIGH);
 			delay(CAM_BTN_DELAY);
 			digitalWrite(CAM_TRIGGER, LOW);
@@ -396,10 +397,10 @@ void checkButtonAndVoltage()
 {
 	if (isUSBconnected()) return; // usb is connected, no need to check bat voltage etc.
 	if (megaDebug)Serial.println(analogRead(BTN_PWR));
-	if (analogRead(BTN_PWR) < 70)
+	if (analogRead(BTN_PWR) < 80)
 	{
 		delay(1000);
-		if (analogRead(BTN_PWR) < 70)
+		if (analogRead(BTN_PWR) < 80)
 		{
 			if (megaDebug)Serial.println("button - shutdown");
 			// power button pressed, power off
@@ -411,7 +412,8 @@ void checkButtonAndVoltage()
 			delay(3000); //wait for MosFet to discharge  
 		}
 	}
-	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE));
+	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE)); 
+	//if (isUSBconnected()) return;
 	if (analogRead(BAT_VOLTAGE) < 900)
 	{
 		// bat low, power off
