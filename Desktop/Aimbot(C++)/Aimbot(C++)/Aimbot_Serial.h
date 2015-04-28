@@ -198,7 +198,15 @@ public ref struct AimBot_Serial
 	}
 
 	void request(){
-		m_serial->Write("0xff2222");
+		//m_serial->Write("sendx");
+		m_serial->WriteLine("sendx");
+	}
+	void sendSettings(System::String^ newSettings){
+
+		//m_serial->WriteLine(newSettings);
+		
+
+
 	}
 	
 	System::IO::Ports::SerialPort^ m_serial;
