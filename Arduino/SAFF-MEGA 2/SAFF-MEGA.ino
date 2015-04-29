@@ -18,9 +18,6 @@
 #define ESC_PWR				2
 #define PIX_PWR				3
 #define FPV_PWR				4
-#define RIG_PWR				5
-#define BTN_PWR				A0
-#define BAT_VOLTAGE			A1
 
 // Camera (GoPro/DSLR)
 int CAM_BTN_DELAY = 100;
@@ -88,10 +85,6 @@ bool modeSequenceHasBeenDone = false; // At each restart mode has to go to sleep
 // sudden start in auto/RC with bad consecuences
 uint8_t pixyUpdateCount = 0;
 
-// Power check
-volatile unsigned long lastPowerCheck = 0;
-int PWR_CHECK_INTERVAL = 1000;
-
 // Serial interface
 static AimBot_Serial m_pixySerial(Serial3);
 static AimBot_Serial m_escSerial(Serial2);
@@ -99,11 +92,9 @@ String inString = "";  // buffer for PC communication
 
 void setup()
 {
-#if 0
 	// Load config from persistent storage
 	loadSettingsFromEEPROM();
-	// Skip this during dev
-#endif
+
 	// Setup serial
 	if(megaDebug || isUSBconnected()) Serial.begin(BAUDRATE);	// Usb debug
 	if(megaDebug) Serial.println("Setup started");
@@ -112,9 +103,6 @@ void setup()
 
 	// Initial Mode
 	currentMode = SLEEP_MODE; // Start with externals off
-
-	// Relay setup
-	initButtonAndVoltage();
 
 	// USB setup
 	pinMode(USBpulldownPIN, OUTPUT);
@@ -142,19 +130,15 @@ void setup()
 	attachInterrupt(CHAN2_INTERRUPT, calculatePWMch2, CHANGE);
 	attachInterrupt(CHAN1_INTERRUPT, calculatePWMch1, CHANGE);
 
-
-
 	if (megaDebug) Serial.println("Setup complete");
 }
 
 void loop()
 {
-#if 1
 	if (isUSBconnected() && !megaDebug) // Settings & debug
 	{
 		communicateWithPC();
 	}
-#endif
 	if(modeSequenceHasBeenDone) // normal operation:
 	{
 		if (checkCameraTrigger())
@@ -175,21 +159,11 @@ void loop()
 				Mode_Manual_RC();
 				break;
 			default:
-				Sleep_mode();
 				break;
 			}
-
-			//Power check
-			checkButtonAndVoltage();
 			lastPassTime = millis();
 		}
 	}
-}
-
-// Mode selection routines--------------------------------------------------------------------------
-void Sleep_mode()
-{
-	// Nope.
 }
 
 void Mode_Auto()
@@ -385,48 +359,6 @@ void calculatePWMch4() // Elev
 	if (timepassed4 > 900 && timepassed4 < 2100) lastRCvalCH4 = timepassed4;
 }
 
-void initButtonAndVoltage()
-{
-	pinMode(RIG_PWR, OUTPUT);
-	digitalWrite(RIG_PWR, LOW);
-	pinMode(BTN_PWR, INPUT);
-	pinMode(BAT_VOLTAGE, INPUT);
-}
-
-void checkButtonAndVoltage()
-{
-	if (isUSBconnected()) return; // usb is connected, no need to check bat voltage etc.
-	if (megaDebug)Serial.println(analogRead(BTN_PWR));
-	if (analogRead(BTN_PWR) < 80)
-	{
-		delay(1000);
-		if (analogRead(BTN_PWR) < 80)
-		{
-			if (megaDebug)Serial.println("button - shutdown");
-			// power button pressed, power off
-			digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
-			digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
-			digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
-			delay(1500);
-			digitalWrite(RIG_PWR, HIGH); // Opens up discharge circuit for MosFet
-			delay(3000); //wait for MosFet to discharge  
-		}
-	}
-	if (megaDebug)Serial.println(analogRead(BAT_VOLTAGE)); 
-	//if (isUSBconnected()) return;
-	if (analogRead(BAT_VOLTAGE) < 900)
-	{
-		// bat low, power off
-		if (megaDebug)Serial.println("voltage - shutdown");
-		digitalWrite(PIX_PWR, LOW);
-		digitalWrite(ESC_PWR, LOW);
-		digitalWrite(FPV_PWR, LOW);
-		delay(1500);
-		digitalWrite(RIG_PWR, HIGH);
-		delay(3000);
-	}
-}
-
 bool isUSBconnected()
 {
 	return digitalRead(USBconnectedPIN);
@@ -444,8 +376,8 @@ void communicateWithPC()
 			{
 				inString = "";
 				int i = 0;
-				int settings[23];
-				while (i <= 21)
+				int settings[21];
+				while (i <= 20)
 				{
 					while (Serial.available() < 1){} // wait for next var
 					char last = Serial.read();
@@ -463,23 +395,22 @@ void communicateWithPC()
 				CAM_TRIGGER_DELAY = settings[2];
 				CAM_FOCUS_DELAY = settings[3];
 				LOOP_TIME = settings[4];
-				PWR_CHECK_INTERVAL = settings[5];
-				xRCmin = settings[6];
-				xRCmax = settings[7];
-				xRCMAPmin = settings[8];
-				xRCMAPmax = settings[9];
-				yRCmin = settings[10];
-				yRCmax = settings[11];
-				yRCMAPmin = settings[12];
-				yRCMAPmax = settings[13];
-				xVECT_INmin = settings[14];
-				xVECT_INmax = settings[15];
-				xVECT_OUTmin = settings[16];
-				xVECT_OUTmax = settings[17];
-				yVECT_INmin = settings[18];
-				yVECT_INmax = settings[19];
-				yVECT_OUTmin = settings[20];
-				yVECT_OUTmax = settings[21];
+				xRCmin = settings[5];
+				xRCmax = settings[6];
+				xRCMAPmin = settings[7];
+				xRCMAPmax = settings[8];
+				yRCmin = settings[9];
+				yRCmax = settings[10];
+				yRCMAPmin = settings[11];
+				yRCMAPmax = settings[12];
+				xVECT_INmin = settings[13];
+				xVECT_INmax = settings[14];
+				xVECT_OUTmin = settings[15];
+				xVECT_OUTmax = settings[16];
+				yVECT_INmin = settings[17];
+				yVECT_INmax = settings[18];
+				yVECT_OUTmin = settings[19];
+				yVECT_OUTmax = settings[20];
 				inString = "";
 
 			}
@@ -491,7 +422,6 @@ void communicateWithPC()
 				Serial.print(CAM_TRIGGER_DELAY, DEC); Serial.print(",");
 				Serial.print(CAM_FOCUS_DELAY, DEC); Serial.print(",");
 				Serial.print(LOOP_TIME, DEC); Serial.print(",");
-				Serial.print(PWR_CHECK_INTERVAL, DEC); Serial.print(",");
 				Serial.print(xRCmin, DEC); Serial.print(",");
 				Serial.print(xRCmax, DEC); Serial.print(",");
 				Serial.print(xRCMAPmin, DEC); Serial.print(",");
@@ -512,6 +442,7 @@ void communicateWithPC()
 			}
 			else if (inString == "savex") // Save to EEPROM
 			{
+				inString = "";
 				saveSettingsToEEPROM();
 			}
 			else
@@ -536,7 +467,6 @@ void saveSettingsToEEPROM()
 	EEPROMWriteInt16(i, CAM_TRIGGER_DELAY); i++; i++;
 	EEPROMWriteInt16(i, CAM_FOCUS_DELAY); i++; i++;
 	EEPROMWriteInt16(i, LOOP_TIME); i++; i++;
-	EEPROMWriteInt16(i, PWR_CHECK_INTERVAL); i++; i++;
 	EEPROMWriteInt16(i, xRCmin); i++; i++;
 	EEPROMWriteInt16(i, xRCmax); i++; i++;
 	EEPROMWriteInt16(i, xRCMAPmin); i++; i++;
@@ -558,26 +488,25 @@ void saveSettingsToEEPROM()
 void loadSettingsFromEEPROM()
 {
 	int i = 0;
-	bool isdslr = EEPROMReadBool(i); i++;
-	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
-	int CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
-	int CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
-	int LOOP_TIME = EEPROMReadInt16(i); i++; i++;
-	int PWR_CHECK_INTERVAL = EEPROMReadInt16(i); i++; i++;
-	int xRCmin = EEPROMReadInt16(i); i++; i++;
-	int xRCmax = EEPROMReadInt16(i); i++; i++;
-	int xRCMAPmin = EEPROMReadInt16(i); i++; i++;
-	int xRCMAPmax = EEPROMReadInt16(i); i++; i++;
-	int yRCmin = EEPROMReadInt16(i); i++; i++;
-	int yRCmax = EEPROMReadInt16(i); i++; i++;
-	int yRCMAPmin = EEPROMReadInt16(i); i++; i++;
-	int yRCMAPmax = EEPROMReadInt16(i); i++; i++;
-	int xVECT_INmin = EEPROMReadInt16(i); i++; i++;
-	int xVECT_INmax = EEPROMReadInt16(i); i++; i++;
-	int xVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
-	int xVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
-	int yVECT_INmin = EEPROMReadInt16(i); i++; i++;
-	int yVECT_INmax = EEPROMReadInt16(i); i++; i++;
-	int yVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
-	int yVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
+	isDSLR = EEPROMReadBool(i); i++;
+	CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
+	CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
+	CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
+	LOOP_TIME = EEPROMReadInt16(i); i++; i++;
+	xRCmin = EEPROMReadInt16(i); i++; i++;
+	xRCmax = EEPROMReadInt16(i); i++; i++;
+	xRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	xRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	yRCmin = EEPROMReadInt16(i); i++; i++;
+	yRCmax = EEPROMReadInt16(i); i++; i++;
+	yRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	yRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	xVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	xVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	xVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	xVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
+	yVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	yVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	yVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	yVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
 }

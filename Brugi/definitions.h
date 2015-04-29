@@ -46,7 +46,7 @@
 
 
 
-uint8_t freqCounter = 0;
+uint8_t freqCounter_0 = 0, freqCounter_1 = 0, freqCounter = 0;
 volatile unsigned long timer1_millis;
 
 uint8_t pwm_a_motor0 = 128;
@@ -67,8 +67,8 @@ uint8_t motorNumberPitch = 0;
 uint8_t motorNumberYaw = 1;
 
 
-static volatile bool motorUpdate = false;
-
+static volatile bool motorUpdate_0 = false, motorUpdate_1 = false, motorUpdate = false;
+bool rc_mode = false;
 
 
 // Number of sinus values for full 360 deg.
@@ -76,7 +76,8 @@ static volatile bool motorUpdate = false;
 // Reason: Fast Motor Routine using uint8_t overflow for stepping
 #define N_SIN 256
 
-#define MOTORUPDATE_FREQ 1000                // in Hz, 1000 is default
+#define MOTORUPDATE_FREQ 500                // in Hz, 1000 is default
+volatile uint16_t MOTORUPDATE_FREQ_0 = 500, MOTORUPDATE_FREQ_1 = 1000;
 #define LOOPUPDATE_FREQ MOTORUPDATE_FREQ     // loop control sample rate equals motor update rate
 #define DT_FLOAT (1.0/LOOPUPDATE_FREQ*1.024) // loop controller sample period dT
 #define DT_INT_MS (1000/MOTORUPDATE_FREQ)    // dT, integer, (ms)

@@ -19,27 +19,64 @@ ticker hver gang TIMER1 overflow slår inn. ticker hver gang phase correct PWM tr
 når bunnen.*/
 ISR(TIMER1_OVF_vect)
 {
-	freqCounter++;
-	if (freqCounter == (CC_FACTOR * 1000 / MOTORUPDATE_FREQ))
+
+	if (!rc_mode)
 	{
-		freqCounter = 0;
 
-		PWM_A_MOTOR0 = pwm_a_motor0;
-		PWM_B_MOTOR0 = pwm_b_motor0;
-		PWM_C_MOTOR0 = pwm_c_motor0;
+		freqCounter_0++;
+		freqCounter_1++;
+		if (freqCounter_0 >= (CC_FACTOR * 1000 / MOTORUPDATE_FREQ_0))
+		{
+			freqCounter_0 = 0;
 
-		PWM_A_MOTOR1 = pwm_a_motor1;
-		PWM_B_MOTOR1 = pwm_b_motor1;
-		PWM_C_MOTOR1 = pwm_c_motor1;
+			PWM_A_MOTOR0 = pwm_a_motor0;
+			PWM_B_MOTOR0 = pwm_b_motor0;
+			PWM_C_MOTOR0 = pwm_c_motor0;
 
-		// update event
-		motorUpdate = true;
+			// update event
+			motorUpdate_0 = true;
+		}
+
+		if (freqCounter_1 >= (CC_FACTOR * 1000 / MOTORUPDATE_FREQ_1))
+		{
+			freqCounter_1 = 0;
+
+			PWM_A_MOTOR1 = pwm_a_motor1;
+			PWM_B_MOTOR1 = pwm_b_motor1;
+			PWM_C_MOTOR1 = pwm_c_motor1;
+
+			// update event
+			motorUpdate_1 = true;
+		}
+
+		// care for standard timers every 1 ms
+		if ((freqCounter_0 & 0x01f) == 0) {
+			TIMER0_isr_emulation();
+		}
 	}
+	else
+	{
+		freqCounter++;
+		if (freqCounter == (CC_FACTOR * 1000 / MOTORUPDATE_FREQ))
+		{
+			freqCounter = 0;
 
+			PWM_A_MOTOR0 = pwm_a_motor0;
+			PWM_B_MOTOR0 = pwm_b_motor0;
+			PWM_C_MOTOR0 = pwm_c_motor0;
 
-	// care for standard timers every 1 ms
-	if ((freqCounter & 0x01f) == 0) {
-		TIMER0_isr_emulation();
+			PWM_A_MOTOR1 = pwm_a_motor1;
+			PWM_B_MOTOR1 = pwm_b_motor1;
+			PWM_C_MOTOR1 = pwm_c_motor1;
+
+			// update event
+			motorUpdate = true;
+		}
+
+		// care for standard timers every 1 ms
+		if ((freqCounter & 0x01f) == 0) {
+			TIMER0_isr_emulation();
+		}
 	}
 }
 

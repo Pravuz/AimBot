@@ -19,7 +19,6 @@ char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
 int8_t z_count, y_count;
-bool rc_mode = false;
 
 // Low-pass filter
 float last_z_Pos = 0, last_y_Pos = 0;
@@ -87,15 +86,19 @@ void moveToPos(){
 	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
 	y_Pos_Steps = y_Pos / bldc1;
 
-	uint16_t y_skipCount = 0, z_skipCount = 0;
+	int16_t z_Origin = z_Pos_Steps, y_Origin = y_Pos_Steps;
+
 #if 0
+	uint16_t y_skipCount = 0, z_skipCount = 0;
 	uint8_t generalSpeedFactor = 0;
 #endif
 	while ((z_Pos_Steps != 0) || (y_Pos_Steps != 0))
 	{
+#if 0
 		if (motorUpdate)
 		{
 			motorUpdate = false;
+#endif
 #if 0
 			/* The speed of the motorcontroller is constant, updating once every 31.5 microseconds. 
 			we want to slow this down, using generalSpeedFactor in the following way. 
@@ -106,6 +109,7 @@ void moveToPos(){
 			}
 			else generalSpeedFactor = 4;
 #endif
+#if 0
 			//when we are closing in on our position, we want to slow down gradually
 			if (!y_skipCount && abs(y_Pos_Steps) < SPEED_FACTOR_PIXY/2) y_skipCount = SPEED_FACTOR_PIXY/2 - abs(y_Pos_Steps);
 			if(y_skipCount) y_skipCount--;
@@ -151,6 +155,58 @@ void moveToPos(){
 			}
 		}
 	}
+#endif
+#if 1
+		if (motorUpdate_0)
+		{
+			motorUpdate_0 = false;
+			if (z_Pos_Steps != 0)
+			{
+				if (z_Pos_Steps > 0)
+				{
+					MOTORUPDATE_FREQ_0 = map(z_Pos_Steps, 0, z_Origin, 100, 500);
+					--z_Pos_Steps;
+					--z_Motor;
+				}
+				else if (z_Pos_Steps < 0)
+				{
+					MOTORUPDATE_FREQ_0 = map(z_Pos_Steps, z_Origin, 0, 100, 500);
+					++z_Pos_Steps;
+					++z_Motor;
+				}
+				MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+			}
+		}
+		if (motorUpdate_1)
+		{
+			motorUpdate_1 = false;
+			if (y_Pos_Steps != 0)
+			{
+				if (y_Pos_Steps > 0)
+				{
+					MOTORUPDATE_FREQ_1 = map(y_Pos_Steps, 0, y_Origin, 500, 1000);
+					if (y_Motor_Signed > Y_MIN_LIMIT){
+						y_Motor--;
+						y_Motor_Signed--;
+						y_Pos_Steps--;
+					}
+					else y_Pos_Steps = 0;
+				}
+				else if (y_Pos_Steps < 0)
+				{
+					MOTORUPDATE_FREQ_1 = map(y_Pos_Steps, y_Origin, 0, 500, 1000);
+					if (y_Motor_Signed < Y_MAX_LIMIT){
+						y_Motor++;
+						y_Motor_Signed++;
+						y_Pos_Steps++;
+					}
+					else y_Pos_Steps = 0;
+				}
+				MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
+			}
+		}
+	}
+#endif
 #if 0
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
