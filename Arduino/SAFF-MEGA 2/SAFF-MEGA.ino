@@ -93,7 +93,7 @@ String inString = "";  // buffer for PC communication
 void setup()
 {
 	// Load config from persistent storage
-	loadSettingsFromEEPROM();
+	//loadSettingsFromEEPROM();
 
 	// Setup serial
 	if(megaDebug || isUSBconnected()) Serial.begin(BAUDRATE);	// Usb debug
@@ -315,6 +315,16 @@ void calculatePWMch3() // Mode selector
 	{
 		lastRCvalCH3 = timepassed3;
 		if (timepassed3 > 1800){
+			if (currentMode != MANUAL && modeSequenceHasBeenDone){
+				// Manual, no pixy feed
+				digitalWrite(PIX_PWR, LOW);
+				digitalWrite(ESC_PWR, HIGH);
+				digitalWrite(FPV_PWR, HIGH);
+				if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
+			}
+			currentMode = MANUAL;
+		}
+		else if (timepassed3 > 1200)  {
 			if (currentMode != SLEEP_MODE)
 			{
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
@@ -324,18 +334,7 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = SLEEP_MODE;
 			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
-											 // safety precaution
-			
-		}
-		else if (timepassed3 > 1200)  {
-			if (currentMode != MANUAL && modeSequenceHasBeenDone){
-				// Manual, no pixy feed
-				digitalWrite(PIX_PWR, LOW);
-				digitalWrite(ESC_PWR, HIGH);
-				digitalWrite(FPV_PWR, HIGH);
-				if (currentMode != MANUAL && megaDebug) Serial.println("Mode is now set to MANUAL");
-			}
-			currentMode = MANUAL;
+			// safety precaution
 		}
 		else {
 			if (currentMode != AUTO && modeSequenceHasBeenDone)

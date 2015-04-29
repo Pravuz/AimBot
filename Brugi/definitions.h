@@ -27,11 +27,8 @@
 #define CC_FACTOR 1
 #endif
 
-
 #define interrupts() sei()
 #define noInterrupts() cli()
-
-
 
 // Hardware Abstraction for Motor connectors,
 // DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING !!!
@@ -44,10 +41,7 @@
 #define PWM_B_MOTOR0 OCR0B
 #define PWM_C_MOTOR0 OCR2B
 
-
-
-uint8_t freqCounter_0 = 0, freqCounter_1 = 0, freqCounter = 0;
-volatile unsigned long timer1_millis;
+#define N_SIN 256
 
 uint8_t pwm_a_motor0 = 128;
 uint8_t pwm_b_motor0 = 128;
@@ -57,30 +51,26 @@ uint8_t pwm_a_motor1 = 128;
 uint8_t pwm_b_motor1 = 128;
 uint8_t pwm_c_motor1 = 128;
 
-int8_t pwmSinMotor[256];
+int8_t pwmSinMotor[N_SIN];
 
+#define motorNumberPitch 0
+#define motorNumberYaw 1
 
+uint16_t freq_1_count = 0; 
+uint16_t freq_0_count = 0;
+volatile uint8_t pinState;
+volatile uint16_t motor_0_freq = 256;
+volatile uint16_t motor_1_freq = 96;
+volatile bool motor_0_update = false;
+volatile bool motor_1_update = false;
 
-static volatile	uint8_t	pinState;
-
-uint8_t motorNumberPitch = 0;
-uint8_t motorNumberYaw = 1;
-
-
-static volatile bool motorUpdate_0 = false, motorUpdate_1 = false, motorUpdate = false;
-bool rc_mode = false;
-
-
-// Number of sinus values for full 360 deg.
-// NOW FIXED TO 256 !!!
-// Reason: Fast Motor Routine using uint8_t overflow for stepping
-#define N_SIN 256
-
-#define MOTORUPDATE_FREQ 500                // in Hz, 1000 is default
-volatile uint16_t MOTORUPDATE_FREQ_0 = 500, MOTORUPDATE_FREQ_1 = 1000;
+#if 0
+#define MOTORUPDATE_FREQ 1000                // in Hz, 1000 is default
+//volatile uint16_t MOTORUPDATE_FREQ_0 = 500, MOTORUPDATE_FREQ_1 = 1000;
 #define LOOPUPDATE_FREQ MOTORUPDATE_FREQ     // loop control sample rate equals motor update rate
 #define DT_FLOAT (1.0/LOOPUPDATE_FREQ*1.024) // loop controller sample period dT
 #define DT_INT_MS (1000/MOTORUPDATE_FREQ)    // dT, integer, (ms)
 #define DT_INT_INV (MOTORUPDATE_FREQ)        // dT, integer, inverse, (Hz)
 
 #define LOWPASS_K_FLOAT(TAU) (DT_FLOAT/(TAU+DT_FLOAT))
+#endif
