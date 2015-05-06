@@ -110,7 +110,7 @@ void setup()
 	digitalWrite(USBpulldownPIN, LOW);
 
 	// RC channels
-	pinMode(CHAN1_DIGIN, INPUT); // gear 
+	pinMode(CHAN1_DIGIN, INPUT); // throttle 
 	pinMode(CHAN2_DIGIN, INPUT); // aile 
 	pinMode(CHAN3_DIGIN, INPUT); // elev 
 	pinMode(CHAN4_DIGIN, INPUT); // rudd 
@@ -135,36 +135,20 @@ void setup()
 
 void loop()
 {
-	if (isUSBconnected() && !megaDebug) // Settings & debug
-	{
-		communicateWithPC();
-	}
-	if(modeSequenceHasBeenDone) // normal operation:
-	{
 		if (checkCameraTrigger())
 		{
-			if (currentMode == SLEEP_MODE) timelapseMode();
-			else takePicture(); // Check trigger and take picture if pressed
+			Serial.println("CAMERA!");
+		    delay(1000);
 		}
-
-		long diff = millis() - lastPassTime;
-		if (diff > LOOP_TIME)
+		else
 		{
-			// Run update for the current mode
-			switch (currentMode)
-			{
-			case AUTO:
-				Mode_Auto();
-				break;
-			case MANUAL:
-				Mode_Manual();
-				break;
-			default:
-				break;
-			}
-			lastPassTime = millis();
+			Serial.println("1chan: " + lastRCvalCH1);
+			Serial.println("2chan: " + lastRCvalCH2);
+			Serial.println("3chan: " + lastRCvalCH3);
+			Serial.println("4chan: " + lastRCvalCH4);
+			Serial.println("--------------------------");
+			delay(100);
 		}
-	}
 }
 void Mode_Auto()
 {
@@ -238,7 +222,10 @@ bool checkCameraTrigger()
 
 void takePicture()
 {
-
+	if (currentMode == SLEEP_MODE)
+	{
+		timelapseMode();
+	}
 	if (isDSLR) // DSLR's require focus before trigger
 	{
 		// Check that there is a set time between pictures
@@ -269,15 +256,13 @@ void takePicture()
 }
 void timelapseMode() // takes a timelapse burst of 100 photos
 {
-	digitalWrite(ESC_PWR, HIGH); // Turn on Brugi power
-	delay(2000); // wait a bit 
+	delay(5000); // wait a bit 
 	for (int i = 0; i < 100; i++)
 	{
-		delay(2000); // wait
+		delay(5000); // wait
 		digitalWrite(CAM_TRIGGER, HIGH); // take picture
 		delay(CAM_BTN_DELAY);
 		digitalWrite(CAM_TRIGGER, LOW);
-		delay(2000);
 		m_escSerial.sendXY(10, 10, VECTOR); // move rig
 		if (currentMode != SLEEP_MODE) // stop timelapse if mode is switched
 		{
@@ -285,8 +270,6 @@ void timelapseMode() // takes a timelapse burst of 100 photos
 			break;
 		}
 	}
-	digitalWrite(ESC_PWR, LOW); // Turn off Brugi power again
-
 }
 
 
