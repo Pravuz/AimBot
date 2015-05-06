@@ -1,6 +1,5 @@
 #include "BLcontroller.h"
 #include "Interupts_.h"
-//#include "definitions.h"
 #include <Wire\Wire.h>
 #define __ESC
 #include "Aimbot_Serial.h"
@@ -8,23 +7,20 @@
 #define bldc1 0.1171875
 #define bldc2 0.05859375
 #define DIR_MASK 0x80
-#define SPEED_FACTOR 30
-#define SPEED_FACTOR_PIXY 20
 #define Y_MIN_LIMIT -160
 #define Y_MAX_LIMIT 320
-#define MOTORPOWER 100 // 0 to 255
-#define MOTORPOWER_HOLD 150
+#define MOTORPOWER 255 // 0 to 255
+#define MOTOR_0_DEFAULT_FREQ 128
+#define MOTOR_1_DEFAULT_FREQ 64
+#define MOTOR_0_MIN_FREQ 192
+#define MOTOR_1_MIN_FREQ 96
+#define MOTOR_0_MAX_FREQ 256
+#define MOTOR_1_MAX_FREQ 256
 
 char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t z_Motor = 0, y_Motor = 0;
-int8_t z_count, y_count;
 bool rc_mode = false;
-
-// Low-pass filter
-float last_z_Pos = 0, last_y_Pos = 0;
-#define LAST_TO_NEW_RATIO 0.9  //ex 0.7 gives: 0.7 old and 0.3 new
-
 
 static AimBot_Serial megaSerial(Serial);
 
@@ -37,7 +33,7 @@ void setup()
 	initMotorStuff();
 
 	motorPowerOff();
-
+	
 	sei();
 
 #if 1
@@ -45,8 +41,6 @@ void setup()
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
 	delay(250);
-	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
-	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
 	megaSerial.sendPosReached();
 #endif
 }
@@ -58,141 +52,116 @@ void loop()
 		z_Pos = megaSerial.getX();
 		y_Pos = megaSerial.getY();
 
-		if (!z_Pos) z_count = 0;
-		if (!y_Pos) y_count = 0;
-
-		//lowPassFilter();
-
 		if (!rc_mode) moveToPos();
+		else 
+		{
+			motor_0_freq = MOTOR_0_DEFAULT_FREQ;
+			motor_1_freq = MOTOR_1_DEFAULT_FREQ;
+		}
 		megaSerial.flush();
 	}
+	//when in RC-mode, we want to continually move regardless of the success of serial update. 
 	if (rc_mode) moveWithSpeed();
-}
-
-void lowPassFilter()
-{
-	last_z_Pos = ((1 - LAST_TO_NEW_RATIO)*z_Pos) + (LAST_TO_NEW_RATIO*last_z_Pos);
-	last_y_Pos = ((1 - LAST_TO_NEW_RATIO)*y_Pos) + (LAST_TO_NEW_RATIO*last_y_Pos);
-	y_Pos = last_y_Pos;
-	z_Pos = last_z_Pos;
+	else{
+		MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
+		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
+	}
 }
 
 void moveToPos(){
-	z_count = 0;
-	y_count = 0;
-
-	//if (!(z_Pos | y_Pos)) return; // z and y is 0, nothing to do
 
 	//converting angle to motor steps.
-	z_Pos_Steps = z_Pos / bldc2; //todo: OPTIMALISER.
+	z_Pos_Steps = z_Pos / bldc2;
 	y_Pos_Steps = y_Pos / bldc1;
 
-	uint16_t y_skipCount = 0, z_skipCount = 0;
-#if 0
-	uint8_t generalSpeedFactor = 0;
-#endif
+	int16_t z_pos_origin = z_Pos_Steps;
+	int16_t y_pos_origin = y_Pos_Steps;
+
 	while ((z_Pos_Steps != 0) || (y_Pos_Steps != 0))
 	{
-		if (motorUpdate)
+		if (motor_0_update && z_Pos_Steps != 0)
 		{
-			motorUpdate = false;
-#if 0
-			/* The speed of the motorcontroller is constant, updating once every 31.5 microseconds. 
-			we want to slow this down, using generalSpeedFactor in the following way. 
-			*/
-			if (generalSpeedFactor) {
-				generalSpeedFactor--;
-				continue; //skips this iteration, waiting for the next time motorUpdate is set. 
-			}
-			else generalSpeedFactor = 4;
-#endif
-			//when we are closing in on our position, we want to slow down gradually
-			if (!y_skipCount && abs(y_Pos_Steps) < SPEED_FACTOR_PIXY/2) y_skipCount = SPEED_FACTOR_PIXY/2 - abs(y_Pos_Steps);
-			if(y_skipCount) y_skipCount--;
-			if (!z_skipCount && abs(z_Pos_Steps) < SPEED_FACTOR_PIXY) z_skipCount = SPEED_FACTOR_PIXY - abs(y_Pos_Steps);
-			if(z_skipCount) z_skipCount--;
-
-
-			if (!y_skipCount && y_Pos_Steps != 0)
+			if (z_Pos_Steps > 0)
 			{
-				if (y_Pos_Steps > 0)
-				{
-					if (y_Motor_Signed > Y_MIN_LIMIT){
-						y_Motor--;
-						y_Motor_Signed--;
-						y_Pos_Steps--;
-					}
-					else y_Pos_Steps = 0;
-				}
-				else if (y_Pos_Steps < 0)
-				{
-					if (y_Motor_Signed < Y_MAX_LIMIT){
-						y_Motor++;
-						y_Motor_Signed++;
-						y_Pos_Steps++;
-					}
-					else y_Pos_Steps = 0;
-				}
-				MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
+				--z_Pos_Steps;
+				--z_Motor;
 			}
-			if (!z_skipCount && z_Pos_Steps != 0)
+			else if (z_Pos_Steps < 0)
 			{
-				if (z_Pos_Steps > 0)
-				{
-					--z_Pos_Steps;
-					--z_Motor;
-				}
-				else if (z_Pos_Steps < 0)
-				{
-					++z_Pos_Steps;
-					++z_Motor;
-				}
-				MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+				++z_Pos_Steps;
+				++z_Motor;
 			}
+			setMotorFreq(z_pos_origin, z_Pos_Steps, motorNumberPitch);
+			motor_0_update = false;
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+		}
+		if (motor_1_update && y_Pos_Steps != 0)
+		{
+			if (y_Pos_Steps > 0)
+			{
+				if (y_Motor_Signed > Y_MIN_LIMIT){
+					y_Motor--;
+					y_Motor_Signed--;
+					y_Pos_Steps--;
+				}
+				else y_Pos_Steps = 0;
+			}
+			else if (y_Pos_Steps < 0)
+			{
+				if (y_Motor_Signed < Y_MAX_LIMIT){
+					y_Motor++;
+					y_Motor_Signed++;
+					y_Pos_Steps++;
+				}
+				else y_Pos_Steps = 0;
+			}
+			setMotorFreq(y_pos_origin, y_Pos_Steps, motorNumberYaw);
+			motor_1_update = false;
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 		}
 	}
-#if 0
-	MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
-	MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
-	delay(250);
-#endif
+	delay(100); //wait for rig to settle a little
 	megaSerial.sendPosReached();
 }
 
 void moveWithSpeed(){
 
-	if (motorUpdate){
-		motorUpdate = false;
+	if ((z_Pos >= -1 && z_Pos <= 1)) z_Pos = 0;
+	if ((y_Pos >= -1 && y_Pos <= 1)) y_Pos = 0;
 
-		if (z_Pos > 1 || z_Pos < -1) z_count += z_Pos;
-		if (y_Pos > 1 || y_Pos < -1) y_count += y_Pos;
+	if (motor_0_update){
+		motor_0_update = false;
+		if (z_Pos & DIR_MASK) z_Motor--;
+		else if (z_Pos) z_Motor++;
+		MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+	}
 
-		if (z_count >= SPEED_FACTOR || z_count <= -SPEED_FACTOR){
-#if 1
-			if (z_count > 0) z_count -= SPEED_FACTOR;
-			if (z_count < 0) z_count += SPEED_FACTOR;
-#endif
-			//z_count = 0;
-			if (z_Pos & DIR_MASK) z_Motor--;
-			else z_Motor++;
-			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER_HOLD);
+	if (motor_1_update){
+		motor_1_update = false;
+		if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
+			y_Motor--;
+			y_Motor_Signed--;
 		}
-
-		if (y_count >= SPEED_FACTOR || y_count <= -SPEED_FACTOR){
-#if 1
-			if (y_count > 0) y_count -= SPEED_FACTOR;
-			if (y_count < 0) y_count += SPEED_FACTOR;
-#endif
-			//y_count = 0;
-			if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
-				y_Motor--;
-				y_Motor_Signed--;
-			}
-			else if (y_Motor_Signed < Y_MAX_LIMIT){
-				y_Motor++;
-				y_Motor_Signed++;
-			}
-			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER_HOLD);
+		else if (y_Pos && y_Motor_Signed < Y_MAX_LIMIT){
+			y_Motor++;
+			y_Motor_Signed++;
 		}
+		MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
+	}
+}
+
+void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber){
+	switch (motorNumber)
+	{
+	case motorNumberPitch:
+		if ((origin/2)<progress) motor_0_freq = origin > 0 ? map(progress, 0, origin, MOTOR_0_MAX_FREQ, MOTOR_0_MIN_FREQ) : map(progress, origin, 0, MOTOR_0_MAX_FREQ, MOTOR_0_MIN_FREQ);
+		else motor_0_freq = origin > 0 ? map(progress, 0, origin, MOTOR_0_MIN_FREQ, MOTOR_0_MAX_FREQ) : map(progress, origin, 0, MOTOR_0_MIN_FREQ, MOTOR_0_MAX_FREQ);
+		break;
+	case motorNumberYaw:
+		if ((origin/2)<progress) motor_1_freq = origin > 0 ? map(progress, 0, origin, MOTOR_1_MAX_FREQ, MOTOR_1_MIN_FREQ) : map(progress, origin, 0, MOTOR_1_MAX_FREQ, MOTOR_1_MIN_FREQ);
+		else motor_1_freq = origin > 0 ? map(progress, 0, origin, MOTOR_1_MIN_FREQ, MOTOR_1_MAX_FREQ) : map(progress, origin, 0, MOTOR_1_MIN_FREQ, MOTOR_1_MAX_FREQ);
+		break;
+	default:
+		break;
 	}
 }
