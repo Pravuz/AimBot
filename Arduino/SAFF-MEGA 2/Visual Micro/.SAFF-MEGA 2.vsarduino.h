@@ -11,7 +11,7 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define ARDUINO 105
+#define ARDUINO 106
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__
