@@ -30,5 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SAFF-MEGA.ino" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

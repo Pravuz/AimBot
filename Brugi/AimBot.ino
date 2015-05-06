@@ -16,6 +16,10 @@
 #define MOTOR_1_MIN_FREQ 96
 #define MOTOR_0_MAX_FREQ 256
 #define MOTOR_1_MAX_FREQ 256
+#define SPEED_FACTOR_Z 9
+#define SPEED_FACTOR_Y 20
+int speedCountY = 0; // RC mode counters for speed factor
+int speedCountZ = 0;
 
 char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
@@ -47,7 +51,8 @@ void setup()
 
 void loop()
 {
-	if (megaSerial.update()){
+	if (megaSerial.update())
+	{
 		rc_mode = megaSerial.isRCmode();
 		z_Pos = megaSerial.getX();
 		y_Pos = megaSerial.getY();
@@ -57,18 +62,24 @@ void loop()
 		{
 			motor_0_freq = MOTOR_0_DEFAULT_FREQ;
 			motor_1_freq = MOTOR_1_DEFAULT_FREQ;
+			//setMotorFreqRC(z_Pos, motorNumberPitch);
+			//setMotorFreqRC(y_Pos, motorNumberYaw);
+			//motor_0_freq = MOTOR_0_MIN_FREQ;
+			//motor_1_freq = MOTOR_1_MIN_FREQ;
 		}
 		megaSerial.flush();
 	}
 	//when in RC-mode, we want to continually move regardless of the success of serial update. 
 	if (rc_mode) moveWithSpeed();
-	else{
+	else
+	{
 		MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
 	}
 }
 
-void moveToPos(){
+void moveToPos()
+{
 
 	//converting angle to motor steps.
 	z_Pos_Steps = z_Pos / bldc2;
@@ -124,33 +135,71 @@ void moveToPos(){
 	megaSerial.sendPosReached();
 }
 
-void moveWithSpeed(){
+
+void moveWithSpeed()
+{
 
 	if ((z_Pos >= -1 && z_Pos <= 1)) z_Pos = 0;
 	if ((y_Pos >= -1 && y_Pos <= 1)) y_Pos = 0;
 
 	if (motor_0_update){
 		motor_0_update = false;
-		if (z_Pos & DIR_MASK) z_Motor--;
-		else if (z_Pos) z_Motor++;
+		speedCountZ += abs(z_Pos);
+		if (speedCountZ > SPEED_FACTOR_Z)
+		{
+			speedCountZ = 0;
+			if (z_Pos & DIR_MASK) z_Motor--;
+			else if (z_Pos) z_Motor++;
+		}
 		MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 	}
 
 	if (motor_1_update){
 		motor_1_update = false;
-		if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
-			y_Motor--;
-			y_Motor_Signed--;
-		}
-		else if (y_Pos && y_Motor_Signed < Y_MAX_LIMIT){
-			y_Motor++;
-			y_Motor_Signed++;
+		speedCountY += abs(y_Pos);
+		if (speedCountY > SPEED_FACTOR_Y)
+		{
+			speedCountY = 0;
+			if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
+				y_Motor--;
+				y_Motor_Signed--;
+			}
+			else if (y_Pos && y_Motor_Signed < Y_MAX_LIMIT){
+				y_Motor++;
+				y_Motor_Signed++;
+			}
 		}
 		MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 	}
+
+#if 0
+	if (motor_0_update)
+	{
+		motor_0_update = false;
+		speedCountZ += z_Pos;
+		if (speedCountZ > 40)
+		{
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor++, MOTORPOWER);
+			speedCountZ = 0;
+		}
+	}
+	if (motor_1_update)
+	{
+		motor_1_update = false;	
+		speedCountY += y_Pos;
+		if (speedCountY > 40)
+		{
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor++, MOTORPOWER);
+			speedCountY = 0;
+		}
+	}
+#endif
 }
 
-void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber){
+
+
+void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber)
+{
 	switch (motorNumber)
 	{
 	case motorNumberPitch:
@@ -165,3 +214,19 @@ void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber){
 		break;
 	}
 }
+void setMotorFreqRC(int RCval, uint8_t motorNumber)
+{
+	RCval = abs(RCval);
+	switch (motorNumber)
+	{
+	case motorNumberPitch:
+		motor_0_freq = map(RCval, 0, 10, MOTOR_0_MIN_FREQ, MOTOR_0_MAX_FREQ);
+		break;
+	case motorNumberYaw:
+		motor_1_freq = map(RCval, 0, 10, MOTOR_1_MIN_FREQ, MOTOR_1_MAX_FREQ);
+		break;
+	default:
+		break;
+	}
+}
+	

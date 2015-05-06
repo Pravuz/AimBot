@@ -92,10 +92,6 @@ String inString = "";  // buffer for PC communication
 
 void setup()
 {
-<<<<<<< HEAD
-#if 1
-=======
->>>>>>> origin/master
 	// Load config from persistent storage
 	//loadSettingsFromEEPROM();
 
@@ -139,12 +135,7 @@ void setup()
 
 void loop()
 {
-<<<<<<< HEAD
-#if 1
-	if (isUSBconnected()) // Settings & debug
-=======
 	if (isUSBconnected() && !megaDebug) // Settings & debug
->>>>>>> origin/master
 	{
 		communicateWithPC();
 	}
@@ -165,7 +156,7 @@ void loop()
 				Mode_Auto();
 				break;
 			case MANUAL:
-				Mode_Manual_RC();
+				Mode_Manual();
 				break;
 			default:
 				break;
@@ -174,7 +165,6 @@ void loop()
 		}
 	}
 }
-
 void Mode_Auto()
 {
 	if (isFirstAuto)
@@ -228,7 +218,7 @@ void Mode_Auto()
 	}
 }
 
-void Mode_Manual_RC()
+void Mode_Manual()
 {
 	char x = getRCx();
 	char y = getRCy();
@@ -247,6 +237,10 @@ bool checkCameraTrigger()
 
 void takePicture()
 {
+	if (currentMode == SLEEP_MODE)
+	{
+		timelapseMode();
+	}
 	if (isDSLR) // DSLR's require focus before trigger
 	{
 		// Check that there is a set time between pictures
@@ -275,6 +269,24 @@ void takePicture()
 		}
 	}
 }
+void timelapseMode() // takes a timelapse burst of 100 photos
+{
+	delay(5000); // wait a bit 
+	for (int i = 0; i < 100; i++)
+	{
+		delay(5000); // wait
+		digitalWrite(CAM_TRIGGER, HIGH); // take picture
+		delay(CAM_BTN_DELAY);
+		digitalWrite(CAM_TRIGGER, LOW);
+		m_escSerial.sendXY(10, 10, VECTOR); // move rig
+		if (currentMode != SLEEP_MODE) // stop timelapse if mode is switched
+		{
+			while (Serial2.available() > 0){ Serial2.read(); } // flush buffer
+			break;
+		}
+	}
+}
+
 
 char getRCx()
 {
@@ -469,7 +481,7 @@ void communicateWithPC()
 void saveSettingsToEEPROM()
 {
 	// Each address on the EEPROM is 8 bits
-	int i = 10;
+	int i = 0;
 	EEPROMWriteBool(i, isDSLR); i++; // bool uses only one 8bit block
 	EEPROMWriteInt16(i, CAM_BTN_DELAY); i++; i++; // an int is 16 bits and uses two blocks
 	EEPROMWriteInt16(i, CAM_TRIGGER_DELAY); i++; i++;
@@ -495,20 +507,12 @@ void saveSettingsToEEPROM()
 
 void loadSettingsFromEEPROM()
 {
-<<<<<<< HEAD
-	int i = 10;
-=======
 	int i = 0;
->>>>>>> origin/master
 	isDSLR = EEPROMReadBool(i); i++;
 	CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
 	CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
 	CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
 	LOOP_TIME = EEPROMReadInt16(i); i++; i++;
-<<<<<<< HEAD
-	PWR_CHECK_INTERVAL = EEPROMReadInt16(i); i++; i++;
-=======
->>>>>>> origin/master
 	xRCmin = EEPROMReadInt16(i); i++; i++;
 	xRCmax = EEPROMReadInt16(i); i++; i++;
 	xRCMAPmin = EEPROMReadInt16(i); i++; i++;
