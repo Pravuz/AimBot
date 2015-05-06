@@ -99,7 +99,7 @@ String inString = "";  // buffer for PC communication
 
 void setup()
 {
-#if 0
+#if 1
 	// Load config from persistent storage
 	loadSettingsFromEEPROM();
 	// Skip this during dev
@@ -150,7 +150,7 @@ void setup()
 void loop()
 {
 #if 1
-	if (isUSBconnected() && !megaDebug) // Settings & debug
+	if (isUSBconnected()) // Settings & debug
 	{
 		communicateWithPC();
 	}
@@ -512,6 +512,7 @@ void communicateWithPC()
 			}
 			else if (inString == "savex") // Save to EEPROM
 			{
+				inString = "";
 				saveSettingsToEEPROM();
 			}
 			else
@@ -530,7 +531,7 @@ void communicateWithPC()
 void saveSettingsToEEPROM()
 {
 	// Each address on the EEPROM is 8 bits
-	int i = 0;
+	int i = 10;
 	EEPROMWriteBool(i, isDSLR); i++; // bool uses only one 8bit block
 	EEPROMWriteInt16(i, CAM_BTN_DELAY); i++; i++; // an int is 16 bits and uses two blocks
 	EEPROMWriteInt16(i, CAM_TRIGGER_DELAY); i++; i++;
@@ -557,27 +558,27 @@ void saveSettingsToEEPROM()
 
 void loadSettingsFromEEPROM()
 {
-	int i = 0;
-	bool isdslr = EEPROMReadBool(i); i++;
-	int CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
-	int CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
-	int CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
-	int LOOP_TIME = EEPROMReadInt16(i); i++; i++;
-	int PWR_CHECK_INTERVAL = EEPROMReadInt16(i); i++; i++;
-	int xRCmin = EEPROMReadInt16(i); i++; i++;
-	int xRCmax = EEPROMReadInt16(i); i++; i++;
-	int xRCMAPmin = EEPROMReadInt16(i); i++; i++;
-	int xRCMAPmax = EEPROMReadInt16(i); i++; i++;
-	int yRCmin = EEPROMReadInt16(i); i++; i++;
-	int yRCmax = EEPROMReadInt16(i); i++; i++;
-	int yRCMAPmin = EEPROMReadInt16(i); i++; i++;
-	int yRCMAPmax = EEPROMReadInt16(i); i++; i++;
-	int xVECT_INmin = EEPROMReadInt16(i); i++; i++;
-	int xVECT_INmax = EEPROMReadInt16(i); i++; i++;
-	int xVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
-	int xVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
-	int yVECT_INmin = EEPROMReadInt16(i); i++; i++;
-	int yVECT_INmax = EEPROMReadInt16(i); i++; i++;
-	int yVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
-	int yVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
+	int i = 10;
+	isDSLR = EEPROMReadBool(i); i++;
+	CAM_BTN_DELAY = EEPROMReadInt16(i); i++; i++;
+	CAM_TRIGGER_DELAY = EEPROMReadInt16(i); i++; i++;
+	CAM_FOCUS_DELAY = EEPROMReadInt16(i); i++; i++;
+	LOOP_TIME = EEPROMReadInt16(i); i++; i++;
+	PWR_CHECK_INTERVAL = EEPROMReadInt16(i); i++; i++;
+	xRCmin = EEPROMReadInt16(i); i++; i++;
+	xRCmax = EEPROMReadInt16(i); i++; i++;
+	xRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	xRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	yRCmin = EEPROMReadInt16(i); i++; i++;
+	yRCmax = EEPROMReadInt16(i); i++; i++;
+	yRCMAPmin = EEPROMReadInt16(i); i++; i++;
+	yRCMAPmax = EEPROMReadInt16(i); i++; i++;
+	xVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	xVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	xVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	xVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
+	yVECT_INmin = EEPROMReadInt16(i); i++; i++;
+	yVECT_INmax = EEPROMReadInt16(i); i++; i++;
+	yVECT_OUTmin = EEPROMReadInt16(i); i++; i++;
+	yVECT_OUTmax = EEPROMReadInt16(i); i++; i++;
 }

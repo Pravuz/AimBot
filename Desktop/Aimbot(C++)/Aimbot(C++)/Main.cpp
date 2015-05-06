@@ -9,9 +9,10 @@ using namespace System::Windows::Forms;
 void Main(array<String^>^ args){
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-
+	
 	AimbotC::Main form;
 	Application::Run(%form); 4
 	;
+	
 }
 

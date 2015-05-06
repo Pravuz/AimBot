@@ -18,12 +18,18 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Form2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Aimbot_Serial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Form2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,7 +39,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="reload.png">
+    <Image Include="A-Tea.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

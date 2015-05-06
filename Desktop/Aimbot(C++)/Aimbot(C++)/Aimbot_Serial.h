@@ -198,13 +198,19 @@ public ref struct AimBot_Serial
 	}
 
 	void request(){
-		//m_serial->Write("sendx");
 		m_serial->WriteLine("sendx");
 	}
 	void sendSettings(System::String^ newSettings){
 
-		//m_serial->WriteLine(newSettings);
+		m_serial->WriteLine(newSettings);
 		
+
+
+	}
+	void saveEEPROM(){
+
+		m_serial->WriteLine("savex");
+
 
 
 	}
