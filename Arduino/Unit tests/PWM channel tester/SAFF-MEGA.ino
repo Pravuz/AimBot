@@ -142,10 +142,10 @@ void loop()
 		}
 		else
 		{
-			Serial.println("1chan: " + lastRCvalCH1);
-			Serial.println("2chan: " + lastRCvalCH2);
-			Serial.println("3chan: " + lastRCvalCH3);
-			Serial.println("4chan: " + lastRCvalCH4);
+			Serial.print("1chan: "); Serial.println(+lastRCvalCH1);
+			Serial.print("2chan: "); Serial.println(+lastRCvalCH2);
+			Serial.print("3chan: "); Serial.println(+lastRCvalCH3);
+			Serial.print("4chan: "); Serial.println(+lastRCvalCH4);
 			Serial.println("--------------------------");
 			delay(100);
 		}
