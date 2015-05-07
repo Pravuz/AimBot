@@ -221,7 +221,8 @@ struct AimBot_Serial {
 		ucfg.Stopbits = UART_STOPBIT_1;
 		ucfg.Clock_Speed = CLKFREQ;
 		UART_Init(LPC_USART0, &ucfg);
-		UART_TxCmd(LPC_USART0, ENABLE);
+		UART_TxCmd(LPC_USART0, 
+			);
 
 		//m_tx = new uint8_t[4];
 		//m_rx = new uint8_t[4];
