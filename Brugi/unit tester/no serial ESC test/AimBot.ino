@@ -16,14 +16,14 @@
 #define MOTOR_1_MIN_FREQ 96
 #define MOTOR_0_MAX_FREQ 256
 #define MOTOR_1_MAX_FREQ 256
-#define SPEED_FACTOR_Z 9
-#define SPEED_FACTOR_Y 20
+#define SPEED_FACTOR_Z 18
+#define SPEED_FACTOR_Y 40
 int speedCountY = 0; // RC mode counters for speed factor
 int speedCountZ = 0;
 
 char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
-uint8_t z_Motor = 0, y_Motor = 0;
+uint16_t z_Motor = 0, y_Motor = 0;
 bool rc_mode = false;
 
 static AimBot_Serial megaSerial(Serial);
@@ -31,6 +31,7 @@ static AimBot_Serial megaSerial(Serial);
 
 int zMotorCounter = 0;
 bool up = true;
+int z_MotorCounter = 0;
 
 void setup()
 {
@@ -44,7 +45,7 @@ void setup()
 	
 	sei();
 
-#if 1
+#if 0
 	//moving to 0 pos. 
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
@@ -83,12 +84,16 @@ void loop()
 		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
 	}
 #endif
+#if 1
 	moveWithSpeed();
-	if (zMotorCounter >= 3072) up = false;
-	if (zMotorCounter <= 0) up = true;
+	//if (zMotorCounter >= 3072) up = false;
+	//if (zMotorCounter <= 0) up = true;
 
-	if (up)z_Pos = 8;
-	else z_Pos = -8;
+	//if (up)z_Pos = 8;
+	//else z_Pos = -8;
+	z_Pos = 9;
+	//if (z_Motor >= 360) z_Motor = 0;
+#endif
 }
 
 void moveToPos()
@@ -117,6 +122,8 @@ void moveToPos()
 			}
 			setMotorFreq(z_pos_origin, z_Pos_Steps, motorNumberPitch);
 			motor_0_update = false;
+			if (z_Motor >= sineArraySize) z_Motor = 0;
+			else if (z_Motor < 0) z_Motor = sineArraySize;
 			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 		}
 		if (motor_1_update && y_Pos_Steps != 0)
@@ -141,6 +148,8 @@ void moveToPos()
 			}
 			setMotorFreq(y_pos_origin, y_Pos_Steps, motorNumberYaw);
 			motor_1_update = false;
+			if (y_Motor >= sineArraySize) y_Motor = 0;
+			else if (y_Motor < 0) y_Motor = sineArraySize;
 			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 		}
 	}
@@ -172,6 +181,8 @@ void moveWithSpeed()
 				zMotorCounter++;
 			}
 		}
+		if (z_Motor >= sineArraySize) z_Motor = 0;
+		else if (z_Motor < 0) z_Motor = sineArraySize;
 		MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 
 	}
@@ -191,6 +202,8 @@ void moveWithSpeed()
 				y_Motor_Signed++;
 			}
 		}
+		if (y_Motor >= sineArraySize) y_Motor = 0;
+		else if (y_Motor < 0) y_Motor = sineArraySize;
 		MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 	}
 

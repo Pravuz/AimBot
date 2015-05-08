@@ -42,5 +42,8 @@
     <ClInclude Include="Visual Micro\.unit tester.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Visual Micro\.no serial ESC test.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
