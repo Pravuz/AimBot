@@ -16,8 +16,8 @@
 #define MOTOR_1_MIN_FREQ 96
 #define MOTOR_0_MAX_FREQ 256
 #define MOTOR_1_MAX_FREQ 256
-#define SPEED_FACTOR_Z 9
-#define SPEED_FACTOR_Y 20
+#define SPEED_FACTOR_Z 5
+#define SPEED_FACTOR_Y 12
 int speedCountY = 0; // RC mode counters for speed factor
 int speedCountZ = 0;
 
@@ -37,8 +37,6 @@ void setup()
 	initMotorStuff();
 
 	motorPowerOff();
-	
-	sei();
 
 #if 1
 	//moving to 0 pos. 
@@ -62,10 +60,6 @@ void loop()
 		{
 			motor_0_freq = MOTOR_0_DEFAULT_FREQ;
 			motor_1_freq = MOTOR_1_DEFAULT_FREQ;
-			//setMotorFreqRC(z_Pos, motorNumberPitch);
-			//setMotorFreqRC(y_Pos, motorNumberYaw);
-			//motor_0_freq = MOTOR_0_MIN_FREQ;
-			//motor_1_freq = MOTOR_1_MIN_FREQ;
 		}
 		megaSerial.flush();
 	}
