@@ -337,7 +337,7 @@ void calculatePWMch3() // Mode selector
 	if (timepassed3 < 2100 && timepassed3 > 900)
 	{
 		lastRCvalCH3 = timepassed3;
-		if (timepassed3 > 1800){
+		if (timepassed3 > 1800){ // Manual
 			if (currentMode != MANUAL && modeSequenceHasBeenDone){
 				// Manual, no pixy feed
 				digitalWrite(PIX_PWR, LOW);
@@ -347,7 +347,28 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = MANUAL;
 		}
-		else if (timepassed3 > 1200)  {
+
+		else if (timepassed3 > 1400)  { // Remote is turned off
+			if (currentMode == AUTO)
+			{
+				// Stay in auto
+			}
+			else if (currentMode == MANUAL)
+			{
+				// Power off
+				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
+				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
+				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
+				if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
+				currentMode = SLEEP_MODE;
+			}
+			else if (currentMode == SLEEP_MODE)
+			{
+				// Stay in sleep
+			}
+		}
+
+		else if (timepassed3 > 1200)  { // Sleep
 			if (currentMode != SLEEP_MODE)
 			{
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
@@ -359,7 +380,7 @@ void calculatePWMch3() // Mode selector
 			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
 			// safety precaution
 		}
-		else {
+		else { // Auto
 			if (currentMode != AUTO && modeSequenceHasBeenDone)
 			{
 				// Auto, no video feed
