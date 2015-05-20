@@ -28,7 +28,7 @@
 #define __inline__
 //#define __asm__ 
 #define __volatile__
-#define GCC_VERSION 40301
+#define GCC_VERSION 40801
 #define volatile(va_arg) 
 
 typedef void *__builtin_va_list;
@@ -79,6 +79,4 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <SAFF-MEGA.ino>
-#include <Aimbot_EEPROM.h>
-#include <Aimbot_Serial.h>
 #endif

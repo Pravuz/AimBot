@@ -43,12 +43,12 @@ int yRCMAPmin = -10;
 int yRCMAPmax = 10;
 int xVECT_INmin = -127;
 int xVECT_INmax = 127;
-int xVECT_OUTmin = -32;
-int xVECT_OUTmax = 32;
+int xVECT_OUTmin = -30;
+int xVECT_OUTmax = 30;
 int yVECT_INmin = -98;
 int yVECT_INmax = 98;
-int yVECT_OUTmin = -18;
-int yVECT_OUTmax = 18;
+int yVECT_OUTmin = -16;
+int yVECT_OUTmax = 16;
 
 enum Aimbot_Mode
 {
@@ -207,7 +207,7 @@ void Mode_Auto()
 		}
 		while (Serial2.available() > 0){ Serial2.read(); }
 		//waiting for rig to settle
-		delay(200);
+		delay(250);
 
 		takePicture(); // Arrived at destination, take picture
 
@@ -337,7 +337,7 @@ void calculatePWMch3() // Mode selector
 	if (timepassed3 < 2100 && timepassed3 > 900)
 	{
 		lastRCvalCH3 = timepassed3;
-		if (timepassed3 > 1800){ // Manual
+		if (timepassed3 > 1800){
 			if (currentMode != MANUAL && modeSequenceHasBeenDone){
 				// Manual, no pixy feed
 				digitalWrite(PIX_PWR, LOW);
@@ -347,28 +347,7 @@ void calculatePWMch3() // Mode selector
 			}
 			currentMode = MANUAL;
 		}
-
-		else if (timepassed3 > 1400)  { // Remote is turned off
-			if (currentMode == AUTO)
-			{
-				// Stay in auto
-			}
-			else if (currentMode == MANUAL)
-			{
-				// Power off
-				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
-				digitalWrite(ESC_PWR, LOW); // Turn off Brugi power
-				digitalWrite(FPV_PWR, LOW); // Turn off Video transmitter power
-				if (currentMode != SLEEP_MODE && megaDebug) Serial.println("Mode is now set to SLEEP_MODE");
-				currentMode = SLEEP_MODE;
-			}
-			else if (currentMode == SLEEP_MODE)
-			{
-				// Stay in sleep
-			}
-		}
-
-		else if (timepassed3 > 1200)  { // Sleep
+		else if (timepassed3 > 1200)  {
 			if (currentMode != SLEEP_MODE)
 			{
 				digitalWrite(PIX_PWR, LOW); // Turn off Pixy power
@@ -380,7 +359,7 @@ void calculatePWMch3() // Mode selector
 			modeSequenceHasBeenDone = true;  // Rig should always be set to sleep mode before normal operation as a 
 			// safety precaution
 		}
-		else { // Auto
+		else {
 			if (currentMode != AUTO && modeSequenceHasBeenDone)
 			{
 				// Auto, no video feed

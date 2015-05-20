@@ -11,7 +11,7 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define ARDUINO 160
+#define ARDUINO 158
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__
@@ -28,7 +28,7 @@
 #define __inline__
 //#define __asm__ 
 #define __volatile__
-#define GCC_VERSION 40801
+#define GCC_VERSION 40301
 #define volatile(va_arg) 
 
 typedef void *__builtin_va_list;

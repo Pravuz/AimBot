@@ -1,0 +1,33 @@
+
+Default settings:
+0,100,500,200,5,1000,1916,1052,-10,10,1040,1916,-10,10,-127,127,-38,38,-100,100,-38,38,
+
+Example commands:
+sendx // Asks arduino to send current settings
+
+setup0,100,500,200,5,1000,1916,1052,-10,10,1040,1916,-10,10,-127,127,-38,38,-100,100,-38,322, // Sets values for all settings
+
+VAR's i rekkefølge:
+------------------------------
+bool isdslr = false;
+int CAM_BTN_DELAY = 100;
+int CAM_TRIGGER_DELAY = 500;
+int CAM_FOCUS_DELAY = 200;
+int LOOP_TIME = 50; 
+int PWR_CHECK_INTERVAL = 1000;
+int xRCmin = 1916;
+int xRCmax = 1052;
+int xRCMAPmin = -10;
+int xRCMAPmax = 10;
+int yRCmin = 1040;
+int yRCmax = 1916;
+int yRCMAPmin = -10;
+int yRCMAPmax = 10;
+int xVECT_INmin = -127;
+int xVECT_INmax = 127;
+int xVECT_OUTmin = -38;
+int xVECT_OUTmax = 38;
+int yVECT_INmin = -100;
+int yVECT_INmax = 100;
+int yVECT_OUTmin = -38;
+int yVECT_OUTmax = 38;
