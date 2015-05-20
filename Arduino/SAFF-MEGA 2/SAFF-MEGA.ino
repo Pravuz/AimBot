@@ -43,12 +43,12 @@ int yRCMAPmin = -10;
 int yRCMAPmax = 10;
 int xVECT_INmin = -127;
 int xVECT_INmax = 127;
-int xVECT_OUTmin = -30;
-int xVECT_OUTmax = 30;
+int xVECT_OUTmin = -32;
+int xVECT_OUTmax = 32;
 int yVECT_INmin = -98;
 int yVECT_INmax = 98;
-int yVECT_OUTmin = -16;
-int yVECT_OUTmax = 16;
+int yVECT_OUTmin = -18;
+int yVECT_OUTmax = 18;
 
 enum Aimbot_Mode
 {
@@ -207,7 +207,7 @@ void Mode_Auto()
 		}
 		while (Serial2.available() > 0){ Serial2.read(); }
 		//waiting for rig to settle
-		delay(250);
+		delay(200);
 
 		takePicture(); // Arrived at destination, take picture
 

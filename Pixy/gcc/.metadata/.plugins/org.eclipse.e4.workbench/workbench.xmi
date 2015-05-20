@@ -122,13 +122,13 @@
       <tags>categoryTag:Help</tags>
     </sharedElements>
     <sharedElements xsi:type="advanced:Area" xmi:id="_esfB1uTmEeSv3MZOLPYHHA" elementId="org.eclipse.ui.editorss" selectedElement="_esfB1-TmEeSv3MZOLPYHHA">
-      <children xsi:type="basic:PartStack" xmi:id="_esfB1-TmEeSv3MZOLPYHHA" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_esfCQeTmEeSv3MZOLPYHHA">
+      <children xsi:type="basic:PartStack" xmi:id="_esfB1-TmEeSv3MZOLPYHHA" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_6yR-kOT3EeSZmu-KcqdlSg">
         <tags>newtablook</tags>
         <tags>org.eclipse.e4.primaryDataStack</tags>
         <tags>EditorStack</tags>
         <tags>active</tags>
         <children xsi:type="basic:Part" xmi:id="_esfB2OTmEeSv3MZOLPYHHA" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="proggreyshades.h" iconURI="platform:/plugin/org.eclipse.cdt.ui/icons/obj16/c_file_obj.gif" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;proggreyshades.h&quot; partName=&quot;proggreyshades.h&quot; title=&quot;proggreyshades.h&quot; tooltip=&quot;video/inc/proggreyshades.h&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/video/inc/proggreyshades.h&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;1125&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;proggreyshades.h&quot; partName=&quot;proggreyshades.h&quot; title=&quot;proggreyshades.h&quot; tooltip=&quot;video/inc/proggreyshades.h&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/video/inc/proggreyshades.h&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;1125&quot; selectionTopPixel=&quot;1223&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>org.eclipse.cdt.ui.editor.CEditor</tags>
           <tags>removeOnHide</tags>
@@ -166,7 +166,7 @@
           </menus>
         </children>
         <children xsi:type="basic:Part" xmi:id="_esfB3-TmEeSv3MZOLPYHHA" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="proggreyshades.cpp" iconURI="platform:/plugin/org.eclipse.cdt.ui/icons/obj16/c_file_obj.gif" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;proggreyshades.cpp&quot; partName=&quot;proggreyshades.cpp&quot; title=&quot;proggreyshades.cpp&quot; tooltip=&quot;video/src/proggreyshades.cpp&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/video/src/proggreyshades.cpp&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;8962&quot; selectionTopPixel=&quot;2760&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;proggreyshades.cpp&quot; partName=&quot;proggreyshades.cpp&quot; title=&quot;proggreyshades.cpp&quot; tooltip=&quot;video/src/proggreyshades.cpp&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/video/src/proggreyshades.cpp&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;8962&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>org.eclipse.cdt.ui.editor.CEditor</tags>
           <tags>removeOnHide</tags>
@@ -224,8 +224,6 @@
           <tags>Editor</tags>
           <tags>org.eclipse.cdt.ui.editor.CEditor</tags>
           <tags>removeOnHide</tags>
-          <tags>active</tags>
-          <tags>activeOnClose</tags>
           <menus xsi:type="menu:PopupMenu" xmi:id="_esfCQuTmEeSv3MZOLPYHHA" elementId="#CEditorContext">
             <tags>menuContribution:popup</tags>
             <tags>popup:#CEditorContext</tags>
@@ -244,10 +242,12 @@
           </menus>
         </children>
         <children xsi:type="basic:Part" xmi:id="_6yR-kOT3EeSZmu-KcqdlSg" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="Aimbot_Serial.h" iconURI="platform:/plugin/org.eclipse.cdt.ui/icons/obj16/c_file_obj.gif" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;Aimbot_Serial.h&quot; partName=&quot;Aimbot_Serial.h&quot; title=&quot;Aimbot_Serial.h&quot; tooltip=&quot;C:\Users\ouroborus\Documents\BACHELOR\AimBot\Common\Aimbot_Serial.h&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/ouroborus/Documents/BACHELOR/AimBot/Common/Aimbot_Serial.h&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;8315&quot; selectionTopPixel=&quot;1743&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;Aimbot_Serial.h&quot; partName=&quot;Aimbot_Serial.h&quot; title=&quot;Aimbot_Serial.h&quot; tooltip=&quot;C:\Users\ouroborus\Documents\BACHELOR\AimBot\Common\Aimbot_Serial.h&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/C:/Users/ouroborus/Documents/BACHELOR/AimBot/Common/Aimbot_Serial.h&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;8315&quot; selectionTopPixel=&quot;2663&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>org.eclipse.cdt.ui.editor.CEditor</tags>
           <tags>removeOnHide</tags>
+          <tags>active</tags>
+          <tags>activeOnClose</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_e5sXAOULEeSZmu-KcqdlSg" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="lpc43xx_uart.c" iconURI="platform:/plugin/org.eclipse.cdt.ui/icons/obj16/c_file_obj.gif" closeable="true">
           <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;lpc43xx_uart.c&quot; partName=&quot;lpc43xx_uart.c&quot; title=&quot;lpc43xx_uart.c&quot; tooltip=&quot;pixy_m4/src/lpc43xx_uart.c&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/pixy_m4/src/lpc43xx_uart.c&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;43577&quot; selectionTopPixel=&quot;7268&quot;/>&#xD;&#xA;&lt;/editor>"/>
@@ -739,7 +739,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_esfoxuTmEeSv3MZOLPYHHA" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_Q1lFB-mKEeSW4v8-T7Er_A" elementId="print" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" enabled="false" command="_eshdqOTmEeSv3MZOLPYHHA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_DZuqcv0_EeSV8-DPQ5NjXw" elementId="print" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" enabled="false" command="_eshdqOTmEeSv3MZOLPYHHA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_esfo1uTmEeSv3MZOLPYHHA" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -760,7 +760,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_esfpG-TmEeSv3MZOLPYHHA" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_Q1xSRemKEeSW4v8-T7Er_A" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_esg3huTmEeSv3MZOLPYHHA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_DZ_wMP0_EeSV8-DPQ5NjXw" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_esg3huTmEeSv3MZOLPYHHA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_esfpJuTmEeSv3MZOLPYHHA" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>

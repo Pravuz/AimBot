@@ -4,8 +4,8 @@
 #define __ESC
 #include "Aimbot_Serial.h"
 
-#define bldc1 0.1171875
-#define bldc2 0.05859375
+#define bldc1 0.2008929 //360degree/256sinval/7magneticpos
+#define bldc2 0.1278409 //360/256/11
 #define DIR_MASK 0x80
 #define Y_MIN_LIMIT -160
 #define Y_MAX_LIMIT 320
@@ -42,13 +42,17 @@ void setup()
 	//moving to 0 pos. 
 	MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 	MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
-	delay(250);
+	delay(150);
 	megaSerial.sendPosReached();
 #endif
+
+	motor_0_freq = MOTOR_0_DEFAULT_FREQ;
+	motor_1_freq = MOTOR_1_DEFAULT_FREQ;
 }
 
 void loop()
 {
+#if 1
 	if (megaSerial.update())
 	{
 		rc_mode = megaSerial.isRCmode();
@@ -70,6 +74,15 @@ void loop()
 		MoveMotorPosSpeed(motorNumberYaw, y_Motor, 100);
 		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 100);
 	}
+#endif
+#if 0
+	if (motor_0_update) {
+		motor_0_update = false;
+		z_Motor++;
+		MoveMotorPosSpeed(motorNumberPitch, z_Motor, 255);
+		if(!z_Motor) delay(500000);
+	}
+#endif
 }
 
 void moveToPos()
@@ -125,7 +138,7 @@ void moveToPos()
 			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 		}
 	}
-	delay(100); //wait for rig to settle a little
+	//delay(100); //wait for rig to settle a little
 	megaSerial.sendPosReached();
 }
 
@@ -190,8 +203,6 @@ void moveWithSpeed()
 #endif
 }
 
-
-
 void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber)
 {
 	switch (motorNumber)
@@ -208,6 +219,7 @@ void setMotorFreq(int16_t &origin, int16_t &progress, uint8_t motorNumber)
 		break;
 	}
 }
+
 void setMotorFreqRC(int RCval, uint8_t motorNumber)
 {
 	RCval = abs(RCval);
