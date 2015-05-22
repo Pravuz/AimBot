@@ -21,7 +21,13 @@ char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t y_Motor = 0;
 int z_Motor = 0;
-bool rc_mode = false, ser_updated = false;
+bool rc_mode = false, moving = false, ser_updated = false;
+
+enum mode{
+	IDLE,
+	MANUAL,
+	AUTO
+}currentMode;
 
 static AimBot_Serial megaSerial(Serial);
 
@@ -30,11 +36,8 @@ void setup()
 	Serial.begin(BAUDRATE);
 
 	initBlController();
-
 	initMotorStuff();
-
 	motorPowerOff();
-
 	setDefaultParameters();
 
 	// Start I2C and Configure Frequency
@@ -59,9 +62,7 @@ void setup()
 		gimState = (gimStateType)GIM_ERROR;
 	}
 
-	// set sensor orientation
 	initSensorOrientation();
-
 	initPIDs();
 
 	//moving to 0 pos. 
@@ -71,6 +72,7 @@ void setup()
 
 	//let mega know we're ready
 	megaSerial.sendPosReached();
+	currentMode = IDLE;
 }
 
 /************************/
@@ -99,21 +101,28 @@ int32_t ComputePID(int32_t DTms, int32_t DTinv, int32_t in, int32_t setPoint, in
 
 void loop()
 {
-	operatingRoutine();
-	if (ser_updated){
-		if (rc_mode) moveWithSpeed();
-		else moveToPos();
+	if (currentMode == IDLE)
+	{
+		if (megaSerial.update())
+		{
+			currentMode = megaSerial.isRCmode() ? MANUAL : AUTO;
+			z_Pos = megaSerial.getX();
+			y_Pos = megaSerial.getY();
+
+			megaSerial.flush();
+			ser_updated = true;
+		}
+		else delay(50);
 	}
+	else operatingRoutine();
 }
 
 void operatingRoutine(){
-
-	if (motorUpdate) {
+	if (motorUpdate){
 		motorUpdate = false;
 
 		// update IMU data            
 		readGyros();   // td = 330us
-
 		updateGyroAttitude(); // td = 176 us
 		updateACCAttitude(); // td = 21 us
 		getAttiduteAngles(); // td = 372 us
@@ -121,8 +130,10 @@ void operatingRoutine(){
 		//only using IMU and PID on z_Motor
 		pitchAngleSet = utilLP3_float(qLPPitch, z_Pos, LOWPASS_K_FLOAT(0.03));
 		z_Motor = ComputePID(DT_INT_MS, DT_INT_INV, angle[YAW], pitchAngleSet * 1000, &pitchErrorSum, &pitchErrorOld, pitchPIDpar.Kp, pitchPIDpar.Ki, pitchPIDpar.Kd);
-		
-		if (enableMotorUpdates){
+
+		if (enableMotorUpdates) {
+			if (currentMode == AUTO) moveToPos();
+			else if (currentMode == MANUAL) moveWithSpeed();
 			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 		}
@@ -139,7 +150,7 @@ void operatingRoutine(){
 			//communicate with MEGA
 			if (megaSerial.update())
 			{
-				rc_mode = megaSerial.isRCmode();
+				//currentMode = megaSerial.isRCmode() ? MANUAL : AUTO; won't change before restart.
 				z_Pos = megaSerial.getX();
 				y_Pos = megaSerial.getY();
 
@@ -159,6 +170,9 @@ void operatingRoutine(){
 					gimState = (gimStateType)GIM_UNLOCKED;
 					stateCount = 0;
 				}
+				enableMotorUpdates = false;
+				setACCtc(0.2);
+				disableAccGtest = true;
 				break;
 			case GIM_UNLOCKED:
 				// allow PID controller to settle on ACC position
@@ -168,33 +182,19 @@ void operatingRoutine(){
 					gimState = (gimStateType)GIM_LOCKED;
 					stateCount = 0;
 				}
-				break;
-			case GIM_LOCKED:
-				// normal operation
-				break;
-			case GIM_ERROR:
-				// error state
-				break;
-			}
-			// gimbal state actions 
-			switch (gimState) {
-			case GIM_IDLE: // allow settling IMU
-				enableMotorUpdates = false;
-				setACCtc(0.2);
-				disableAccGtest = true;
-				break;
-			case GIM_UNLOCKED: // fast settling of desired position
 				enableMotorUpdates = true;
 				disableAccGtest = true;
 				setACCtc(2.0);
 				disableAccGtest = true;
 				break;
-			case GIM_LOCKED: // normal operation
+			case GIM_LOCKED:
+				// normal operation
 				enableMotorUpdates = true;
 				disableAccGtest = false;
 				setACCtc(config.accTimeConstant);
 				break;
 			case GIM_ERROR:
+				// error state
 				enableMotorUpdates = false;
 				motorPowerOff();
 				break;
@@ -246,60 +246,61 @@ void operatingRoutine(){
 
 void moveToPos()
 {
-	ser_updated = false;
-
-	//converting angle to motor steps.
-	if (y_Pos) y_Pos_Steps = y_Pos / bldc1;
-	if (z_Pos) z_Pos_Steps = z_Pos / bldc2;
-	else if (!y_Pos) return; 
-
-	while ((z_Pos_Steps != 0) || (y_Pos_Steps != 0))
-	{
-		if (enableMotorUpdates && motorUpdate)
-		{
-			if (z_Pos_Steps < 0) //z_Pos is negative
-			{
-				z_Pos_Steps++;
-				z_Motor *= -1;
-			}
-			else if (z_Pos_Steps > 0)
-			{
-				z_Pos_Steps--;
-			}
-			else z_Pos = 0;
-
-			if (y_Pos_Steps > 0)
-			{
-				if (y_Motor_Signed > Y_MIN_LIMIT){
-					y_Motor--;
-					y_Motor_Signed--;
-					y_Pos_Steps--;
-				}
-				else y_Pos_Steps = 0;
-			}
-			else if (y_Pos_Steps < 0)
-			{
-				if (y_Motor_Signed < Y_MAX_LIMIT){
-					y_Motor++;
-					y_Motor_Signed++;
-					y_Pos_Steps++;
-				}
-				else y_Pos_Steps = 0;
-			}
-		}
-		//doing regular stuff
-		operatingRoutine(); 
+	if (ser_updated){
+		ser_updated = false;
+		moving = true;
+		//converting angle to motor steps.
+		if (y_Pos) y_Pos_Steps = y_Pos / bldc1;
+		if (z_Pos) z_Pos_Steps = z_Pos / bldc2;
+		else if (!y_Pos) return;
 	}
-	z_Pos = 0;
-	megaSerial.sendPosReached();
+
+	if (z_Pos_Steps != 0 || y_Pos_Steps != 0)
+	{
+		if (z_Pos_Steps < 0) //z_Pos is negative
+		{
+			z_Pos_Steps++;
+		}
+		else if (z_Pos_Steps > 0)
+		{
+			z_Pos_Steps--;
+			//z_Motor *= -1;
+		}
+		else z_Pos = 0;
+
+		if (y_Pos_Steps > 0)
+		{
+			if (y_Motor_Signed > Y_MIN_LIMIT){
+				y_Motor--;
+				y_Motor_Signed--;
+				y_Pos_Steps--;
+			}
+			else y_Pos_Steps = 0;
+		}
+		else if (y_Pos_Steps < 0)
+		{
+			if (y_Motor_Signed < Y_MAX_LIMIT){
+				y_Motor++;
+				y_Motor_Signed++;
+				y_Pos_Steps++;
+			}
+			else y_Pos_Steps = 0;
+		}
+	}
+	else if (moving)
+	{
+		moving = false;
+		z_Pos = 0;
+		megaSerial.sendPosReached();
+	}
 }
 
 void moveWithSpeed()
 {
-	if (!(z_Pos || y_Pos) || !motorUpdate) return; //returning if both are 0
-	if (y_Pos == 1 || y_Pos == -1) y_Pos = 0;
+	if (!(z_Pos || y_Pos)) return; //returning if both are 0
+	if (y_Pos == 1 || y_Pos == -1) y_Pos = 0; //filtering out misreadings when user don't want to move. 
 
-	if (z_Pos < 0) z_Motor *= -1;
+	//if (z_Pos < 0) z_Motor *= -1;
 
 	if ((y_Pos & DIR_MASK) && y_Motor_Signed > Y_MIN_LIMIT){
 		y_Motor--;

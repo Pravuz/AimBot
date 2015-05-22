@@ -26,13 +26,7 @@
     <ClInclude Include="BLcontroller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Interupts_.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="definitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="config_oppsett.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Visual Micro\.Brugi.vsarduino.h">
@@ -48,6 +42,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fastMathRoutines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="orientationRoutines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

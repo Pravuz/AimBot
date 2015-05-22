@@ -71,18 +71,29 @@
     <None Include="AimBot.ino">
       <FileType>CppCode</FileType>
     </None>
-    <None Include="IMU.ino" />
-    <None Include="Timer1.ino" />
+    <None Include="IMU.ino">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="Timer1.ino">
+      <FileType>CppCode</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aimbot_Serial.h" />
     <ClInclude Include="BLcontroller.h" />
-    <ClInclude Include="config_oppsett.h" />
     <ClInclude Include="definitions.h" />
+    <ClInclude Include="fastMathRoutines.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="I2Cdev.h" />
-    <ClInclude Include="Interupts_.h" />
     <ClInclude Include="MPU6050.h" />
+    <ClInclude Include="orientationRoutines.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Timer1.h" />
+    <ClInclude Include="variables.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="Visual Micro\.AimBot.vsarduino.h" />
     <ClInclude Include="Visual Micro\.Brugi.vsarduino.h" />
   </ItemGroup>
