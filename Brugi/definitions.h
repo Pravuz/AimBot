@@ -6,6 +6,8 @@
 //#define PWM_4KHZ_PHASE   // Resolution 8 bit for PWM
 //#define NO_PWM_LOOP
 
+#define _INLINE_		__attribute__( ( always_inline ) ) inline
+#define _NO_INLINE_		__attribute__( ( noinline ) )
 
 // the prescaler is set so that timer0 ticks every 64 clock cycles, and the
 // the overflow handler is called every 256 ticks.
@@ -27,8 +29,23 @@
 #define CC_FACTOR 1
 #endif
 
+// MPU Address Settings
+#define MPU6050_ADDRESS_AD0_LOW     0x68 // default for InvenSense evaluation board
+#define MPU6050_ADDRESS_AD0_HIGH    0x69 // Drotek MPU breakout board
+#define MPU6050_DEFAULT_ADDRESS     MPU6050_ADDRESS_AD0_HIGH
+
+// Do not change for now
+#define MPU6050_GYRO_FS MPU6050_GYRO_FS_250  // +-250,500,1000,2000 deg/s
+#define MPU6050_DLPF_BW MPU6050_DLPF_BW_256  // 5,10,20,42,98,188,256 Hz
+
 #define interrupts() sei()
 #define noInterrupts() cli()
+
+#define I2C_SPEED 800000L   //800kHz ultra fast mode
+#define POUT_FREQ 25      // rate of ACC print output in Hz, 25 Hz is default
+#define TRACE_OUT_FREQ 10 // rate of Trace Outoput in Hz, 10Hz is default 
+#define LOCK_TIME_SEC 5   // gimbal fast lock time at startup 
+
 
 // Hardware Abstraction for Motor connectors,
 // DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING !!!
@@ -43,34 +60,13 @@
 
 #define N_SIN 256
 
-uint8_t pwm_a_motor0 = 128;
-uint8_t pwm_b_motor0 = 128;
-uint8_t pwm_c_motor0 = 128;
-
-uint8_t pwm_a_motor1 = 128;
-uint8_t pwm_b_motor1 = 128;
-uint8_t pwm_c_motor1 = 128;
-
-int8_t pwmSinMotor[N_SIN];
-
 #define motorNumberPitch 0
 #define motorNumberYaw 1
 
-uint16_t freq_1_count = 0; 
-uint16_t freq_0_count = 0;
-volatile uint8_t pinState;
-volatile uint16_t motor_0_freq = 256;
-volatile uint16_t motor_1_freq = 96;
-volatile bool motor_0_update = false;
-volatile bool motor_1_update = false;
-
-#if 0
 #define MOTORUPDATE_FREQ 1000                // in Hz, 1000 is default
-//volatile uint16_t MOTORUPDATE_FREQ_0 = 500, MOTORUPDATE_FREQ_1 = 1000;
 #define LOOPUPDATE_FREQ MOTORUPDATE_FREQ     // loop control sample rate equals motor update rate
 #define DT_FLOAT (1.0/LOOPUPDATE_FREQ*1.024) // loop controller sample period dT
 #define DT_INT_MS (1000/MOTORUPDATE_FREQ)    // dT, integer, (ms)
 #define DT_INT_INV (MOTORUPDATE_FREQ)        // dT, integer, inverse, (Hz)
 
 #define LOWPASS_K_FLOAT(TAU) (DT_FLOAT/(TAU+DT_FLOAT))
-#endif

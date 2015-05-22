@@ -16,6 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AimBot.ino" />
+    <None Include="IMU.ino" />
+    <None Include="Timer1.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visual Micro\.AimBot.vsarduino.h">
@@ -39,5 +41,22 @@
     <ClInclude Include="Aimbot_Serial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MPU6050.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="I2Cdev.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MPU6050.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="I2Cdev.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
