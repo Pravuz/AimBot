@@ -124,16 +124,16 @@ private: System::Windows::Forms::TextBox^  txtVector;
 
 
 
-private: System::Windows::Forms::TextBox^  txtPixy;
 
 
-private: System::Windows::Forms::NumericUpDown^  numBrightness;
-private: System::Windows::Forms::NumericUpDown^  numNumberOfPixelChanged;
-private: System::Windows::Forms::NumericUpDown^  numPixelChangeThreshold;
-private: System::Windows::Forms::Label^  lblBrightness;
-private: System::Windows::Forms::Label^  lblNumberOfPixelChanged;
-private: System::Windows::Forms::Label^  lblPixelChangeThreshold;
-private: System::Windows::Forms::Panel^  pnlPixy;
+
+
+
+
+
+
+
+
 private: System::Windows::Forms::Panel^  pnlVector;
 
 
@@ -143,7 +143,7 @@ private: System::Windows::Forms::Panel^  pnlGeneral;
 private: System::Windows::Forms::Panel^  pnlBack;
 
 
-private: System::Windows::Forms::HelpProvider^  hlpProvider;
+
 private: System::Windows::Forms::Label^  lblV;
 private: System::Windows::Forms::TextBox^  txtHelp;
 
@@ -232,19 +232,10 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->txtGeneral = (gcnew System::Windows::Forms::TextBox());
 			this->txtRC = (gcnew System::Windows::Forms::TextBox());
 			this->txtVector = (gcnew System::Windows::Forms::TextBox());
-			this->txtPixy = (gcnew System::Windows::Forms::TextBox());
-			this->numBrightness = (gcnew System::Windows::Forms::NumericUpDown());
-			this->numNumberOfPixelChanged = (gcnew System::Windows::Forms::NumericUpDown());
-			this->numPixelChangeThreshold = (gcnew System::Windows::Forms::NumericUpDown());
-			this->lblBrightness = (gcnew System::Windows::Forms::Label());
-			this->lblNumberOfPixelChanged = (gcnew System::Windows::Forms::Label());
-			this->lblPixelChangeThreshold = (gcnew System::Windows::Forms::Label());
-			this->pnlPixy = (gcnew System::Windows::Forms::Panel());
 			this->pnlVector = (gcnew System::Windows::Forms::Panel());
 			this->pnlRC = (gcnew System::Windows::Forms::Panel());
 			this->pnlGeneral = (gcnew System::Windows::Forms::Panel());
 			this->pnlBack = (gcnew System::Windows::Forms::Panel());
-			this->hlpProvider = (gcnew System::Windows::Forms::HelpProvider());
 			this->lblV = (gcnew System::Windows::Forms::Label());
 			this->txtHelp = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numCam_Trigger_Delay))->BeginInit();
@@ -268,9 +259,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numYVect_OutMin))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numYVect_OutMax))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbxStatus))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numBrightness))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numNumberOfPixelChanged))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numPixelChangeThreshold))->BeginInit();
+			this->pnlBack->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// serialPort
@@ -371,7 +360,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->chkIsDSLR->BackColor = System::Drawing::Color::White;
 			this->chkIsDSLR->Font = (gcnew System::Drawing::Font(L"Helonia", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->chkIsDSLR->Location = System::Drawing::Point(35, 80);
+			this->chkIsDSLR->Location = System::Drawing::Point(21, 46);
 			this->chkIsDSLR->Name = L"chkIsDSLR";
 			this->chkIsDSLR->Size = System::Drawing::Size(61, 20);
 			this->chkIsDSLR->TabIndex = 0;
@@ -385,7 +374,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblCam_Btn_Delay->BackColor = System::Drawing::Color::White;
 			this->lblCam_Btn_Delay->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblCam_Btn_Delay->Location = System::Drawing::Point(114, 108);
+			this->lblCam_Btn_Delay->Location = System::Drawing::Point(100, 87);
 			this->lblCam_Btn_Delay->Name = L"lblCam_Btn_Delay";
 			this->lblCam_Btn_Delay->Size = System::Drawing::Size(126, 17);
 			this->lblCam_Btn_Delay->TabIndex = 34;
@@ -398,7 +387,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblCam_Trigger_Delay->BackColor = System::Drawing::Color::White;
 			this->lblCam_Trigger_Delay->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblCam_Trigger_Delay->Location = System::Drawing::Point(114, 134);
+			this->lblCam_Trigger_Delay->Location = System::Drawing::Point(100, 132);
 			this->lblCam_Trigger_Delay->Name = L"lblCam_Trigger_Delay";
 			this->lblCam_Trigger_Delay->Size = System::Drawing::Size(127, 17);
 			this->lblCam_Trigger_Delay->TabIndex = 35;
@@ -411,7 +400,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblCam_Focus_Delay->BackColor = System::Drawing::Color::White;
 			this->lblCam_Focus_Delay->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblCam_Focus_Delay->Location = System::Drawing::Point(114, 160);
+			this->lblCam_Focus_Delay->Location = System::Drawing::Point(100, 177);
 			this->lblCam_Focus_Delay->Name = L"lblCam_Focus_Delay";
 			this->lblCam_Focus_Delay->Size = System::Drawing::Size(122, 17);
 			this->lblCam_Focus_Delay->TabIndex = 36;
@@ -424,7 +413,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblloop_Time->BackColor = System::Drawing::Color::White;
 			this->lblloop_Time->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblloop_Time->Location = System::Drawing::Point(114, 186);
+			this->lblloop_Time->Location = System::Drawing::Point(100, 221);
 			this->lblloop_Time->Name = L"lblloop_Time";
 			this->lblloop_Time->Size = System::Drawing::Size(65, 17);
 			this->lblloop_Time->TabIndex = 37;
@@ -437,7 +426,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXRcMin->BackColor = System::Drawing::Color::White;
 			this->lblXRcMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblXRcMin->Location = System::Drawing::Point(377, 83);
+			this->lblXRcMin->Location = System::Drawing::Point(377, 91);
 			this->lblXRcMin->Name = L"lblXRcMin";
 			this->lblXRcMin->Size = System::Drawing::Size(55, 17);
 			this->lblXRcMin->TabIndex = 36;
@@ -450,7 +439,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXRcMax->BackColor = System::Drawing::Color::White;
 			this->lblXRcMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblXRcMax->Location = System::Drawing::Point(377, 107);
+			this->lblXRcMax->Location = System::Drawing::Point(377, 115);
 			this->lblXRcMax->Name = L"lblXRcMax";
 			this->lblXRcMax->Size = System::Drawing::Size(57, 17);
 			this->lblXRcMax->TabIndex = 148;
@@ -463,7 +452,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXVect_InMin->BackColor = System::Drawing::Color::White;
 			this->lblXVect_InMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblXVect_InMin->Location = System::Drawing::Point(377, 259);
+			this->lblXVect_InMin->Location = System::Drawing::Point(377, 267);
 			this->lblXVect_InMin->Name = L"lblXVect_InMin";
 			this->lblXVect_InMin->Size = System::Drawing::Size(89, 17);
 			this->lblXVect_InMin->TabIndex = 47;
@@ -476,7 +465,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYRcMapMax->BackColor = System::Drawing::Color::White;
 			this->lblYRcMapMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblYRcMapMax->Location = System::Drawing::Point(558, 161);
+			this->lblYRcMapMax->Location = System::Drawing::Point(558, 169);
 			this->lblYRcMapMax->Name = L"lblYRcMapMax";
 			this->lblYRcMapMax->Size = System::Drawing::Size(84, 17);
 			this->lblYRcMapMax->TabIndex = 46;
@@ -489,7 +478,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYRcMapMin->BackColor = System::Drawing::Color::White;
 			this->lblYRcMapMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblYRcMapMin->Location = System::Drawing::Point(558, 135);
+			this->lblYRcMapMin->Location = System::Drawing::Point(558, 143);
 			this->lblYRcMapMin->Name = L"lblYRcMapMin";
 			this->lblYRcMapMin->Size = System::Drawing::Size(82, 17);
 			this->lblYRcMapMin->TabIndex = 45;
@@ -502,7 +491,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYRcMax->BackColor = System::Drawing::Color::White;
 			this->lblYRcMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblYRcMax->Location = System::Drawing::Point(558, 109);
+			this->lblYRcMax->Location = System::Drawing::Point(558, 117);
 			this->lblYRcMax->Name = L"lblYRcMax";
 			this->lblYRcMax->Size = System::Drawing::Size(57, 17);
 			this->lblYRcMax->TabIndex = 44;
@@ -515,7 +504,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYRcMin->BackColor = System::Drawing::Color::White;
 			this->lblYRcMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblYRcMin->Location = System::Drawing::Point(558, 84);
+			this->lblYRcMin->Location = System::Drawing::Point(558, 92);
 			this->lblYRcMin->Name = L"lblYRcMin";
 			this->lblYRcMin->Size = System::Drawing::Size(55, 17);
 			this->lblYRcMin->TabIndex = 43;
@@ -528,7 +517,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblRcMapMax->BackColor = System::Drawing::Color::White;
 			this->lblRcMapMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblRcMapMax->Location = System::Drawing::Point(377, 159);
+			this->lblRcMapMax->Location = System::Drawing::Point(377, 167);
 			this->lblRcMapMax->Name = L"lblRcMapMax";
 			this->lblRcMapMax->Size = System::Drawing::Size(84, 17);
 			this->lblRcMapMax->TabIndex = 42;
@@ -541,7 +530,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXRcMapMax->BackColor = System::Drawing::Color::White;
 			this->lblXRcMapMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblXRcMapMax->Location = System::Drawing::Point(377, 133);
+			this->lblXRcMapMax->Location = System::Drawing::Point(377, 141);
 			this->lblXRcMapMax->Name = L"lblXRcMapMax";
 			this->lblXRcMapMax->Size = System::Drawing::Size(82, 17);
 			this->lblXRcMapMax->TabIndex = 198;
@@ -554,7 +543,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYVect_OutMax->BackColor = System::Drawing::Color::White;
 			this->lblYVect_OutMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblYVect_OutMax->Location = System::Drawing::Point(558, 337);
+			this->lblYVect_OutMax->Location = System::Drawing::Point(558, 345);
 			this->lblYVect_OutMax->Name = L"lblYVect_OutMax";
 			this->lblYVect_OutMax->Size = System::Drawing::Size(100, 17);
 			this->lblYVect_OutMax->TabIndex = 54;
@@ -567,7 +556,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYVect_OutMin->BackColor = System::Drawing::Color::White;
 			this->lblYVect_OutMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblYVect_OutMin->Location = System::Drawing::Point(558, 311);
+			this->lblYVect_OutMin->Location = System::Drawing::Point(558, 319);
 			this->lblYVect_OutMin->Name = L"lblYVect_OutMin";
 			this->lblYVect_OutMin->Size = System::Drawing::Size(98, 17);
 			this->lblYVect_OutMin->TabIndex = 53;
@@ -580,7 +569,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYVect_InMax->BackColor = System::Drawing::Color::White;
 			this->lblYVect_InMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblYVect_InMax->Location = System::Drawing::Point(558, 285);
+			this->lblYVect_InMax->Location = System::Drawing::Point(558, 293);
 			this->lblYVect_InMax->Name = L"lblYVect_InMax";
 			this->lblYVect_InMax->Size = System::Drawing::Size(91, 17);
 			this->lblYVect_InMax->TabIndex = 52;
@@ -593,7 +582,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblYVect_InMin->BackColor = System::Drawing::Color::White;
 			this->lblYVect_InMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblYVect_InMin->Location = System::Drawing::Point(558, 259);
+			this->lblYVect_InMin->Location = System::Drawing::Point(558, 267);
 			this->lblYVect_InMin->Name = L"lblYVect_InMin";
 			this->lblYVect_InMin->Size = System::Drawing::Size(89, 17);
 			this->lblYVect_InMin->TabIndex = 51;
@@ -606,7 +595,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXVect_OutMax->BackColor = System::Drawing::Color::White;
 			this->lblXVect_OutMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblXVect_OutMax->Location = System::Drawing::Point(377, 337);
+			this->lblXVect_OutMax->Location = System::Drawing::Point(377, 345);
 			this->lblXVect_OutMax->Name = L"lblXVect_OutMax";
 			this->lblXVect_OutMax->Size = System::Drawing::Size(100, 17);
 			this->lblXVect_OutMax->TabIndex = 50;
@@ -619,7 +608,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXVect_OutMin->BackColor = System::Drawing::Color::White;
 			this->lblXVect_OutMin->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblXVect_OutMin->Location = System::Drawing::Point(377, 311);
+			this->lblXVect_OutMin->Location = System::Drawing::Point(377, 319);
 			this->lblXVect_OutMin->Name = L"lblXVect_OutMin";
 			this->lblXVect_OutMin->Size = System::Drawing::Size(98, 17);
 			this->lblXVect_OutMin->TabIndex = 49;
@@ -632,7 +621,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->lblXVectt_InMax->BackColor = System::Drawing::Color::White;
 			this->lblXVectt_InMax->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblXVectt_InMax->Location = System::Drawing::Point(377, 285);
+			this->lblXVectt_InMax->Location = System::Drawing::Point(377, 293);
 			this->lblXVectt_InMax->Name = L"lblXVectt_InMax";
 			this->lblXVectt_InMax->Size = System::Drawing::Size(91, 17);
 			this->lblXVectt_InMax->TabIndex = 48;
@@ -688,7 +677,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numCam_Trigger_Delay->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numCam_Trigger_Delay->Location = System::Drawing::Point(35, 132);
+			this->numCam_Trigger_Delay->Location = System::Drawing::Point(21, 130);
 			this->numCam_Trigger_Delay->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numCam_Trigger_Delay->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numCam_Trigger_Delay->Name = L"numCam_Trigger_Delay";
@@ -699,7 +688,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numCam_Focus_Delay->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numCam_Focus_Delay->Location = System::Drawing::Point(35, 158);
+			this->numCam_Focus_Delay->Location = System::Drawing::Point(21, 175);
 			this->numCam_Focus_Delay->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numCam_Focus_Delay->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numCam_Focus_Delay->Name = L"numCam_Focus_Delay";
@@ -710,7 +699,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numLoop_Time->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numLoop_Time->Location = System::Drawing::Point(35, 184);
+			this->numLoop_Time->Location = System::Drawing::Point(21, 219);
 			this->numLoop_Time->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numLoop_Time->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numLoop_Time->Name = L"numLoop_Time";
@@ -721,7 +710,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numCam_Btn_Delay->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numCam_Btn_Delay->Location = System::Drawing::Point(35, 106);
+			this->numCam_Btn_Delay->Location = System::Drawing::Point(21, 85);
 			this->numCam_Btn_Delay->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numCam_Btn_Delay->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numCam_Btn_Delay->Name = L"numCam_Btn_Delay";
@@ -732,7 +721,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXRcMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXRcMin->Location = System::Drawing::Point(298, 79);
+			this->numXRcMin->Location = System::Drawing::Point(298, 87);
 			this->numXRcMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXRcMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXRcMin->Name = L"numXRcMin";
@@ -743,7 +732,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXRcMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXRcMax->Location = System::Drawing::Point(298, 104);
+			this->numXRcMax->Location = System::Drawing::Point(298, 112);
 			this->numXRcMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXRcMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXRcMax->Name = L"numXRcMax";
@@ -754,7 +743,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXRcMapMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXRcMapMin->Location = System::Drawing::Point(298, 130);
+			this->numXRcMapMin->Location = System::Drawing::Point(298, 138);
 			this->numXRcMapMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXRcMapMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXRcMapMin->Name = L"numXRcMapMin";
@@ -765,7 +754,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXRcMapMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXRcMapMax->Location = System::Drawing::Point(298, 157);
+			this->numXRcMapMax->Location = System::Drawing::Point(298, 165);
 			this->numXRcMapMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXRcMapMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXRcMapMax->Name = L"numXRcMapMax";
@@ -776,7 +765,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYRcMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYRcMin->Location = System::Drawing::Point(479, 81);
+			this->numYRcMin->Location = System::Drawing::Point(479, 89);
 			this->numYRcMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYRcMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYRcMin->Name = L"numYRcMin";
@@ -787,7 +776,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYRcMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYRcMax->Location = System::Drawing::Point(479, 107);
+			this->numYRcMax->Location = System::Drawing::Point(479, 115);
 			this->numYRcMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYRcMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYRcMax->Name = L"numYRcMax";
@@ -798,7 +787,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYRcMapMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYRcMapMin->Location = System::Drawing::Point(479, 132);
+			this->numYRcMapMin->Location = System::Drawing::Point(479, 140);
 			this->numYRcMapMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYRcMapMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYRcMapMin->Name = L"numYRcMapMin";
@@ -809,7 +798,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYRcMapMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYRcMapMax->Location = System::Drawing::Point(479, 158);
+			this->numYRcMapMax->Location = System::Drawing::Point(479, 166);
 			this->numYRcMapMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYRcMapMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYRcMapMax->Name = L"numYRcMapMax";
@@ -820,7 +809,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXVect_InMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXVect_InMin->Location = System::Drawing::Point(298, 257);
+			this->numXVect_InMin->Location = System::Drawing::Point(298, 265);
 			this->numXVect_InMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXVect_InMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 200, 0, 0, System::Int32::MinValue });
 			this->numXVect_InMin->Name = L"numXVect_InMin";
@@ -831,7 +820,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXVect_InMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXVect_InMax->Location = System::Drawing::Point(298, 283);
+			this->numXVect_InMax->Location = System::Drawing::Point(298, 291);
 			this->numXVect_InMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXVect_InMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXVect_InMax->Name = L"numXVect_InMax";
@@ -842,7 +831,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXVect_OutMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXVect_OutMin->Location = System::Drawing::Point(298, 309);
+			this->numXVect_OutMin->Location = System::Drawing::Point(298, 317);
 			this->numXVect_OutMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXVect_OutMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXVect_OutMin->Name = L"numXVect_OutMin";
@@ -853,7 +842,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numXVect_OutMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numXVect_OutMax->Location = System::Drawing::Point(298, 335);
+			this->numXVect_OutMax->Location = System::Drawing::Point(298, 343);
 			this->numXVect_OutMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numXVect_OutMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numXVect_OutMax->Name = L"numXVect_OutMax";
@@ -864,7 +853,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYVect_InMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYVect_InMin->Location = System::Drawing::Point(479, 257);
+			this->numYVect_InMin->Location = System::Drawing::Point(479, 265);
 			this->numYVect_InMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYVect_InMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 300, 0, 0, System::Int32::MinValue });
 			this->numYVect_InMin->Name = L"numYVect_InMin";
@@ -875,7 +864,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYVect_InMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYVect_InMax->Location = System::Drawing::Point(479, 283);
+			this->numYVect_InMax->Location = System::Drawing::Point(479, 291);
 			this->numYVect_InMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYVect_InMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYVect_InMax->Name = L"numYVect_InMax";
@@ -886,7 +875,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYVect_OutMin->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYVect_OutMin->Location = System::Drawing::Point(479, 309);
+			this->numYVect_OutMin->Location = System::Drawing::Point(479, 317);
 			this->numYVect_OutMin->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYVect_OutMin->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYVect_OutMin->Name = L"numYVect_OutMin";
@@ -897,7 +886,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->numYVect_OutMax->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numYVect_OutMax->Location = System::Drawing::Point(479, 335);
+			this->numYVect_OutMax->Location = System::Drawing::Point(479, 343);
 			this->numYVect_OutMax->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
 			this->numYVect_OutMax->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
 			this->numYVect_OutMax->Name = L"numYVect_OutMax";
@@ -922,7 +911,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->txtGeneral->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->txtGeneral->ForeColor = System::Drawing::SystemColors::Info;
-			this->txtGeneral->Location = System::Drawing::Point(26, 54);
+			this->txtGeneral->Location = System::Drawing::Point(12, 15);
 			this->txtGeneral->Multiline = true;
 			this->txtGeneral->Name = L"txtGeneral";
 			this->txtGeneral->ReadOnly = true;
@@ -970,108 +959,6 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->txtVector->Text = L"Vector";
 			this->txtVector->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
-			// txtPixy
-			// 
-			this->txtPixy->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(63)), static_cast<System::Int32>(static_cast<System::Byte>(66)),
-				static_cast<System::Int32>(static_cast<System::Byte>(65)));
-			this->txtPixy->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->txtPixy->Cursor = System::Windows::Forms::Cursors::Arrow;
-			this->txtPixy->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->txtPixy->ForeColor = System::Drawing::SystemColors::Info;
-			this->txtPixy->Location = System::Drawing::Point(26, 230);
-			this->txtPixy->Multiline = true;
-			this->txtPixy->Name = L"txtPixy";
-			this->txtPixy->ReadOnly = true;
-			this->txtPixy->Size = System::Drawing::Size(248, 19);
-			this->txtPixy->TabIndex = 96;
-			this->txtPixy->TabStop = false;
-			this->txtPixy->Text = L"Pixy";
-			this->txtPixy->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			// 
-			// numBrightness
-			// 
-			this->numBrightness->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->numBrightness->Location = System::Drawing::Point(35, 307);
-			this->numBrightness->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
-			this->numBrightness->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
-			this->numBrightness->Name = L"numBrightness";
-			this->numBrightness->Size = System::Drawing::Size(73, 22);
-			this->numBrightness->TabIndex = 15;
-			// 
-			// numNumberOfPixelChanged
-			// 
-			this->numNumberOfPixelChanged->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->numNumberOfPixelChanged->Location = System::Drawing::Point(35, 281);
-			this->numNumberOfPixelChanged->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
-			this->numNumberOfPixelChanged->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
-			this->numNumberOfPixelChanged->Name = L"numNumberOfPixelChanged";
-			this->numNumberOfPixelChanged->Size = System::Drawing::Size(73, 22);
-			this->numNumberOfPixelChanged->TabIndex = 14;
-			// 
-			// numPixelChangeThreshold
-			// 
-			this->numPixelChangeThreshold->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->numPixelChangeThreshold->Location = System::Drawing::Point(35, 255);
-			this->numPixelChangeThreshold->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2000, 0, 0, 0 });
-			this->numPixelChangeThreshold->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, System::Int32::MinValue });
-			this->numPixelChangeThreshold->Name = L"numPixelChangeThreshold";
-			this->numPixelChangeThreshold->Size = System::Drawing::Size(73, 22);
-			this->numPixelChangeThreshold->TabIndex = 13;
-			// 
-			// lblBrightness
-			// 
-			this->lblBrightness->AutoSize = true;
-			this->lblBrightness->BackColor = System::Drawing::Color::White;
-			this->lblBrightness->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->lblBrightness->Location = System::Drawing::Point(114, 309);
-			this->lblBrightness->Name = L"lblBrightness";
-			this->lblBrightness->Size = System::Drawing::Size(67, 17);
-			this->lblBrightness->TabIndex = 90;
-			this->lblBrightness->Text = L"Brightness";
-			this->lblBrightness->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->lblBrightness->MouseHover += gcnew System::EventHandler(this, &Main::lblBrightness_MouseHover);
-			// 
-			// lblNumberOfPixelChanged
-			// 
-			this->lblNumberOfPixelChanged->AutoSize = true;
-			this->lblNumberOfPixelChanged->BackColor = System::Drawing::Color::White;
-			this->lblNumberOfPixelChanged->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblNumberOfPixelChanged->Location = System::Drawing::Point(114, 283);
-			this->lblNumberOfPixelChanged->Name = L"lblNumberOfPixelChanged";
-			this->lblNumberOfPixelChanged->Size = System::Drawing::Size(149, 17);
-			this->lblNumberOfPixelChanged->TabIndex = 89;
-			this->lblNumberOfPixelChanged->Text = L"Number Of Pixel Changed";
-			this->lblNumberOfPixelChanged->MouseHover += gcnew System::EventHandler(this, &Main::lblNumberOfPixelChanged_MouseHover);
-			// 
-			// lblPixelChangeThreshold
-			// 
-			this->lblPixelChangeThreshold->AutoSize = true;
-			this->lblPixelChangeThreshold->BackColor = System::Drawing::Color::White;
-			this->lblPixelChangeThreshold->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium", 9.75F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->lblPixelChangeThreshold->Location = System::Drawing::Point(114, 257);
-			this->lblPixelChangeThreshold->Name = L"lblPixelChangeThreshold";
-			this->lblPixelChangeThreshold->Size = System::Drawing::Size(137, 17);
-			this->lblPixelChangeThreshold->TabIndex = 88;
-			this->lblPixelChangeThreshold->Text = L"Pixel Change Threshold";
-			this->lblPixelChangeThreshold->MouseHover += gcnew System::EventHandler(this, &Main::lblPixelChangeThreshold_MouseHover);
-			// 
-			// pnlPixy
-			// 
-			this->pnlPixy->BackColor = System::Drawing::Color::White;
-			this->pnlPixy->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->pnlPixy->Location = System::Drawing::Point(26, 249);
-			this->pnlPixy->Name = L"pnlPixy";
-			this->pnlPixy->Size = System::Drawing::Size(248, 142);
-			this->pnlPixy->TabIndex = 98;
-			this->pnlPixy->MouseHover += gcnew System::EventHandler(this, &Main::pnlPixy_MouseHover);
-			// 
 			// pnlVector
 			// 
 			this->pnlVector->BackColor = System::Drawing::Color::White;
@@ -1096,9 +983,9 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->pnlGeneral->BackColor = System::Drawing::Color::White;
 			this->pnlGeneral->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->pnlGeneral->Location = System::Drawing::Point(26, 73);
+			this->pnlGeneral->Location = System::Drawing::Point(12, 34);
 			this->pnlGeneral->Name = L"pnlGeneral";
-			this->pnlGeneral->Size = System::Drawing::Size(248, 142);
+			this->pnlGeneral->Size = System::Drawing::Size(248, 318);
 			this->pnlGeneral->TabIndex = 0;
 			this->pnlGeneral->MouseHover += gcnew System::EventHandler(this, &Main::pnlGeneral_MouseHover);
 			// 
@@ -1106,6 +993,17 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// 
 			this->pnlBack->BackColor = System::Drawing::Color::White;
 			this->pnlBack->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->pnlBack->Controls->Add(this->txtGeneral);
+			this->pnlBack->Controls->Add(this->chkIsDSLR);
+			this->pnlBack->Controls->Add(this->lblCam_Btn_Delay);
+			this->pnlBack->Controls->Add(this->lblCam_Trigger_Delay);
+			this->pnlBack->Controls->Add(this->lblCam_Focus_Delay);
+			this->pnlBack->Controls->Add(this->lblloop_Time);
+			this->pnlBack->Controls->Add(this->numCam_Trigger_Delay);
+			this->pnlBack->Controls->Add(this->numCam_Focus_Delay);
+			this->pnlBack->Controls->Add(this->numLoop_Time);
+			this->pnlBack->Controls->Add(this->numCam_Btn_Delay);
+			this->pnlBack->Controls->Add(this->pnlGeneral);
 			this->pnlBack->Location = System::Drawing::Point(14, 38);
 			this->pnlBack->Name = L"pnlBack";
 			this->pnlBack->Size = System::Drawing::Size(657, 421);
@@ -1115,11 +1013,11 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			// lblV
 			// 
 			this->lblV->AutoSize = true;
-			this->lblV->Location = System::Drawing::Point(632, 22);
+			this->lblV->Location = System::Drawing::Point(628, 22);
 			this->lblV->Name = L"lblV";
-			this->lblV->Size = System::Drawing::Size(37, 13);
+			this->lblV->Size = System::Drawing::Size(43, 13);
 			this->lblV->TabIndex = 103;
-			this->lblV->Text = L"v 1.00";
+			this->lblV->Text = L"v 1.377";
 			this->lblV->MouseHover += gcnew System::EventHandler(this, &Main::lblV_MouseHover);
 			// 
 			// txtHelp
@@ -1144,15 +1042,7 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->ClientSize = System::Drawing::Size(685, 541);
 			this->Controls->Add(this->txtHelp);
 			this->Controls->Add(this->lblV);
-			this->Controls->Add(this->txtPixy);
-			this->Controls->Add(this->numBrightness);
-			this->Controls->Add(this->numNumberOfPixelChanged);
-			this->Controls->Add(this->numPixelChangeThreshold);
-			this->Controls->Add(this->lblBrightness);
-			this->Controls->Add(this->lblNumberOfPixelChanged);
-			this->Controls->Add(this->lblPixelChangeThreshold);
 			this->Controls->Add(this->txtRC);
-			this->Controls->Add(this->txtGeneral);
 			this->Controls->Add(this->numYVect_OutMax);
 			this->Controls->Add(this->numYVect_OutMin);
 			this->Controls->Add(this->numYVect_InMax);
@@ -1169,10 +1059,6 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->Controls->Add(this->numXRcMapMin);
 			this->Controls->Add(this->numXRcMax);
 			this->Controls->Add(this->numXRcMin);
-			this->Controls->Add(this->numCam_Btn_Delay);
-			this->Controls->Add(this->numLoop_Time);
-			this->Controls->Add(this->numCam_Focus_Delay);
-			this->Controls->Add(this->numCam_Trigger_Delay);
 			this->Controls->Add(this->btnDefaults);
 			this->Controls->Add(this->btnSaveToEEPROM);
 			this->Controls->Add(this->btnSaveSettings);
@@ -1192,11 +1078,6 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->Controls->Add(this->lblXRcMapMax);
 			this->Controls->Add(this->lblXRcMax);
 			this->Controls->Add(this->lblXRcMin);
-			this->Controls->Add(this->lblloop_Time);
-			this->Controls->Add(this->lblCam_Focus_Delay);
-			this->Controls->Add(this->lblCam_Trigger_Delay);
-			this->Controls->Add(this->lblCam_Btn_Delay);
-			this->Controls->Add(this->chkIsDSLR);
 			this->Controls->Add(this->btnGetSettings);
 			this->Controls->Add(this->btnRefresh);
 			this->Controls->Add(this->lblStatus);
@@ -1205,10 +1086,8 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			this->Controls->Add(this->cboPorts);
 			this->Controls->Add(this->pbxStatus);
 			this->Controls->Add(this->txtVector);
-			this->Controls->Add(this->pnlGeneral);
 			this->Controls->Add(this->pnlRC);
 			this->Controls->Add(this->pnlVector);
-			this->Controls->Add(this->pnlPixy);
 			this->Controls->Add(this->pnlBack);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
@@ -1236,9 +1115,8 @@ private: System::Windows::Forms::TextBox^  txtHelp;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numYVect_OutMin))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numYVect_OutMax))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbxStatus))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numBrightness))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numNumberOfPixelChanged))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numPixelChangeThreshold))->EndInit();
+			this->pnlBack->ResumeLayout(false);
+			this->pnlBack->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -1577,17 +1455,8 @@ private: System::Void button1_Click(System::Object^  sender, System::EventArgs^ 
 				 case 21:
 					 helptxt = "Resolting degrees for maximum Y vector from Pixy";
 					 break;
-				 case 22:
-					 helptxt = "MOTHER";
-					 break;
-				 case 23:
-					 helptxt = "MOTHERFAKKA";
-					 break;
-				 case 24:
-					 helptxt = "FAKKA";
-					 break;
 				 default:
-					 helptxt = "JÆVEL";
+					 helptxt = "Hover over a label to get more info about the parameter";
 					 break;
 				 }
 				 txtHelp->Text = helptxt;
@@ -1678,18 +1547,7 @@ private: System::Void lblYVect_OutMax_MouseHover(System::Object^  sender, System
 			 helpNum = 21;
 			 fillTxt();
 }
-private: System::Void lblPixelChangeThreshold_MouseHover(System::Object^  sender, System::EventArgs^  e) {
-			 helpNum = 22;
-			 fillTxt();
-}
-private: System::Void lblNumberOfPixelChanged_MouseHover(System::Object^  sender, System::EventArgs^  e) {
-			 helpNum = 23;
-			 fillTxt();
-}
-private: System::Void lblBrightness_MouseHover(System::Object^  sender, System::EventArgs^  e) {
-			 helpNum = 24;
-			 fillTxt();
-}
+
 private: System::Void pnlGeneral_MouseHover(System::Object^  sender, System::EventArgs^  e) {
 			 helpNum = 0;
 			 fillTxt();
@@ -1698,10 +1556,7 @@ private: System::Void pnlRC_MouseHover(System::Object^  sender, System::EventArg
 			 helpNum = 0;
 			 fillTxt();
 }
-private: System::Void pnlPixy_MouseHover(System::Object^  sender, System::EventArgs^  e) {
-			 helpNum = 0;
-			 fillTxt();
-}
+
 private: System::Void pnlVector_MouseHover(System::Object^  sender, System::EventArgs^  e) {
 			 helpNum = 0;
 			 fillTxt();
