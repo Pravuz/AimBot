@@ -1,0 +1,20 @@
+INFO:
+-------------------------
+This folder contains 3D models created in SolidWorks, as well as
+rendered images.
+
+
+Folders:
+-------------------------
+- 'Assembly 13 - 2 axis' 
+	Contains the 3D model of the 2axis-rig
+	The full assembly is located at: 
+		'/3D model/Assembly 13 - 2 axis/Assembly/Assem2.SLDASM'
+
+- 'Assembly 14 - 3 axis' 
+	Contains the 3D model of the 3axis-rig
+	The full assembly is located at: 
+		'/3D model/Assembly 14 - 3 axis/Assembly/Assem2.SLDASM'
+
+- 'Rendered images'
+	Contains rendered images
