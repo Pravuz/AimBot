@@ -434,5 +434,67 @@ private:
 };
 #endif
 #ifdef __DESKTOP
+public ref struct AimBot_Serial
+{
+
+	AimBot_Serial(System::IO::Ports::SerialPort^ serial){
+		m_serial = serial;
+		m_serial->BaudRate = BAUDRATE;
+	}
+
+	array<Object^>^ findPorts(){
+		return m_serial->GetPortNames();
+	}
+
+	void setName(System::String^ portName){
+		m_serial->PortName = portName;
+	}
+
+	System::String^ readS(){
+		return m_serial->ReadLine();
+	}
+
+	void openPort(){
+		m_serial->Open();
+	}
+
+	void closePort(){
+		m_serial->Close();
+	}
+
+	int status(){
+		int test = 1;
+		if (m_serial->IsOpen == true)
+		{
+			test = 0;
+		}
+		else
+		{
+			test = 1;
+		}
+		return test;
+	}
+
+	void request(){
+		m_serial->WriteLine("sendx");
+	}
+	void sendSettings(System::String^ newSettings){
+
+		m_serial->WriteLine(newSettings);
+		
+
+
+	}
+	void saveEEPROM(){
+
+		m_serial->WriteLine("savex");
+
+
+
+	}
+	
+	System::IO::Ports::SerialPort^ m_serial;
+
+};
 #endif
 #endif // SERIAL_H
