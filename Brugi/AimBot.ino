@@ -114,6 +114,16 @@ void loop()
 		}
 		else delay(50);
 	}
+	else if (currentMode == AUTO){
+		if (megaSerial.update())
+		{
+			z_Pos = megaSerial.getX();
+			y_Pos = megaSerial.getY();
+
+			megaSerial.flush();
+			//ser_updated = true;
+		}
+	}
 	else operatingRoutine();
 }
 
@@ -132,8 +142,9 @@ void operatingRoutine(){
 		z_Motor = ComputePID(DT_INT_MS, DT_INT_INV, angle[YAW], pitchAngleSet * 1000, &pitchErrorSum, &pitchErrorOld, pitchPIDpar.Kp, pitchPIDpar.Ki, pitchPIDpar.Kd);
 
 		if (enableMotorUpdates) {
-			if (currentMode == AUTO) moveToPos();
-			else if (currentMode == MANUAL) moveWithSpeed();
+			//if (currentMode == AUTO) moveToPos();
+			//else if (currentMode == MANUAL) 
+			moveWithSpeed();
 			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
 			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
 		}
@@ -242,6 +253,53 @@ void operatingRoutine(){
 		}
 		count++;
 	}
+}
+
+void moveToPosNoIMU()
+{
+	//converting angle to motor steps.
+	z_Pos_Steps = z_Pos / bldc2;
+	y_Pos_Steps = y_Pos / bldc1;
+
+	while ((z_Pos_Steps != 0) || (y_Pos_Steps != 0))
+	{
+		if (motorUpdate && z_Pos_Steps != 0)
+		{
+			motorUpdate = false;
+			if (z_Pos_Steps > 0)
+			{
+				--z_Pos_Steps;
+				--z_Motor;
+			}
+			else if (z_Pos_Steps < 0)
+			{
+				++z_Pos_Steps;
+				++z_Motor;
+			}
+
+			if (y_Pos_Steps > 0)
+			{
+				if (y_Motor_Signed > Y_MIN_LIMIT){
+					y_Motor--;
+					y_Motor_Signed--;
+					y_Pos_Steps--;
+				}
+				else y_Pos_Steps = 0;
+			}
+			else if (y_Pos_Steps < 0)
+			{
+				if (y_Motor_Signed < Y_MAX_LIMIT){
+					y_Motor++;
+					y_Motor_Signed++;
+					y_Pos_Steps++;
+				}
+				else y_Pos_Steps = 0;
+			}
+			MoveMotorPosSpeed(motorNumberPitch, z_Motor, MOTORPOWER);
+			MoveMotorPosSpeed(motorNumberYaw, y_Motor, MOTORPOWER);
+		}
+	}
+	megaSerial.sendPosReached();
 }
 
 void moveToPos()
