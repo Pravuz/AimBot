@@ -38,7 +38,7 @@ void setup()
 
 	motorPowerOff();
 	
-	sei();
+	//sei();
 
 #if 1
 	//moving to 0 pos. 
