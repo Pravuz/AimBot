@@ -105,7 +105,8 @@ void loop()
 	{
 		if (megaSerial.update())
 		{
-			currentMode = megaSerial.isRCmode() ? MANUAL : AUTO;
+			if (megaSerial.isRCmode()) currentMode = MANUAL;
+			else currentMode = AUTO;
 			z_Pos = megaSerial.getX();
 			y_Pos = megaSerial.getY();
 
@@ -128,7 +129,8 @@ void operatingRoutine(){
 		getAttiduteAngles(); // td = 372 us
 
 		//only using IMU and PID on z_Motor
-		pitchAngleSet = utilLP3_float(qLPPitch, z_Pos, LOWPASS_K_FLOAT(0.03));
+		if (currentMode == AUTO) pitchAngleSet = utilLP3_float(qLPPitch, z_Pos*100, LOWPASS_K_FLOAT(0.03));
+		else if (currentMode == MANUAL) pitchAngleSet = utilLP3_float(qLPPitch, z_Pos, LOWPASS_K_FLOAT(0.03));
 		z_Motor = ComputePID(DT_INT_MS, DT_INT_INV, angle[YAW], pitchAngleSet * 1000, &pitchErrorSum, &pitchErrorOld, pitchPIDpar.Kp, pitchPIDpar.Ki, pitchPIDpar.Kd);
 
 		if (enableMotorUpdates) {
@@ -244,53 +246,47 @@ void operatingRoutine(){
 	}
 }
 
+int32_t goal = 0;
+
 void moveToPos()
 {
+	int temp = angle[YAW] * 0.01;
 	if (ser_updated){
 		ser_updated = false;
-		moving = true;
 		//converting angle to motor steps.
 		if (y_Pos) y_Pos_Steps = y_Pos / bldc1;
-		if (z_Pos) z_Pos_Steps = z_Pos / bldc2;
-		else if (!y_Pos) return;
+		else if (!z_Pos) return;
+		moving = true;
+		goal = temp + z_Pos;
+		if (z_Pos & DIR_MASK) goal < 0 ? goal + 360 : 0;
+		else goal > 360 ? goal - 360 : 0;
 	}
+	else if (!moving) return;
 
-	if (z_Pos_Steps != 0 || y_Pos_Steps != 0)
+	if (goal + 1 >= temp && goal - 1 <= temp) z_Pos = 0;
+
+	if (y_Pos_Steps > 0)
 	{
-		if (z_Pos_Steps < 0) //z_Pos is negative
-		{
-			z_Pos_Steps++;
+		if (y_Motor_Signed > Y_MIN_LIMIT){
+			y_Motor--;
+			y_Motor_Signed--;
+			y_Pos_Steps--;
 		}
-		else if (z_Pos_Steps > 0)
-		{
-			z_Pos_Steps--;
-			//z_Motor *= -1;
-		}
-		else z_Pos = 0;
-
-		if (y_Pos_Steps > 0)
-		{
-			if (y_Motor_Signed > Y_MIN_LIMIT){
-				y_Motor--;
-				y_Motor_Signed--;
-				y_Pos_Steps--;
-			}
-			else y_Pos_Steps = 0;
-		}
-		else if (y_Pos_Steps < 0)
-		{
-			if (y_Motor_Signed < Y_MAX_LIMIT){
-				y_Motor++;
-				y_Motor_Signed++;
-				y_Pos_Steps++;
-			}
-			else y_Pos_Steps = 0;
-		}
+		else y_Pos_Steps = 0;
 	}
-	else if (moving)
+	else if (y_Pos_Steps < 0)
+	{
+		if (y_Motor_Signed < Y_MAX_LIMIT){
+			y_Motor++;
+			y_Motor_Signed++;
+			y_Pos_Steps++;
+		}
+		else y_Pos_Steps = 0;
+	}
+
+	if (y_Pos_Steps == 0 && !z_Pos)
 	{
 		moving = false;
-		z_Pos = 0;
 		megaSerial.sendPosReached();
 	}
 }
