@@ -20,6 +20,7 @@ MPU6050 mpu;
 char z_Pos = 0, y_Pos = 0;
 int16_t z_Pos_Steps = 0, y_Pos_Steps = 0, y_Motor_Signed = 0;
 uint8_t y_Motor = 0;
+int32_t goal = 0;
 int z_Motor = 0;
 bool rc_mode = false, moving = false, ser_updated = false;
 
@@ -245,8 +246,6 @@ void operatingRoutine(){
 		count++;
 	}
 }
-
-int32_t goal = 0;
 
 void moveToPos()
 {
